@@ -1,0 +1,62 @@
+.user-card-elegant {
+  overflow: hidden;
+  transition: all 0.3s ease;
+  background: #ffffff;
+  border-radius: 20px !important;
+}
+
+.user-card-elegant:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.1) !important;
+}
+
+/* Header dell'immagine con overlay sfumato */
+.card-header-img {
+  position: relative;
+  height: 120px;
+}
+
+.header-bg {
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.8);
+}
+
+/* Avatar che "esce" dall'header */
+.user-avatar-wrapper {
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+.user-avatar-img {
+  width: 90px;
+  height: 90px;
+  border: 4px solid #fff;
+  object-fit: cover;
+}
+
+/* Tipografia */
+.user-card-elegant .card-title {
+  letter-spacing: 1px;
+  color: #2c3e50;
+}
+
+.user-bio {
+  font-style: italic;
+  font-size: 0.95rem;
+  color: #6c757d;
+  line-height: 1.6;
+}
+
+/* Bottoni arrotondati */
+.rounded-pill {
+  transition: all 0.2s;
+}
+
+.btn-dark:hover {
+  background-color: #444;
+  border-color: #444;
+}

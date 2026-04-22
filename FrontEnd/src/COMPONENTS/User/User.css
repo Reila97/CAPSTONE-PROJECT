@@ -1,0 +1,44 @@
+/* Rimuove l'arrotondamento dalla card principale */
+.profile-card {
+  border-radius: 0 !important; 
+  overflow: hidden;
+  background-color: #ffffff;
+}
+
+/* Rimuove l'arrotondamento dalla sidebar interna */
+.profile-sidebar {
+  background: linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%);
+  color: white;
+  border-radius: 0 !important;
+}
+
+/* MANTIENE il cerchio solo per l'avatar */
+.profile-avatar-circle {
+  width: 100px;
+  height: 100px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border: 3px solid rgba(255, 255, 255, 0.5);
+  border-radius: 50%; /* Questo lo lasciamo per l'effetto cerchio */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Rimuove arrotondamento dai box delle icone */
+.icon-box {
+  width: 40px;
+  height: 40px;
+  background-color: #f8f9fa;
+  border-radius: 0 !important; /* Diventa quadrato */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #4ca1af;
+  font-size: 1.2rem;
+}
+
+/* Rimuove arrotondamento dai bottoni */
+.profile-card .btn, 
+.profile-card .badge {
+  border-radius: 0 !important;
+}

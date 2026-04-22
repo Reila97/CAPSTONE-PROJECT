@@ -1,18 +1,20 @@
 import express from 'express'
 
-import { findAll, findById } from '../CONTROLLERS/users.js'
+import { findAll, findById, canc, update} from '../CONTROLLERS/users.js'
+import { hasToken } from '../MIDDLEWARES/hasToken.js'
+import { isAdmin } from '../MIDDLEWARES/isAdmin.js'
 
 
 const userRouter = express.Router()
 
 
-userRouter.get('/', findAll) //get di tutti
-userRouter.get('/:id', findById) // get del singolo
+userRouter.get('/', findAll) 
+userRouter.get('/:id', findById) 
 
 //userRouter.post('/' ) // elemento nuovo
 //
-//userRouter.delete('/:id' ) // elimino elemento
-//userRouter.put('/:id' ) //modifica elemento
-//userRouter.patch('/:id/avatar'); // upload dell'avatar
+userRouter.delete('/:id', hasToken, isAdmin,canc ) 
+userRouter.put('/:id', hasToken, isAdmin, update ) 
+//userRouter.patch('/:id/avatar'); 
 
 export default userRouter

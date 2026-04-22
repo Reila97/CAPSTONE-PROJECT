@@ -25,7 +25,7 @@ export async function login(req, res) {
 
         //Generazione Token (Sincrona, più leggibile)
         const token = jwt.sign(
-            { id: user._id, isAdmin: user.isAdmin },
+            { id: user._id},
             process.env.JWT_SECRET,
             { expiresIn: '24h' }
         );

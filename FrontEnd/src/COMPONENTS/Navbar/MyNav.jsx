@@ -1,56 +1,76 @@
+import {
+  Button,
+  Container,
+  Form,
+  Nav,
+  Navbar,
+  NavDropdown,
+  Offcanvas
+} from "react-bootstrap"
+
 import "./MyNav.css";
-import { Button, Container, Form, Nav, Navbar, NavDropdown } from "react-bootstrap";
 
 function MyNav() {
-  return (
-    // 'w-100' e 'vw-100' forzano la larghezza totale.
-    // 'px-0' rimuove padding laterali della navbar stessa.
-    <Navbar expand="lg" className="bg-body-tertiary w-100" style={{ width: '100vw' }}>
-      <Container fluid className="px-4"> 
-        {/* 'fluid' permette l'espansione, 'px-4' dà un minimo di respiro ai lati */}
-        
-        <Navbar.Brand href="#home">
+   return (
+    <Navbar expand="xxl" className="bg-body-tertiary mb-3">
+      <Container fluid>
+        <Navbar.Brand href="#//TODO">
           <img
             className="Logo"
-            src="/Villa Fenix_Logo_Colore.png" 
+            src="/Villa Fenix_Logo_Colore.png"
             alt="Villa Fenix Logo"
-            style={{ height: '40px', marginRight: '10px' }}
+            style={{ height: "40px", marginRight: "10px" }}
           />
           Villa Fenix
         </Navbar.Brand>
 
-        <Navbar.Toggle aria-controls="navbarScroll" />
+        <Navbar.Toggle aria-controls="offcanvasNavbar-expand-lg" />
+        <Navbar.Offcanvas
+          id="offcanvasNavbar-expand-lg"
+          aria-labelledby="offcanvasNavbarLabel-expand-lg"
+          placement="start"
+        >
+          <Offcanvas.Header closeButton>
+            <Offcanvas.Title id="offcanvasNavbarLabel-expand-lg">
+              Offcanvas
+            </Offcanvas.Title>
+          </Offcanvas.Header>
+          <Offcanvas.Body>
+            <Nav className="justify-content-end flex-grow-1 pe-3">
 
-        <Navbar.Collapse id="navbarScroll">
-          {/* 'ms-auto' sposta tutto il menu a DESTRA. Se vuoi i link a sinistra usa 'me-auto' */}
-          <Nav className="ms-auto my-2 my-lg-0" navbarScroll>
-            <Nav.Link href="#home">Home</Nav.Link>
+              <Nav.Link href="//TODO">Home</Nav.Link>
 
-            <NavDropdown title="Le Nostre Strutture" id="navbarScrollingDropdown">
-              <NavDropdown.Item href="#osio">Osio Sotto</NavDropdown.Item>
-              <NavDropdown.Item href="#osio2">Osio Sotto 2</NavDropdown.Item>
-              <NavDropdown.Item href="#ponte">Ponte San Pietro</NavDropdown.Item>
-              <NavDropdown.Item href="#seriate">Seriate</NavDropdown.Item>
-            </NavDropdown>
+              <NavDropdown
+                title="Le Nostre Strutture"
+                id="navbarScrollingDropdown"
+              >
+                <NavDropdown.Item href="//TODO">Osio Sotto</NavDropdown.Item>
+                <NavDropdown.Item href="//TODO">Osio Sotto 2</NavDropdown.Item>
+                <NavDropdown.Item href="//TODO">
+                  Ponte San Pietro
+                </NavDropdown.Item>
+                <NavDropdown.Item href="//TODO">Seriate</NavDropdown.Item>
+              </NavDropdown>
 
-            <Nav.Link href="#chi-siamo">Chi Siamo</Nav.Link>
-            <Nav.Link href="#convenzioni">Convenzioni</Nav.Link>
-            <Nav.Link href="#servizi">Servizi</Nav.Link>
-            <Nav.Link href="#investi">Investi con noi</Nav.Link>
-            <Nav.Link href="#aziende">Aziende</Nav.Link>
-            <Nav.Link href="#contatti">Contatti</Nav.Link>
-          </Nav>
+              <Nav.Link href="//TODO">Chi Siamo</Nav.Link>
+              <Nav.Link href="//TODO">Convenzioni</Nav.Link>
+              <Nav.Link href="//TODO">Servizi</Nav.Link>
+              <Nav.Link href="//TODO">Investi con noi</Nav.Link>
+              <Nav.Link href="//TODO">Aziende</Nav.Link>
+              <Nav.Link href="//TODO">Contatti</Nav.Link>
+            </Nav>
 
-          <Form className="d-flex ms-lg-3">
-            <Form.Control
-              type="search"
-              placeholder="Cerca"
-              className="me-2"
-              aria-label="Search"
-            />
-            <Button variant="outline-success">Search</Button>
-          </Form>
-        </Navbar.Collapse>
+            <Form className="d-flex">
+              <Form.Control
+                type="search"
+                placeholder="Search"
+                className="me-2"
+                aria-label="Search"
+              />
+              <Button variant="outline-success">Search</Button>
+            </Form>
+          </Offcanvas.Body>
+        </Navbar.Offcanvas>
       </Container>
     </Navbar>
   );
