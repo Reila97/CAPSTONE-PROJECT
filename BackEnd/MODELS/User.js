@@ -40,7 +40,7 @@ const UserSchema = new mongoose.Schema({
     timestamps: true
 });
 
-UserSchema.pre('save', async function () {
+ UserSchema.pre('save', async function () {
     // 1. Controlla se la password è stata modificata
     if (!this.isModified('password')) {
         return 
@@ -54,6 +54,7 @@ UserSchema.pre('save', async function () {
 
     } catch (error) {
         throw(error); // Passa l'errore a Mongoose se qualcosa va storto
+        
     }
 });
 

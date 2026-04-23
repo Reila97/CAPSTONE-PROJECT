@@ -12,6 +12,4 @@ loginRouter.post('/registrazione', register)
 loginRouter.post('/login', login)
 
 
-
-
 export default loginRouter

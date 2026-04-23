@@ -8,6 +8,7 @@ import { dbConnect } from "./dbConnect.js";
 
 import loginRouter from "./ROUTES/login.js"
 import userRouter from "./ROUTES/users.js";
+import propertyRouter from "./ROUTES/strutture.js";
 
 const server = express()
 server.use(express.json())
@@ -35,6 +36,7 @@ server.listen(process.env.PORT, ()=> {
 // Routes
  server.use('/auth', loginRouter)
  server.use('/users', userRouter)
+  server.use('/strutture', propertyRouter)
 
 
 

@@ -5,13 +5,25 @@ import {
   Nav,
   Navbar,
   NavDropdown,
-  Offcanvas
-} from "react-bootstrap"
+  Offcanvas,
+} from "react-bootstrap";
+import { Link, useNavigate } from "react-router";
 
 import "./MyNav.css";
 
 function MyNav() {
-   return (
+  const navigate = useNavigate();
+
+  const userData = JSON.parse(localStorage.getItem("user"));
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+      navigate("/login");
+  };
+
+
+  return (
     <Navbar expand="xxl" className="bg-body-tertiary mb-3">
       <Container fluid>
         <Navbar.Brand href="#//TODO">
@@ -37,8 +49,7 @@ function MyNav() {
           </Offcanvas.Header>
           <Offcanvas.Body>
             <Nav className="justify-content-end flex-grow-1 pe-3">
-
-              <Nav.Link href="//TODO">Home</Nav.Link>
+              <Nav.Link href="/home">Home</Nav.Link>
 
               <NavDropdown
                 title="Le Nostre Strutture"
@@ -58,6 +69,27 @@ function MyNav() {
               <Nav.Link href="//TODO">Investi con noi</Nav.Link>
               <Nav.Link href="//TODO">Aziende</Nav.Link>
               <Nav.Link href="//TODO">Contatti</Nav.Link>
+
+              {/* LOGIN/handleLogout */}
+              {userData ? (
+              <>
+                <Nav.Link as={Link} to="/profilo" className="me-2">
+                  Mio Profilo ({userData.name})
+                </Nav.Link>
+                <Button 
+                  variant="outline-dark" 
+                  onClick={handleLogout}
+                  className="rounded-0 btn-sm fw-bold ms-lg-3"
+                >
+                  LOGOUT
+                </Button>
+              </>
+            ) : (
+              <Nav.Link as={Link} to="/login" className="fw-bold">
+                ACCEDI
+              </Nav.Link>
+            )}
+
             </Nav>
 
             <Form className="d-flex">

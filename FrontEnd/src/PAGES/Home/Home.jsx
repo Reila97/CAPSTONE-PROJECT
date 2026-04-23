@@ -1,7 +1,7 @@
 import React from "react";
 import { Col, Container, Row } from "react-bootstrap";
 
-import FormPrenotazione from "../COMPONENTS/FormPrenotazione/FormPrenotazioni.jsx";
+import FormPrenotazione from "../../COMPONENTS/FormPrenotazione/FormPrenotazioni.jsx";
 
 function Home() {
   return (

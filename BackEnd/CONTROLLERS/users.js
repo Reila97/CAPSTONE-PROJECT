@@ -19,12 +19,12 @@ export async function findById(req, res) {
     try {
         const { id } = req.params
         if (!mongoose.Types.ObjectId.isValid(id)) {
-            return res.status(400).json({ message: 'id autore non valido' })
+            return res.status(400).json({ message: 'id struttura non valido' })
         }
 
         const user = await User.findById(id)
         if (!user) {
-            res.status(404).json({ message: 'User non esistente' })
+            res.status(404).json({ message: 'Struttura non esistente' })
         }
 
         res.status(200).json(user)
@@ -36,7 +36,7 @@ export async function findById(req, res) {
 export async function canc(req, res) {
     const { id } = req.params
     if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(400).json({ message: 'id autore non valido' })
+        return res.status(400).json({ message: 'id struttura non valido' })
     }
 
     const delUser = await User.findOneAndDelete(id)
@@ -51,7 +51,7 @@ export async function update(req,res) {
      try {
         const { id } = req.params
         if (!mongoose.Types.ObjectId.isValid(id)) {
-            return res.status(400).json({ message: 'id autore non valido' })
+            return res.status(400).json({ message: 'id struttura non valido' })
         }
           const { nome, cognome, email, dataDiNascita, password, avatar } = req.body
 

@@ -7,6 +7,11 @@ import { isAdmin } from '../MIDDLEWARES/isAdmin.js'
 
 const userRouter = express.Router()
 
+//CHI SONO IO?
+userRouter.get('/me', hasToken, (req, res) => {
+    res.json(req.user);
+});
+
 
 userRouter.get('/', findAll) 
 userRouter.get('/:id', findById) 
@@ -14,7 +19,9 @@ userRouter.get('/:id', findById)
 //userRouter.post('/' ) // elemento nuovo
 //
 userRouter.delete('/:id', hasToken, isAdmin,canc ) 
-userRouter.put('/:id', hasToken, isAdmin, update ) 
+userRouter.put('/:id', hasToken, update ) 
 //userRouter.patch('/:id/avatar'); 
+
+
 
 export default userRouter
