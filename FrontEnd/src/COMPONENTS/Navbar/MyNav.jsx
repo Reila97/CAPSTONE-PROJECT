@@ -1,111 +1,106 @@
-import {
-  Button,
-  Container,
-  Form,
-  Nav,
-  Navbar,
-  NavDropdown,
-  Offcanvas,
-} from "react-bootstrap";
-import { Link, useNavigate } from "react-router";
+import { Navbar, Nav, Container, NavDropdown, Button, Spinner } from "react-bootstrap";
+import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useAuth } from "../../CONTEXT/IsAdmin";
 
-import "./MyNav.css";
-
-function MyNav() {
+const MyNav = () => {
+  const { user, isAdmin, logout } = useAuth();
   const navigate = useNavigate();
+  
+  // Stato per le strutture dinamiche nel dropdown
+  const [strutture, setStrutture] = useState([]);
+  const [loadingStrutture, setLoadingStrutture] = useState(false);
 
-  const userData = JSON.parse(localStorage.getItem("user"));
+  // Caricamento strutture per il dropdown
+  useEffect(() => {
+    if (user) {
+      setLoadingStrutture(true);
+      fetch("http://localhost:3002/strutture")
+        .then((res) => res.json())
+        .then((data) => setStrutture(data))
+        .catch((err) => console.error("Errore caricamento dropdown:", err))
+        .finally(() => setLoadingStrutture(false));
+    }
+  }, [user]);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-      navigate("/login");
+    logout();
+    navigate("/");
   };
 
-
   return (
-    <Navbar expand="xxl" className="bg-body-tertiary mb-3">
-      <Container fluid>
-        <Navbar.Brand href="#//TODO">
-          <img
-            className="Logo"
-            src="/Villa Fenix_Logo_Colore.png"
-            alt="Villa Fenix Logo"
-            style={{ height: "40px", marginRight: "10px" }}
-          />
-          Villa Fenix
+    <Navbar bg="dark" variant="dark" expand="lg" className="sticky-top shadow-sm">
+      <Container>
+        <Navbar.Brand as={Link} to={user ? "/home" : "/"}>
+          VILLA FENIX
         </Navbar.Brand>
+        
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="me-auto">
+            
+            {/* ROTTE PUBBLICHE / HOME */}
+            {user && <Nav.Link as={Link} to="/home">Home</Nav.Link>}
 
-        <Navbar.Toggle aria-controls="offcanvasNavbar-expand-lg" />
-        <Navbar.Offcanvas
-          id="offcanvasNavbar-expand-lg"
-          aria-labelledby="offcanvasNavbarLabel-expand-lg"
-          placement="start"
-        >
-          <Offcanvas.Header closeButton>
-            <Offcanvas.Title id="offcanvasNavbarLabel-expand-lg">
-              Offcanvas
-            </Offcanvas.Title>
-          </Offcanvas.Header>
-          <Offcanvas.Body>
-            <Nav className="justify-content-end flex-grow-1 pe-3">
-              <Nav.Link href="/home">Home</Nav.Link>
-
-              <NavDropdown
-                title="Le Nostre Strutture"
-                id="navbarScrollingDropdown"
-              >
-                <NavDropdown.Item href="//TODO">Osio Sotto</NavDropdown.Item>
-                <NavDropdown.Item href="//TODO">Osio Sotto 2</NavDropdown.Item>
-                <NavDropdown.Item href="//TODO">
-                  Ponte San Pietro
+            {/* DROPDOWN DINAMICO STRUTTURE */}
+            {user && (
+              <NavDropdown title="Strutture" id="nav-dropdown-strutture">
+                <NavDropdown.Item as={Link} to="/strutture">
+                  Tutte le Strutture
                 </NavDropdown.Item>
-                <NavDropdown.Item href="//TODO">Seriate</NavDropdown.Item>
+                <NavDropdown.Divider />
+                
+                {loadingStrutture ? (
+                  <div className="text-center py-2">
+                    <Spinner animation="border" size="sm" />
+                  </div>
+                ) : (
+                  strutture.map((s) => (
+                    <NavDropdown.Item key={s._id} as={Link} to={`/strutture/${s._id}`}>
+                      {s.nome}
+                    </NavDropdown.Item>
+                  ))
+                )}
               </NavDropdown>
+            )}
 
-              <Nav.Link href="//TODO">Chi Siamo</Nav.Link>
-              <Nav.Link href="//TODO">Convenzioni</Nav.Link>
-              <Nav.Link href="//TODO">Servizi</Nav.Link>
-              <Nav.Link href="//TODO">Investi con noi</Nav.Link>
-              <Nav.Link href="//TODO">Aziende</Nav.Link>
-              <Nav.Link href="//TODO">Contatti</Nav.Link>
+            {/* ROTTE RISERVATE ADMIN */}
+            {isAdmin && (
+              <NavDropdown title="Pannello Admin" id="admin-nav-dropdown" className="bg-warning rounded px-1">
+                <NavDropdown.Item as={Link} to="/admin/users">
+                  Gestione Utenti
+                </NavDropdown.Item>
+                <NavDropdown.Item as={Link} to="/admin/strutture">
+                  Gestione Strutture
+                </NavDropdown.Item>
+              </NavDropdown>
+            )}
+          </Nav>
 
-              {/* LOGIN/handleLogout */}
-              {userData ? (
+          <Nav className="align-items-center">
+            {user ? (
               <>
                 <Nav.Link as={Link} to="/profilo" className="me-2">
-                  Mio Profilo ({userData.name})
+                  Ciao, <strong>{user.nome}</strong>
                 </Nav.Link>
                 <Button 
-                  variant="outline-dark" 
+                  variant="outline-danger" 
+                  size="sm" 
                   onClick={handleLogout}
-                  className="rounded-0 btn-sm fw-bold ms-lg-3"
+                  className="rounded-pill"
                 >
-                  LOGOUT
+                  Logout
                 </Button>
               </>
             ) : (
-              <Nav.Link as={Link} to="/login" className="fw-bold">
-                ACCEDI
-              </Nav.Link>
+              <Nav.Link as={Link} to="/">Login</Nav.Link>
             )}
-
-            </Nav>
-
-            <Form className="d-flex">
-              <Form.Control
-                type="search"
-                placeholder="Search"
-                className="me-2"
-                aria-label="Search"
-              />
-              <Button variant="outline-success">Search</Button>
-            </Form>
-          </Offcanvas.Body>
-        </Navbar.Offcanvas>
+          </Nav>
+        </Navbar.Collapse>
       </Container>
     </Navbar>
   );
-}
+};
 
 export default MyNav;
+

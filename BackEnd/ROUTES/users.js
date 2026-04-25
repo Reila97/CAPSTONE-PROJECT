@@ -1,6 +1,6 @@
 import express from 'express'
 
-import { findAll, findById, canc, update} from '../CONTROLLERS/users.js'
+import { findAll, findById, canc, update, createNew} from '../CONTROLLERS/users.js'
 import { hasToken } from '../MIDDLEWARES/hasToken.js'
 import { isAdmin } from '../MIDDLEWARES/isAdmin.js'
 
@@ -16,8 +16,8 @@ userRouter.get('/me', hasToken, (req, res) => {
 userRouter.get('/', findAll) 
 userRouter.get('/:id', findById) 
 
-//userRouter.post('/' ) // elemento nuovo
-//
+userRouter.post('/', createNew ) // elemento nuovo
+
 userRouter.delete('/:id', hasToken, isAdmin,canc ) 
 userRouter.put('/:id', hasToken, update ) 
 //userRouter.patch('/:id/avatar'); 

@@ -1,10 +1,44 @@
-import { Navigate } from 'react-router-dom';
+import { createContext, useState, useContext, useEffect } from "react";
 
-const AdminRoute = ({ children, user }) => {
-  if (user.role !== 'ADMIN') {
-    // Se non è admin, lo spediamo alla home
-    return <Navigate to="/" replace />;
-  }
-  return children;
+const AuthContext = createContext();
+
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem("user");
+    const token = localStorage.getItem("token");
+    
+    if (savedUser && token) {
+      setUser(JSON.parse(savedUser));
+    }
+    setLoading(false);
+  }, []);
+
+  const login = (userData, token) => {
+    setUser(userData);
+    localStorage.setItem("user", JSON.stringify(userData));
+    localStorage.setItem("token", token);
+  };
+
+  const logout = () => {
+    setUser(null);
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+  };
+
+  return (
+    <AuthContext.Provider value={{ 
+      user, 
+      login, 
+      logout, 
+      isAdmin: user?.ruolo === "ADMIN" || user?.isAdmin === true, 
+      loading 
+    }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
+export const useAuth = () => useContext(AuthContext);

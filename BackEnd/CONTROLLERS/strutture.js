@@ -41,7 +41,7 @@ export async function canc(req, res) {
         return res.status(400).json({ message: 'id autore non valido' })
     }
 
-    const delProperty = await User.findOneAndDelete(id)
+    const delProperty = await Strutture.findOneAndDelete(id)
     if (!delProperty) {
         return res.status(404).json({ message: 'user non trovato' })
     }

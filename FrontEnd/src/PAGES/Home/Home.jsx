@@ -15,6 +15,8 @@ function Home() {
           </Col>
         </Row>
       </Container>
+
+      //TODO carosello strutture
     </>
   );
 }
