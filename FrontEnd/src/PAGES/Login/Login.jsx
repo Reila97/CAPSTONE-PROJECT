@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { useAuth } from "../../CONTEXT/IsAdmin";
 
+import "./Login.css"
+
 function Login() {
   const [loginData, setLoginData] = useState({ email: "", password: "" });
   const [isLoading, setIsLoading] = useState(false);
@@ -29,7 +31,7 @@ function Login() {
         login(userData, token); // Salvo nel context e localStorage
         
         if (userData.ruolo === "ADMIN" || userData.isAdmin) {
-          navigate("/admin");
+          navigate("/admin"); //TODO
         } else {
           navigate("/home");
         }
@@ -69,23 +71,37 @@ function Login() {
 
   return (
     <Container className="d-flex justify-content-center mt-5">
-      <div style={{ maxWidth: "400px", width: "100%" }}>
-        <h2 className="text-center mb-4 fw-light text-uppercase">Villa Fenix</h2>
+
+      <div className="loginContainer">
+
+     <img 
+     src="/Villa Fenix_Logo_Colore.png" 
+     className="Logo"
+     alt="logo villa fenix"/>
+
         {error && <Alert variant="danger" className="py-2 small">{error}</Alert>}
+        
         <Form onSubmit={handleSubmit} className="p-4 bg-white shadow-sm">
-          <FloatingLabel label="Email" className="mb-3">
+          <FloatingLabel label="Email" className="formLabel mb-3">
             <Form.Control 
               type="email" name="email" 
               value={loginData.email} onChange={handleChange} required 
             />
           </FloatingLabel>
-          <FloatingLabel label="Password" className="mb-3">
+
+
+          <FloatingLabel label="Password" className="formLabel mb-3">
             <Form.Control 
               type="password" name="password" 
               value={loginData.password} onChange={handleChange} required 
             />
           </FloatingLabel>
-          <Button variant="dark" type="submit" className="w-100" disabled={isLoading}>
+
+
+          <Button 
+           type="submit" 
+           className="logoButton w-100" 
+           disabled={isLoading}>
             {isLoading ? <Spinner animation="border" size="sm" /> : "ACCEDI"}
           </Button>
         </Form>

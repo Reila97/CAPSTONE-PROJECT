@@ -1,7 +1,11 @@
-import { Navbar, Nav, Container, NavDropdown, Button, Spinner } from "react-bootstrap";
+import { Navbar, Nav, Container, NavDropdown, Button, Spinner, Image } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+
 import { useAuth } from "../../CONTEXT/IsAdmin";
+
+import"./MyNav.css"
+
 
 const MyNav = () => {
   const { user, isAdmin, logout } = useAuth();
@@ -29,15 +33,18 @@ const MyNav = () => {
   };
 
   return (
-    <Navbar bg="dark" variant="dark" expand="lg" className="sticky-top shadow-sm">
+    <Navbar expand="lg" className="sticky-top shadow-sm bg-white">
       <Container>
-        <Navbar.Brand as={Link} to={user ? "/home" : "/"}>
-          VILLA FENIX
+        <Navbar.Brand as={Link} to={user ? "/home" : "/"} className="main">
+        <img 
+     src="/Villa Fenix_Logo_Colore.png" 
+     className="logo"
+     alt="logo villa fenix"/>
         </Navbar.Brand>
         
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
+          <Nav className="me-auto bodyCopy align-items-lg-center">
             
             {/* ROTTE PUBBLICHE / HOME */}
             {user && <Nav.Link as={Link} to="/home">Home</Nav.Link>}
@@ -56,9 +63,11 @@ const MyNav = () => {
                   </div>
                 ) : (
                   strutture.map((s) => (
-                    <NavDropdown.Item key={s._id} as={Link} to={`/strutture/${s._id}`}>
+                    <NavDropdown.Item key={s._id} as={Link} to={`/strutture/${s._id}` }className="mx-1">
                       {s.nome}
+                     
                     </NavDropdown.Item>
+                    
                   ))
                 )}
               </NavDropdown>
@@ -66,13 +75,23 @@ const MyNav = () => {
 
             {/* ROTTE RISERVATE ADMIN */}
             {isAdmin && (
-              <NavDropdown title="Pannello Admin" id="admin-nav-dropdown" className="bg-warning rounded px-1">
+              <NavDropdown title="Pannello Admin" id="admin-nav-dropdown" className="orangeBg rounded p-2">
                 <NavDropdown.Item as={Link} to="/admin/users">
                   Gestione Utenti
                 </NavDropdown.Item>
+                <hr className="hr" />
                 <NavDropdown.Item as={Link} to="/admin/strutture">
                   Gestione Strutture
                 </NavDropdown.Item>
+                <hr className="hr" />
+                <NavDropdown.Item as={Link} to="/admin/camere">
+                  Gestione Camere
+                </NavDropdown.Item>
+                <hr className="hr" />
+                <NavDropdown.Item as={Link} to="/admin/servizi">
+                  Gestione Servizi
+                </NavDropdown.Item>
+                
               </NavDropdown>
             )}
           </Nav>
@@ -80,8 +99,10 @@ const MyNav = () => {
           <Nav className="align-items-center">
             {user ? (
               <>
-                <Nav.Link as={Link} to="/profilo" className="me-2">
-                  Ciao, <strong>{user.nome}</strong>
+                <Nav.Link as={Link} to="/profilo" className=" me-2">
+                  Ciao, <span className="main orangeTxt">
+                    <strong >{user.nome}</strong>
+                    </span>
                 </Nav.Link>
                 <Button 
                   variant="outline-danger" 

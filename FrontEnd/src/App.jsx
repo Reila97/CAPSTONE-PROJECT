@@ -3,14 +3,14 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import MyNav from "./COMPONENTS/Navbar/MyNav.jsx";
 import AllUser from "./COMPONENTS/User/AllUser.jsx";
 import User from "./COMPONENTS/User/User.jsx";
-import StruttureClient from "./COMPONENTS/Strutture/StruttureClient.jsx";
+import StruttureClient from "./COMPONENTS/Strutture/Struttura Clienti/StruttureClient.jsx";
 import AdminStrutture from "./COMPONENTS/Strutture/StruttureAdmin.jsx";
 
 import Home from "./PAGES/Home/Home.jsx";
 import Login from "./PAGES/Login/Login.jsx";
 
 import { AuthProvider, useAuth } from "./CONTEXT/IsAdmin.jsx";
-import StrutturaDettaglio from "./COMPONENTS/Strutture/StrutturaDettaglio.jsx";
+import StrutturaDettaglio from "./COMPONENTS/Strutture/Struttura Dettaglio/StrutturaDettaglio.jsx";
 
 
 // --- PROTEZIONE ROTTE ADMIN ---
@@ -23,7 +23,7 @@ const AdminRoute = ({ children }) => {
   return children;
 };
 
-// --- PROTEZIONE ROTTE UTENTE (Opzionale ma consigliato) ---
+// --- PROTEZIONE ROTTE UTENTE  ---
 const PrivateRoute = ({ children }) => {
   const { user, loading } = useAuth();
   if (loading) return null;
@@ -32,12 +32,14 @@ const PrivateRoute = ({ children }) => {
 
 
 function App() {
+  
   return (
+    
     <>
     <AuthProvider>
 
 
-      <MyNav /> //TODO sistemare nav per admin, client e public
+      <MyNav /> 
       
       <Routes>
         {/* PUBBLICHE */}

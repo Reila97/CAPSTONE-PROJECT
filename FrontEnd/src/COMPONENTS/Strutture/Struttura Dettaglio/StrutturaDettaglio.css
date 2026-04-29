@@ -1,0 +1,30 @@
+.headLine {
+    font-family: "Metrophobic", sans-serif;
+    font-weight: 600;
+    font-style: normal;
+    color: #6d634f;
+}
+
+.bodyCopy {
+    font-family: "Ubuntu", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+    color: #6d634f;
+}
+
+.prenotaButton {
+    font-family: "Metrophobic", sans-serif;
+    font-weight: 600;
+    font-style: normal;
+    color: white !important; 
+    background-color: #f1901f;
+    border: #f1901f;
+    /* //TODO non viene bianco */
+    
+}
+
+.prenotaButton:hover {
+    background-color: #cb781a;
+    border: #f1901f;
+}
+

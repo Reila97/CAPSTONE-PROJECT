@@ -2,12 +2,11 @@ import { useState } from "react";
 import { Modal, Button, Form, Row, Col, Spinner, Alert } from "react-bootstrap";
 import { PencilSquare } from "react-bootstrap-icons";
 
-function EditStruttura ({ struttura, onUpdate })  {
+function EditStruttura({ struttura, onUpdate }) {
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Appiattiamo la struttura complessa per gestirla facilmente negli input
   const [formData, setFormData] = useState({
     nome: struttura.nome,
     descrizione: struttura.descrizione,
@@ -15,8 +14,8 @@ function EditStruttura ({ struttura, onUpdate })  {
     città: struttura.località.città,
     provincia: struttura.località.provincia,
     zipCode: struttura.località.zipCode,
-    email: struttura.contatti.email,
-    telefono: struttura.contatti.telefono,
+    email: struttura.contatti.email, // Inizializzato correttamente
+    telefono: struttura.contatti.telefono, // Inizializzato correttamente
     mainImage: struttura.images.mainImage,
     basePrice: struttura.policies.basePrice,
     cancellation: struttura.policies.cancellation
@@ -32,8 +31,8 @@ function EditStruttura ({ struttura, onUpdate })  {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setError(null);
 
-    // Ricostruiamo l'oggetto nidificato come richiesto dallo schema Mongoose
     const bodyPayload = {
       nome: formData.nome,
       descrizione: formData.descrizione,
@@ -44,9 +43,9 @@ function EditStruttura ({ struttura, onUpdate })  {
         zipCode: formData.zipCode
       },
       contatti: {
-        email: formData.email,
-        telefono: formData.telefono,
-        manager: struttura.contatti.manager // Manteniamo l'originale
+        email: formData.email, // Ora prenderà il valore aggiornato dal form
+        telefono: formData.telefono, // Ora prenderà il valore aggiornato dal form
+        manager: struttura.contatti.manager
       },
       images: {
         mainImage: formData.mainImage
@@ -72,7 +71,8 @@ function EditStruttura ({ struttura, onUpdate })  {
         onUpdate();
         handleClose();
       } else {
-        throw new Error("Errore durante l'aggiornamento");
+        const errorData = await res.json();
+        throw new Error(errorData.message || "Errore durante l'aggiornamento");
       }
     } catch (err) {
       setError(err.message);
@@ -94,6 +94,7 @@ function EditStruttura ({ struttura, onUpdate })  {
         <Form onSubmit={handleSubmit}>
           <Modal.Body>
             {error && <Alert variant="danger">{error}</Alert>}
+            
             <Row>
               <Col md={6}>
                 <Form.Group className="mb-3">
@@ -114,6 +115,7 @@ function EditStruttura ({ struttura, onUpdate })  {
               <Form.Control as="textarea" rows={3} name="descrizione" value={formData.descrizione} onChange={handleChange} required />
             </Form.Group>
 
+            {/* SEZIONE LOCALITÀ */}
             <h6 className="text-muted border-bottom pb-2 mt-4">Località</h6>
             <Row>
               <Col md={8}>
@@ -130,6 +132,24 @@ function EditStruttura ({ struttura, onUpdate })  {
               </Col>
             </Row>
 
+            {/* SEZIONE CONTATTI (AGGIUNTA) */}
+            <h6 className="text-muted border-bottom pb-2 mt-4">Contatti</h6>
+            <Row>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Email</Form.Label>
+                  <Form.Control type="email" name="email" value={formData.email} onChange={handleChange} required />
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Telefono</Form.Label>
+                  <Form.Control name="telefono" value={formData.telefono} onChange={handleChange} required />
+                </Form.Group>
+              </Col>
+            </Row>
+
+            <h6 className="text-muted border-bottom pb-2 mt-4">Media</h6>
             <Form.Group className="mb-3">
               <Form.Label>URL Immagine Principale</Form.Label>
               <Form.Control name="mainImage" value={formData.mainImage} onChange={handleChange} required />
@@ -145,6 +165,6 @@ function EditStruttura ({ struttura, onUpdate })  {
       </Modal>
     </>
   );
-};
+}
 
 export default EditStruttura;

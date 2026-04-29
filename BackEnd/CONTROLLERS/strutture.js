@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import bcrypt from 'bcrypt'
 import { v2 as cloudinary } from 'cloudinary'
 
 import Strutture from "../MODELS/Strutture.js";
@@ -9,7 +8,7 @@ export async function findAll(req, res) {
     try {
         const allProperty = await Strutture.find()
         if (!allProperty) {
-            res.status(404).json({ message: 'non ci sono ancora strutture' })
+           return res.status(404).json({ message: 'non ci sono ancora strutture' })
         }
         res.status(200).json(allProperty)
     } catch (error) {
@@ -24,9 +23,9 @@ export async function findById(req, res) {
             return res.status(400).json({ message: 'id autore non valido' })
         }
 
-        const property = await Strutture.findById(id)
+        const property = await Strutture.findById(id).populate('camere')
         if (!property) {
-            res.status(404).json({ message: 'Struttura non esistente' })
+            return res.status(404).json({ message: 'Struttura non esistente' })
         }
 
         res.status(200).json(property)
@@ -41,7 +40,7 @@ export async function canc(req, res) {
         return res.status(400).json({ message: 'id autore non valido' })
     }
 
-    const delProperty = await Strutture.findOneAndDelete(id)
+    const delProperty = await Strutture.findByIdAndDelete(id)
     if (!delProperty) {
         return res.status(404).json({ message: 'user non trovato' })
     }
@@ -78,6 +77,7 @@ export async function update(req, res) {
             { returnDocument: 'after' }
         );
 
+        //TODO nella modifica non mi esce telefono e email
         res.status(200).json(updateProperty)
     } catch (error) {
         res.status(500).json({ message: error.message })

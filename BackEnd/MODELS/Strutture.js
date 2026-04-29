@@ -8,23 +8,12 @@ const strutturaSchema = new mongoose.Schema(
       required: [true, "Il nome della struttura è obbligatorio"],
       trim: true
     },
-    //TODO
-    // slug: { 
-    //   type: String, 
-    //   required: true, 
-    //   unique: true, 
-    //   lowercase: true 
-    // },
+   
     descrizione: {
       type: String,
       required: [true, "La descrizione è obbligatoria"]
     },
-    // categoria: {
-    //   type: String,
-    //   enum: ["Miniappartamento", "Singola", "Matrimoniale", "Mansardato"],
-    //   default: "Singola"
-    // },
-
+  
     // 2. LOCALIZZAZIONE
     località: {
       indirizzo: { type: String, required: true },
@@ -49,7 +38,7 @@ const strutturaSchema = new mongoose.Schema(
       telefono: { type: String, required: true },
       manager: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User", //TODO mettere user giusto
+        ref: "User", 
         required: true
       }
     },
@@ -89,6 +78,17 @@ const strutturaSchema = new mongoose.Schema(
 //TODO
 // Indice per velocizzare le ricerche per città o nome
 //strutturaSchema.index({ "località.città": 1, nome: 1 });
+
+// Consente di vedere i campi virtuali quando converti il documento in JSON o Oggetto
+strutturaSchema.set('toJSON', { virtuals: true });
+strutturaSchema.set('toObject', { virtuals: true });
+
+// Definisci il campo virtuale 'camere'
+strutturaSchema.virtual('camere', {
+  ref: 'camera',         // Il modello da cercare
+  localField: '_id',     // Il campo in questo modello (Struttura)
+  foreignField: 'strutturaId' // Il campo nel modello Camera che punta alla struttura
+});
 
 const strutture = mongoose.model("struttura", strutturaSchema);
 

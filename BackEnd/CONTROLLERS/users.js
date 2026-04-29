@@ -39,7 +39,7 @@ export async function canc(req, res) {
         return res.status(400).json({ message: 'id struttura non valido' })
     }
 
-    const delUser = await User.findOneAndDelete(id)
+    const delUser = await User.findByIdAndDelete(id)
     if (!delUser) {
         return res.status(404).json({ message: 'user non trovato' })
     }
