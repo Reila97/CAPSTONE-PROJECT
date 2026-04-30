@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import { Container, Table, Badge, Button, Spinner } from "react-bootstrap";
+import { Table, Badge, Spinner, Image } from "react-bootstrap";
 import DeleteStruttura from "../Button/DeleteStruttura"; 
 import EditStruttura from "../Button/EditStruttura"; 
 import CreateStruttura from "../Button/createStruttura";
 
-const AdminStrutture = () => {
+function AdminStrutture () {
   const [strutture, setStrutture] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -22,52 +22,80 @@ const AdminStrutture = () => {
 
   useEffect(() => { getStrutture(); }, []);
 
-  if (loading) return <Container className="mt-5 text-center"><Spinner animation="border" /></Container>;
+  if (loading) return (
+    <div className="text-center py-5">
+      <Spinner animation="border" variant="primary" />
+    </div>
+  );
 
   return (
-    <Container className="mt-5">
+    <div className="admin-section">
+      {/* Header Sezione */}
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2 className="fw-bold m-0">GESTIONE STRUTTURE</h2>
+        <div>
+          <h4 className="fw-bold mb-1">Gestione Strutture</h4>
+          <p className="text-muted small">Visualizza, modifica o aggiungi nuove strutture al catalogo</p>
+        </div>
         <CreateStruttura onCreated={getStrutture} />
       </div>
 
-      <Table responsive hover className="align-middle border">
-        <thead className="table-dark">
-          <tr>
-            <th>Immagine</th>
-            <th>Nome</th>
-            <th>Località</th>
-            <th>Prezzo Base</th>
-            <th className="text-center">Azioni</th>
-          </tr>
-        </thead>
-        <tbody>
-          {strutture.map((s) => (
-            <tr key={s._id}>
-              <td>
-                <img src={s.images.mainImage} alt={s.nome} style={{width: '60px', height: '40px', objectFit: 'cover'}} />
-              </td>
-              <td className="fw-bold">{s.nome}</td>
-              <td>{s.località.città} ({s.località.provincia})</td>
-              <td>€{s.policies.basePrice}</td>
-              <td className="text-center">
-                <div className="d-flex justify-content-center gap-2">
-                  {/* COMPONENTE MODIFICA */}
-                  <EditStruttura struttura={s} onUpdate={getStrutture} />
-                  
-                  {/* COMPONENTE ELIMINA */}
-                  <DeleteStruttura 
-                    strutturaId={s._id} 
-                    strutturaNome={s.nome} 
-                    onDelete={getStrutture} 
-                  />
-                </div>
-              </td>
+      {/* Tabella Minimal */}
+      <div className="table-responsive">
+        <Table hover className="align-middle custom-admin-table">
+          <thead className="bg-light">
+            <tr>
+              <th className="border-0 text-muted small text-uppercase">Struttura</th>
+              <th className="border-0 text-muted small text-uppercase">Località</th>
+            
+              <th className="border-0 text-muted small text-uppercase text-center">Azioni</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
-    </Container>
+          </thead>
+          <tbody>
+            {strutture.map((s) => (
+              <tr key={s._id} className="border-bottom">
+                <td className="py-3">
+                  <div className="d-flex align-items-center">
+                    <Image 
+                      src={s.images?.mainImage} 
+                      alt={s.nome} 
+                      rounded
+                      className="me-3 shadow-sm"
+                      style={{ width: '55px', height: '55px', objectFit: 'cover' }} 
+                    />
+                    <div>
+                      <div className="fw-bold text-dark">{s.nome}</div>
+                      
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div className="d-flex flex-column">
+                    <span>{s.località.città}</span>
+                    <span className="text-muted small">{s.località.provincia}</span>
+                  </div>
+                </td>
+                <td>
+                  <div className="d-flex justify-content-center gap-2">
+                    {/* I bottoni Edit/Delete ora respirano di più */}
+                    <EditStruttura struttura={s} onUpdate={getStrutture} />
+                    <DeleteStruttura 
+                      strutturaId={s._id} 
+                      strutturaNome={s.nome} 
+                      onDelete={getStrutture} 
+                    />
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </div>
+
+      {/* Footer Tabella */}
+      <div className="mt-3 text-muted small">
+        Totale strutture registrate: <strong>{strutture.length}</strong>
+      </div>
+    </div>
   );
 };
 

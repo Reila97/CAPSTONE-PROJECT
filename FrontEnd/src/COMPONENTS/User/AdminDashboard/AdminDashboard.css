@@ -1,0 +1,36 @@
+.main {
+    font-family: "Metrophobic", sans-serif;
+    font-weight: 600;
+    font-style: normal;
+}
+
+.bodyCopy{
+    font-family: "Ubuntu", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+}
+
+/* Colore di base per i link (opzionale, se vuoi cambiarlo) */
+.custom-nav .nav-link {
+    color: #333; /* Grigio scuro di default */
+    transition: all 0.3s ease; /* Rende il cambio colore fluido */
+}
+
+/* Hover: quando passi sopra con il mouse */
+.custom-nav .nav-link:hover {
+    color: #f1901f !important;
+    background-color: rgba(241, 144, 31, 0.1); /* Sfondo arancio leggerissimo al passaggio */
+}
+
+/* Active/On Click: quando il link è selezionato (usando variant="pills") */
+.custom-nav .nav-link.active {
+    background-color: #f1901f !important; /* Sfondo arancione pieno */
+    color: white !important; /* Testo bianco quando attivo */
+}
+
+/* Focus: rimuove l'alone blu tipico dei browser se clicchi */
+.custom-nav .nav-link:focus {
+    box-shadow: 0 0 0 0.25 margin-left rgba(241, 144, 31, 0.25);
+}
+
+

@@ -4,7 +4,7 @@ import { Container, Spinner, Badge, Row, Col, Button } from "react-bootstrap";
 import { ArrowLeft } from "react-bootstrap-icons";
 import { useNavigate } from "react-router-dom";
 
-const StrutturaDettaglio = () => {
+function StrutturaDettaglio() {
   const { id } = useParams();
   const [struttura, setStruttura] = useState(null); // Singolo oggetto, non array
   const [loading, setLoading] = useState(true);

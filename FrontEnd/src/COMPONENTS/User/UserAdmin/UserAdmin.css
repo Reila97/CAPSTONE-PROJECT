@@ -1,0 +1,49 @@
+/* Stile per il piccolo avatar nella tabella utenti */
+.user-avatar-sm {
+    width: 40px;
+    height: 40px;
+    background-color: #e9ecef;
+    color: #495057;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    border: 1px solid #dee2e6;
+}
+
+/* Hover sulla riga della tabella */
+.custom-admin-table tbody tr:hover {
+    background-color: #fcfcfc;
+}
+
+/* Stile base del bottone toggle admin */
+.btn-orange-toggle {
+    background-color: #f8f9fa; /* Grigio chiarissimo di base */
+    color: #6c757d;
+    transition: all 0.2s ease-in-out;
+}
+
+/* Quando l'utente è ADMIN, diamo un tocco di colore al bottone */
+.btn-orange-toggle.active-admin {
+    background-color: rgba(241, 144, 31, 0.15) !important; /* Sfondo arancio molto tenue */
+}
+
+/* Hover sull'icona e sul bottone */
+.btn-orange-toggle:hover {
+    background-color: #f1901f !important;
+    color: white !important;
+}
+
+/* Se passi sopra l'icona ShieldCheck specifica */
+.btn-orange-toggle:hover svg {
+    fill: white !important;
+    color: white !important;
+}
+
+/* Badge del Ruolo: Uniformiamo l'arancione anche qui se preferisci */
+.badge.bg-danger {
+    background-color: #f1901f !important; /* Opzionale: rende anche il badge ADMIN arancione */
+}

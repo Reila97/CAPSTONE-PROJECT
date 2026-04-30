@@ -31,7 +31,7 @@ function Login() {
         login(userData, token); // Salvo nel context e localStorage
         
         if (userData.ruolo === "ADMIN" || userData.isAdmin) {
-          navigate("/admin"); //TODO
+          navigate("/admin"); 
         } else {
           navigate("/home");
         }

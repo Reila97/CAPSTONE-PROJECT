@@ -77,7 +77,6 @@ export async function update(req, res) {
             { returnDocument: 'after' }
         );
 
-        //TODO nella modifica non mi esce telefono e email
         res.status(200).json(updateProperty)
     } catch (error) {
         res.status(500).json({ message: error.message })

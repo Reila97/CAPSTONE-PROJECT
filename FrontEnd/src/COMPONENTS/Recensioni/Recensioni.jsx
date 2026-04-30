@@ -2,7 +2,7 @@ import { Card, Button, Image } from 'react-bootstrap';
 import { Envelope, GeoAlt, StarFill } from 'react-bootstrap-icons';
 import './Recensioni.css';
 
-const Recensioni = () => {
+function Recensioni() {
   return (
     <Card className="user-card-elegant border-0 shadow-sm">
       <div className="card-header-img">

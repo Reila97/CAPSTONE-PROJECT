@@ -1,7 +1,7 @@
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import "./FormPrenotazioni.css";
 
-const FormPrenotazioni = () => {
+function FormPrenotazioni(){
   return (
     <>
       <div className="booking-card-wrapper">

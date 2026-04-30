@@ -1,8 +1,8 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 
 import MyNav from "./COMPONENTS/Navbar/MyNav.jsx";
-import AllUser from "./COMPONENTS/User/AllUser.jsx";
-import User from "./COMPONENTS/User/User.jsx";
+import User from "./COMPONENTS/User/User/User.jsx";
+import UserAdmin from "./COMPONENTS/User/UserAdmin/UserAdmin.jsx";
 import StruttureClient from "./COMPONENTS/Strutture/Struttura Clienti/StruttureClient.jsx";
 import AdminStrutture from "./COMPONENTS/Strutture/StruttureAdmin.jsx";
 
@@ -11,7 +11,7 @@ import Login from "./PAGES/Login/Login.jsx";
 
 import { AuthProvider, useAuth } from "./CONTEXT/IsAdmin.jsx";
 import StrutturaDettaglio from "./COMPONENTS/Strutture/Struttura Dettaglio/StrutturaDettaglio.jsx";
-
+import AdminDashboard from "./COMPONENTS/User/AdminDashboard/AdminDashboard.jsx";
 
 // --- PROTEZIONE ROTTE ADMIN ---
 const AdminRoute = ({ children }) => {
@@ -30,57 +30,66 @@ const PrivateRoute = ({ children }) => {
   return user ? children : <Navigate to="/" replace />;
 };
 
-
 function App() {
-  
   return (
-    
     <>
-    <AuthProvider>
+      <AuthProvider>
+        <MyNav />
 
+        <Routes>
+          {/* PUBBLICHE */}
+          <Route path="/" element={<Login />} />
+          <Route path="/strutture" element={<StruttureClient />} />
+          <Route path="/strutture/:id" element={<StrutturaDettaglio />} />
 
-      <MyNav /> 
-      
-      <Routes>
-        {/* PUBBLICHE */}
-        <Route path="/" element={<Login />} />
-        <Route path="/strutture" element={<StruttureClient />} />
-        <Route path="/strutture/:id" element={<StrutturaDettaglio />} />
-
-        {/* UTENTE LOGGATO */}
-        <Route path="/home" element={<Home />} />
-        <Route path="/profilo" element={
-          <PrivateRoute>
-            <User />
-          </PrivateRoute>} 
+          {/* UTENTE LOGGATO */}
+          <Route path="/home" element={<Home />} />
+          <Route
+            path="/profilo"
+            element={
+              <PrivateRoute>
+                <User/>
+              </PrivateRoute>
+            }
           />
-        
 
-        {/* ADMIN */}
-        <Route path="/admin/users" element={
-          <AdminRoute>
-          <AllUser/>
-          </AdminRoute>}
-        />
+          {/* ADMIN */}
 
-        <Route path="/admin/strutture" element={
-          <AdminRoute>
-            <AdminStrutture />
-          </AdminRoute>
-        } />
+          <Route
+            path="/admin"
+            element={
+              <AdminRoute>
+                <AdminDashboard />
+              </AdminRoute>
+            }
+          />
 
-        {/* Fallback per pagine inesistenti */}
-        <Route path="*" element={<Navigate to="/" />} />
-      </Routes>
+          <Route
+            path="/admin/users"
+            element={
+              <AdminRoute>
+                <UserAdmin />
+              </AdminRoute>
+            }
+          />
 
-      {/* //TODO footer */}
+          <Route
+            path="/admin/strutture"
+            element={
+              <AdminRoute>
+                <AdminStrutture />
+              </AdminRoute>
+            }
+          />
 
+          {/* Fallback per pagine inesistenti */}
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
 
-
+        {/* //TODO footer */}
       </AuthProvider>
     </>
   );
 }
 
 export default App;
-
