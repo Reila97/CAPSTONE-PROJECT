@@ -1,6 +1,50 @@
-.loginContainer {
-    max-width: 400px;
+.Logo {
+    max-width: 350px;
     width: 100%;
+}
+
+.loginBtn {
+    background-color: #f1901f;
+    border: 1px solid #f1901f;
+    font-family: "Metrophobic", sans-serif;
+    font-weight: 600;
+    font-style: normal;
+    color: white;
+    transition: all 0.2s ease-in-out;
+}
+
+.loginBtn:hover {
+    background-color: #cb781a;
+    border-color: #cb781a;
+    color: white;
+}
+
+.loginBtn:active, 
+.loginBtn:focus {
+    background-color: #cb781a !important;
+    border-color: #f1901f !important;
+    color: white !important;
+    box-shadow: none !important; /* Rimuove l'alone azzurro di Bootstrap */
+    outline: none;
+}
+
+.loginBtn:disabled,
+.loginBtn[disabled] {
+    background-color: #cb781a !important;
+    border-color: #f1901f !important;
+    color: white !important;
+    opacity: 0.8; /* Opzionale: leggermente trasparente per far capire che sta caricando */
+    cursor: not-allowed;
+}
+
+
+
+
+.formLabel {
+    font-family: "Ubuntu", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+    color: #6d634f;
 }
 
 
@@ -8,29 +52,4 @@
     font-family: "Metrophobic", sans-serif;
     font-weight: 600;
     font-style: normal;
-}
-
-.Logo {
-    max-width: 350px;
-    width: 100%;
-}
-
-.logoButton {
-    background-color: #f1901f;
-    border: #f1901f;
-    font-family: "Metrophobic", sans-serif;
-    font-weight: 600;
-    font-style: normal;
-}
-
-.logoButton:hover {
-     background-color: #cb781a;
-    border: #f1901f;
-}
-
-.formLabel {
-    font-family: "Ubuntu", sans-serif;
-    font-weight: 300;
-    font-style: normal;
-    color: #6d634f;
 }

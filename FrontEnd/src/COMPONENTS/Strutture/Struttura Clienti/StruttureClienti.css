@@ -12,7 +12,7 @@
     color: #6d634f;
 }
 
-.prenotaButton {
+.dettagliButton {
     font-family: "Metrophobic", sans-serif;
     font-weight: 600;
     font-style: normal;
@@ -21,9 +21,16 @@
     font-family: "Metrophobic", sans-serif;
     font-weight: 600;
     font-style: normal;
+    color: white;
 }
 
-.prenotaButton:hover {
+.dettagliButton:hover {
     background-color: #cb781a;
     border: #f1901f;
+}
+
+.dettagliButton:active {
+    background-color: #cb781a !important;
+    border-color: #f1901f !important;
+    outline: none; 
 }

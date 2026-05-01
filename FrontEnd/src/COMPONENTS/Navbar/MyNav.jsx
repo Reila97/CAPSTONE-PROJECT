@@ -13,29 +13,21 @@ import { useAuth } from "../../CONTEXT/IsAdmin";
 
 import "./MyNav.css";
 
-function MyNav ()  {
+function MyNav() {
   const { user, isAdmin, logout } = useAuth();
   const navigate = useNavigate();
 
-  // Stato per le strutture dinamiche nel dropdown
   const [strutture, setStrutture] = useState([]);
   const [loadingStrutture, setLoadingStrutture] = useState(false);
 
-  // Caricamento strutture per il dropdown
   useEffect(() => {
-    // Carichiamo i dati solo se l'utente esiste
-    if (user) {
-      setLoadingStrutture(true);
-      fetch("http://localhost:3002/strutture")
-        .then((res) => res.json())
-        .then((data) => setStrutture(data))
-        .catch((err) => console.error("Errore caricamento dropdown:", err))
-        .finally(() => setLoadingStrutture(false));
-    } else {
-      // Se l'utente fa logout, svuotiamo la lista
-      setStrutture([]);
-    }
-  }, [user]);
+    setLoadingStrutture(true);
+    fetch("http://localhost:3002/strutture")
+      .then((res) => res.json())
+      .then((data) => setStrutture(Array.isArray(data) ? data : []))
+      .catch((err) => console.error("Errore caricamento dropdown:", err))
+      .finally(() => setLoadingStrutture(false));
+  }, []);
 
   const handleLogout = () => {
     logout();
@@ -45,7 +37,7 @@ function MyNav ()  {
   return (
     <Navbar expand="lg" className="sticky-top shadow-sm bg-white">
       <Container>
-        {/* Brand Link: cambia destinazione in base allo stato user */}
+        {/* Il logo porta a /home se l'utente è loggato, altrimenti alla landing/login "/" */}
         <Navbar.Brand as={Link} to={user ? "/home" : "/"} className="main">
           <img
             src="/Villa Fenix_Logo_Colore.png"
@@ -58,64 +50,70 @@ function MyNav ()  {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto bodyCopy align-items-lg-center">
             
-            {/* SEZIONE UTENTE LOGGATO */}
+            {/* 1. SEZIONE LOGGATO: La Home compare SOLO se l'utente esiste */}
+            {user && (
+           <Nav.Link as={Link} to="/home" className="fw-bold">
+              Home
+            </Nav.Link>
+            )}
+
+            {/* 2. SEZIONE PUBBLICA: Sempre visibile */}
+          
+
+            <NavDropdown title="Strutture" id="nav-dropdown-strutture">
+              <NavDropdown.Item as={Link} to="/strutture">
+                Tutte le Strutture
+              </NavDropdown.Item>
+              <NavDropdown.Divider />
+
+              {loadingStrutture ? (
+                <div className="text-center py-2">
+                  <Spinner animation="border" size="sm" />
+                </div>
+              ) : (
+                strutture.map((s) => (
+                  <NavDropdown.Item
+                    key={s._id}
+                    as={Link}
+                    to={`/strutture/${s._id}`}
+                  >
+                    {s.nome}
+                  </NavDropdown.Item>
+                ))
+              )}
+            </NavDropdown>
+
+            {/* 3. SEZIONE PRIVATA UTENTE / ADMIN */}
             {user ? (
-              <>
-                <Nav.Link as={Link} to="/home">
-                  Home
+              <div className="d-flex align-items-center ms-lg-3">
+               
+                <Nav.Link as={Link} to="/profilo" className="me-2">
+                  Ciao,{" "}
+                  <span className="main orangeTxt">
+                    <strong>{user.nome}</strong>
+                  </span>
                 </Nav.Link>
 
-                <NavDropdown title="Strutture" id="nav-dropdown-strutture">
-                  <NavDropdown.Item as={Link} to="/strutture">
-                    Tutte le Strutture
-                  </NavDropdown.Item>
-                  <NavDropdown.Divider />
-
-                  {loadingStrutture ? (
-                    <div className="text-center py-2">
-                      <Spinner animation="border" size="sm" />
-                    </div>
-                  ) : (
-                    strutture.map((s) => (
-                      <NavDropdown.Item
-                        key={s._id}
-                        as={Link}
-                        to={`/strutture/${s._id}`}
-                      >
-                        {s.nome}
-                      </NavDropdown.Item>
-                    ))
-                  )}
-                </NavDropdown>
-
-                <div className="d-flex align-items-center">
-                  <Nav.Link as={Link} to="/profilo" className="me-2">
-                    Ciao,{" "}
-                    <span className="main orangeTxt">
-                      <strong>{user.nome}</strong>
-                    </span>
+              
+                {isAdmin && (
+                  <Nav.Link as={Link} to="/admin" className="me-2">
+                    | <span className="main orangeTxt">Admin Panel</span>
                   </Nav.Link>
+                )}
 
-                  {isAdmin && (
-                    <Nav.Link as={Link} to="/admin" className="me-2">
-                      | <span className="main orangeTxt">Admin Panel</span>
-                    </Nav.Link>
-                  )}
-
-                  <Button
-                    variant="outline-danger"
-                    size="sm"
-                    onClick={handleLogout}
-                    className="rounded-pill ms-2"
-                  >
-                    Logout
-                  </Button>
-                </div>
-              </>
+                <Button
+                  variant="outline-danger"
+                  size="sm"
+                  onClick={handleLogout}
+                  className="rounded-pill ms-2"
+                >
+                  Logout
+                </Button>
+              </div>
             ) : (
-              /* SEZIONE UTENTE NON LOGGATO */
-              <Nav.Link as={Link} to="/">
-                Login
+              /* Se non è loggato */
+              <Nav.Link as={Link} to="/" className="ms-lg-3 fw-bold text-dark">
+                Accedi
               </Nav.Link>
             )}
           </Nav>
@@ -123,6 +121,6 @@ function MyNav ()  {
       </Container>
     </Navbar>
   );
-};
+}
 
 export default MyNav;

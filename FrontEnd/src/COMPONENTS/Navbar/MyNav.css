@@ -10,17 +10,9 @@
     font-style: normal;
 }
 
-.orangeBg {
-    background-color: #f1901f ;
-}
 
 .orangeTxt {
     color: #f1901f !important ;
-}
-
-.hr {
-    width: 90%;
-    margin: auto 15px;
 }
 
 .logo {

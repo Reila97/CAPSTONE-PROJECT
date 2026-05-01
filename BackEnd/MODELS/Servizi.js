@@ -6,7 +6,8 @@ const serviziSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    icona: {type: String}
+    icona: String,
+    costoExtra: Number
 })
 const Servizi = mongoose.model("servizi", serviziSchema)
 

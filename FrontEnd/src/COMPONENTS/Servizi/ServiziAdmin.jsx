@@ -53,9 +53,6 @@ function ServiziAdmin() {
                 Servizio
               </th>
               <th className="border-0 text-muted small text-uppercase">
-                Categoria
-              </th>
-              <th className="border-0 text-muted small text-uppercase">
                 Costo Extra
               </th>
               <th className="border-0 text-muted small text-uppercase text-center">
@@ -74,14 +71,10 @@ function ServiziAdmin() {
                     <span className="fw-bold">{s.nome}</span>
                   </div>
                 </td>
+              
                 <td>
-                  <Badge pill bg="light" text="dark" className="border">
-                    {s.categoria || "Generale"}
-                  </Badge>
-                </td>
-                <td>
-                  {s.prezzo > 0 ? (
-                    `€ ${s.prezzo}`
+                  {s.costoExtra > 0 ? (
+                    `€ ${s.costoExtra}`
                   ) : (
                     <Badge bg="success" className="fw-normal">
                       Gratuito
@@ -90,7 +83,7 @@ function ServiziAdmin() {
                 </td>
                 <td>
                   <div className="d-flex justify-content-center gap-2">
-                   <EditServizio onCreated={getServizi}/>
+                  <EditServizio servizio={s} onUpdate={getServizi} />
                     <DeleteServizio
                       servizioId={s._id}
                       servizioNome={s.nome}

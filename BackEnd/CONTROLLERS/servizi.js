@@ -51,16 +51,16 @@ export async function update(req, res) {
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(400).json({ message: 'id camera non valido' })
         }
-        const { nome, icona } = req.body
+        const { nome, icona, costoExtra } = req.body
 
 
         const updateService = await Servizi.findByIdAndUpdate(id,
-            req.body,
+            { nome, icona, costoExtra },
             { returnDocument: 'after', runValidators: true}
         );
 
         if (!updateService) {
-            return res.status(404).json({ message: "Camera non trovata" });
+            return res.status(404).json({ message: "Servizio non trovato" });
         }
 
         res.status(200).json(updateService)

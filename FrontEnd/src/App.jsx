@@ -12,6 +12,8 @@ import Login from "./PAGES/Login/Login.jsx";
 import { AuthProvider, useAuth } from "./CONTEXT/IsAdmin.jsx";
 import StrutturaDettaglio from "./COMPONENTS/Strutture/Struttura Dettaglio/StrutturaDettaglio.jsx";
 import AdminDashboard from "./COMPONENTS/User/AdminDashboard/AdminDashboard.jsx";
+import CameraDettaglio from "./COMPONENTS/Camere/CameraDettaglio/CameraDettaglio.jsx";
+import CamereClient from "./COMPONENTS/Camere/CamereClient/CamereClient.jsx";
 
 // --- PROTEZIONE ROTTE ADMIN ---
 const AdminRoute = ({ children }) => {
@@ -38,17 +40,22 @@ function App() {
 
         <Routes>
           {/* PUBBLICHE */}
+
           <Route path="/" element={<Login />} />
+          <Route path="/home" element={<Home />} />
+
           <Route path="/strutture" element={<StruttureClient />} />
           <Route path="/strutture/:id" element={<StrutturaDettaglio />} />
+          
+          <Route path="/camere" element={<CamereClient />} />
+          <Route path="/camere/:id" element={<CameraDettaglio />} />
 
           {/* UTENTE LOGGATO */}
-          <Route path="/home" element={<Home />} />
           <Route
             path="/profilo"
             element={
               <PrivateRoute>
-                <User/>
+                <User />
               </PrivateRoute>
             }
           />
@@ -63,24 +70,7 @@ function App() {
               </AdminRoute>
             }
           />
-
-          <Route
-            path="/admin/users"
-            element={
-              <AdminRoute>
-                <UserAdmin />
-              </AdminRoute>
-            }
-          />
-
-          <Route
-            path="/admin/strutture"
-            element={
-              <AdminRoute>
-                <AdminStrutture />
-              </AdminRoute>
-            }
-          />
+         
 
           {/* Fallback per pagine inesistenti */}
           <Route path="*" element={<Navigate to="/" />} />

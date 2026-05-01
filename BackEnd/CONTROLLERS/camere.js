@@ -57,7 +57,7 @@ export async function update(req, res) {
 
         const updateRoom = await Camera.findByIdAndUpdate(id,
             req.body,
-            { returnDocument: 'after', runValidators: true}
+            { returnDocument: 'after', runValidators: true }
         );
 
         if (!updateRoom) {
@@ -71,9 +71,12 @@ export async function update(req, res) {
 }
 
 export async function createNew(req, res) {
-   try {
+    try {
         const newRoom = new Camera(req.body);
         const savedRoom = await newRoom.save();
+
+        const populatedCamera = await Camera.findById(savedRoom._id).populate('strutturaId');
+
         res.status(201).json(savedRoom); // 201 è lo status corretto per "Created"
     } catch (error) {
         res.status(400).json({ message: error.message }); // 400 se i dati non rispettano lo schema

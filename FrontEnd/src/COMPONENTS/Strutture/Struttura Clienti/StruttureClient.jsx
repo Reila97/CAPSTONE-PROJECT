@@ -54,8 +54,6 @@ function StruttureClient() {
                   <Card.Title className="headLine fw-bold mb-0">
                     {s.nome}
                   </Card.Title>
-
-                  <Badge bg="danger">€{s.policies.basePrice}/notte</Badge>
                 </div>
 
                 <Card.Text className="text-muted small">
@@ -69,7 +67,7 @@ function StruttureClient() {
               <Card.Footer className="bg-white border-0 pb-3">
                 <Button
                   href={`/strutture/${s._id}`}
-                  className="prenotaButton headLine w-100 rounded-0"
+                  className="dettagliButton headLine w-100 rounded-0"
                 >
                   VEDI DETTAGLI
                 </Button>

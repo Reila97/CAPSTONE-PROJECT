@@ -57,7 +57,6 @@ export async function update(req, res) {
         const {
             nome,
             descrizione,
-            // categoria,
             località,
             contatti,
             policies,
@@ -68,7 +67,6 @@ export async function update(req, res) {
             {
                 nome,
                 descrizione,
-                // categoria,
                 località,
                 contatti,
                 policies,
@@ -89,7 +87,6 @@ export async function createNew(req, res) {
         const {
             nome,
             descrizione,
-            // categoria,
             località,
             contatti,
             policies,
@@ -99,7 +96,6 @@ export async function createNew(req, res) {
         const Property = new Strutture({
             nome,
             descrizione,
-            // categoria,
             località,
             contatti,
             policies,

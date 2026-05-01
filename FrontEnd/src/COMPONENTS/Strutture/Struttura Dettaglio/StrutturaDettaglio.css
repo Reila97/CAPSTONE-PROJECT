@@ -19,12 +19,17 @@
     color: white !important; 
     background-color: #f1901f;
     border: #f1901f;
-    /* //TODO non viene bianco */
     
 }
 
 .prenotaButton:hover {
     background-color: #cb781a;
     border: #f1901f;
+}
+
+.prenotaButton:active {
+    background-color: #cb781a !important;
+    border-color: #f1901f !important;
+    outline: none; 
 }
 

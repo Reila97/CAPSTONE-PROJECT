@@ -7,41 +7,63 @@ function EditServizio({ servizio, onUpdate }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Inizializziamo lo stato. 
-  // Aggiungiamo l'ID nello stato per essere sicuri di non perderlo
   const [formData, setFormData] = useState({
- _id: servizio?._id || "",
-    nome: servizio?.nome || "",
-    icona: servizio?.icona || ""
+    _id: "",
+    nome: "",
+    costoExtra: 0,
+    icona: ""
   });
 
-  // Questo useEffect "scatta" ogni volta che il prop 'servizio' cambia
-  // o quando viene aperto il modale.
+  // Aggiorniamo i dati quando il modale si apre o quando cambia il servizio
   useEffect(() => {
-    if (servizio) {
-      setFormData({
-        _id: servizio._id || servizio.id, // Supporta sia _id che id
-        nome: servizio.nome || "",
-        icona: servizio.icona || ""
-      });
+if (servizio && show) {
+    const serviceId = servizio._id || servizio.id;
+    
+    if (!serviceId) {
+      console.error("Attenzione: l'oggetto servizio non ha un ID valido!", servizio);
     }
-  }, [servizio, show]); // 'show' aggiunto per resettare i dati all'apertura
+
+    setFormData({
+      _id: serviceId || "",
+      nome: servizio.nome || "",
+      costoExtra: servizio.costoExtra ?? 0,
+      icona: servizio.icona || ""
+    });
+  }
+}, [servizio, show]);
 
   const handleClose = () => {
     setShow(false);
     setError(null);
+    // Al ritorno, resettiamo il form con i dati originali del prop
+    if (servizio) {
+      setFormData({
+        _id: servizio._id || servizio.id || "",
+        nome: servizio.nome || "",
+        costoExtra: servizio.costoExtra ?? 0,
+        icona: servizio.icona || ""
+      });
+    }
   };
   
   const handleShow = () => setShow(true);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value, type } = e.target;
+    setFormData({ 
+      ...formData, 
+      [name]: type === "number" ? (value === "" ? "" : Number(value)) : value 
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    console.log("Stato del form al submit:", formData);
+
+
     
-    // Controllo di sicurezza prima di partire
+    
     if (!formData._id) {
       setError("Errore: ID servizio mancante.");
       return;
@@ -53,7 +75,6 @@ function EditServizio({ servizio, onUpdate }) {
     try {
       const token = localStorage.getItem("token");
       
-      // Usiamo l'id salvato nello stato formData
       const res = await fetch(`http://localhost:3002/servizi/${formData._id}`, {
         method: "PUT",
         headers: {
@@ -62,12 +83,13 @@ function EditServizio({ servizio, onUpdate }) {
         },
         body: JSON.stringify({
           nome: formData.nome,
+          costoExtra: formData.costoExtra || 0,
           icona: formData.icona
         }),
       });
 
       if (res.ok) {
-        onUpdate(); // Ricarica la tabella
+        onUpdate(); 
         handleClose();
       } else {
         const errData = await res.json();
@@ -79,7 +101,6 @@ function EditServizio({ servizio, onUpdate }) {
       setLoading(false);
     }
   };
-
 
   return (
     <>
@@ -112,6 +133,18 @@ function EditServizio({ servizio, onUpdate }) {
             </Form.Group>
 
             <Form.Group className="mb-3">
+              <Form.Label className="small fw-bold">Costo Extra (€)</Form.Label>
+              <Form.Control 
+                type="number"
+                name="costoExtra" 
+                value={formData.costoExtra} 
+                onChange={handleChange} 
+                min="0"
+                required 
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
               <Form.Label className="small fw-bold">Icona (Classe o URL)</Form.Label>
               <Form.Control 
                 type="text"
@@ -125,7 +158,7 @@ function EditServizio({ servizio, onUpdate }) {
           <Modal.Footer className="border-0">
             <Button variant="light" onClick={handleClose}>Annulla</Button>
             <Button variant="dark" type="submit" disabled={loading} className="px-4">
-              {loading ? <Spinner size="sm" /> : "Salva Modifiche"}
+              {loading ? <Spinner size="sm" animation="border" /> : "Salva Modifiche"}
             </Button>
           </Modal.Footer>
         </Form>
@@ -135,5 +168,3 @@ function EditServizio({ servizio, onUpdate }) {
 }
 
 export default EditServizio;
-
-//TODO non funziona
