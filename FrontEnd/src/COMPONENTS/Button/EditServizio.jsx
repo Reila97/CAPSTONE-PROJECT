@@ -1,42 +1,23 @@
 import { useState, useEffect } from "react";
 import { Modal, Button, Form, Spinner, Alert } from "react-bootstrap";
 import { PencilSquare } from "react-bootstrap-icons";
+import UniversalUploader from "./UniversalUploader"; // Assicurati che il percorso sia corretto
 
 function EditServizio({ servizio, onUpdate }) {
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
-  const [formData, setFormData] = useState({
-    _id: "",
-    nome: "",
-    costoExtra: 0,
-    icona: ""
+  
+  // Stato del form limitato ai dati testuali
+  const [formData, setFormData] = useState({ 
+    _id: "", 
+    nome: "", 
+    costoExtra: 0, 
+    icona: "" 
   });
 
-  // Aggiorniamo i dati quando il modale si apre o quando cambia il servizio
   useEffect(() => {
-if (servizio && show) {
-    const serviceId = servizio._id || servizio.id;
-    
-    if (!serviceId) {
-      console.error("Attenzione: l'oggetto servizio non ha un ID valido!", servizio);
-    }
-
-    setFormData({
-      _id: serviceId || "",
-      nome: servizio.nome || "",
-      costoExtra: servizio.costoExtra ?? 0,
-      icona: servizio.icona || ""
-    });
-  }
-}, [servizio, show]);
-
-  const handleClose = () => {
-    setShow(false);
-    setError(null);
-    // Al ritorno, resettiamo il form con i dati originali del prop
-    if (servizio) {
+    if (servizio && show) {
       setFormData({
         _id: servizio._id || servizio.id || "",
         nome: servizio.nome || "",
@@ -44,56 +25,42 @@ if (servizio && show) {
         icona: servizio.icona || ""
       });
     }
-  };
-  
-  const handleShow = () => setShow(true);
+  }, [servizio, show]);
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;
-    setFormData({ 
-      ...formData, 
-      [name]: type === "number" ? (value === "" ? "" : Number(value)) : value 
-    });
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "number" ? Number(value) : value,
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    console.log("Stato del form al submit:", formData);
-
-
-    
-    
-    if (!formData._id) {
-      setError("Errore: ID servizio mancante.");
-      return;
-    }
-
     setLoading(true);
     setError(null);
 
     try {
       const token = localStorage.getItem("token");
-      
+      // Ora inviamo solo JSON, molto più pulito
       const res = await fetch(`http://localhost:3002/servizi/${formData._id}`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
+        headers: { 
+          "Content-Type": "application/json", 
+          Authorization: `Bearer ${token}` 
         },
         body: JSON.stringify({
           nome: formData.nome,
-          costoExtra: formData.costoExtra || 0,
-          icona: formData.icona
+          costoExtra: formData.costoExtra,
         }),
       });
 
       if (res.ok) {
-        onUpdate(); 
-        handleClose();
+        onUpdate(); // Ricarica la tabella
+        setShow(false);
       } else {
         const errData = await res.json();
-        throw new Error(errData.message || "Errore durante l'aggiornamento");
+        throw new Error(errData.message || "Errore nel salvataggio");
       }
     } catch (err) {
       setError(err.message);
@@ -104,27 +71,22 @@ if (servizio && show) {
 
   return (
     <>
-      <Button 
-        variant="outline-dark" 
-        size="sm" 
-        className="rounded-pill px-3 shadow-sm" 
-        onClick={handleShow}
-      >
+      <Button variant="outline-dark" size="sm" className="rounded-pill px-3 shadow-sm" onClick={() => setShow(true)}>
         <PencilSquare />
       </Button>
 
-      <Modal show={show} onHide={handleClose} centered>
+      <Modal show={show} onHide={() => setShow(false)} centered>
         <Modal.Header closeButton className="border-0">
           <Modal.Title className="fw-bold">Modifica Servizio</Modal.Title>
         </Modal.Header>
+        
         <Form onSubmit={handleSubmit}>
           <Modal.Body>
-            {error && <Alert variant="danger">{error}</Alert>}
-
+            {error && <Alert variant="danger" className="py-2 small">{error}</Alert>}
+            
             <Form.Group className="mb-3">
               <Form.Label className="small fw-bold">Nome Servizio</Form.Label>
               <Form.Control 
-                type="text"
                 name="nome" 
                 value={formData.nome} 
                 onChange={handleChange} 
@@ -132,33 +94,43 @@ if (servizio && show) {
               />
             </Form.Group>
 
-            <Form.Group className="mb-3">
+            <Form.Group className="mb-4">
               <Form.Label className="small fw-bold">Costo Extra (€)</Form.Label>
               <Form.Control 
-                type="number"
+                type="number" 
                 name="costoExtra" 
                 value={formData.costoExtra} 
                 onChange={handleChange} 
                 min="0"
-                required 
               />
             </Form.Group>
 
-            <Form.Group className="mb-3">
-              <Form.Label className="small fw-bold">Icona (Classe o URL)</Form.Label>
-              <Form.Control 
-                type="text"
-                name="icona" 
-                value={formData.icona} 
-                onChange={handleChange} 
-                placeholder="Es: wifi, car-front..." 
-              />
-            </Form.Group>
+            {/* SEZIONE UPLOADER UNIVERSALE */}
+            <div className="border rounded p-3 bg-light">
+              <div className="d-flex align-items-center justify-content-between">
+                <div>
+                  <p className="small fw-bold mb-0">Immagine Identificativa</p>
+                  <p className="text-muted mb-0" style={{ fontSize: '0.75rem' }}>
+                    Aggiorna l'icona
+                  </p>
+                </div>
+                <UniversalUploader 
+                  endpoint={`http://localhost:3002/servizi/${formData._id}/icona`}
+                  fieldName="icona"
+                  onUploadSuccess={(data) => {
+                    // Aggiorniamo l'anteprima locale
+                    setFormData(prev => ({ ...prev, icona: data.icona }));
+                    onUpdate(); // Aggiorna la tabella per mostrare subito la nuova immagine
+                  }}
+                />
+              </div>
+            </div>
           </Modal.Body>
+
           <Modal.Footer className="border-0">
-            <Button variant="light" onClick={handleClose}>Annulla</Button>
+            <Button variant="light" onClick={() => setShow(false)}>Annulla</Button>
             <Button variant="dark" type="submit" disabled={loading} className="px-4">
-              {loading ? <Spinner size="sm" animation="border" /> : "Salva Modifiche"}
+              {loading ? <Spinner size="sm" /> : "Salva Modifiche"}
             </Button>
           </Modal.Footer>
         </Form>

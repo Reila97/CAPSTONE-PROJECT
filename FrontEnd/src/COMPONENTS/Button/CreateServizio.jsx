@@ -1,17 +1,14 @@
 import { useState } from "react";
 import { Modal, Button, Form, Spinner, Alert } from "react-bootstrap";
 import { PlusCircleFill } from "react-bootstrap-icons";
+import UniversalUploader from "./UniversalUploader";
 
-const CreateServizio = ({ onCreated }) => {
+function CreateServizio ({ onCreated })  {
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const initialForm = {
-    nome: "",
-    icona: "" // Stringa che può contenere il nome di una classe icona o un URL
-  };
-
+  const initialForm = { nome: "", icona: "", costoExtra: 0 };
   const [formData, setFormData] = useState(initialForm);
 
   const handleClose = () => {
@@ -20,19 +17,19 @@ const CreateServizio = ({ onCreated }) => {
     setError(null);
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
+
+      // Invia i dati come JSON semplice
       const res = await fetch("http://localhost:3002/servizi", {
         method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        headers: { 
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}` 
+        },
         body: JSON.stringify(formData),
       });
 
@@ -41,7 +38,7 @@ const CreateServizio = ({ onCreated }) => {
         handleClose();
       } else {
         const data = await res.json();
-        throw new Error(data.message || "Errore nella creazione del servizio");
+        throw new Error(data.message || "Errore nella creazione");
       }
     } catch (err) { setError(err.message); } finally { setLoading(false); }
   };
@@ -64,29 +61,41 @@ const CreateServizio = ({ onCreated }) => {
               <Form.Label className="small fw-bold">Nome Servizio *</Form.Label>
               <Form.Control 
                 name="nome" 
-                placeholder="Es: Wi-Fi, Parcheggio..." 
                 value={formData.nome} 
-                onChange={handleChange} 
+                onChange={(e) => setFormData({...formData, nome: e.target.value})} 
                 required 
               />
             </Form.Group>
 
-            <Form.Group className="mb-3">
-              <Form.Label className="small fw-bold">Icona (Nome o URL)</Form.Label>
-              <Form.Control 
-                name="icona" 
-                placeholder="Es: wifi-icon oppure URL immagine" 
-                value={formData.icona} 
-                onChange={handleChange} 
-              />
-              <Form.Text className="text-muted">
-                Puoi inserire un nome identificativo per l'icona o un link.
-              </Form.Text>
-            </Form.Group>
+            {/* Sezione Upload Immagine */}
+            <div className="bg-light p-3 rounded mb-3 border">
+              <p className="small fw-bold mb-2">Immagine Servizio</p>
+              <div className="d-flex align-items-center gap-3">
+
+
+                <UniversalUploader 
+                  endpoint="http://localhost:3002/servizi/temp-upload"
+                  fieldName="icona"
+                  method="POST"
+                  onUploadSuccess={(data) => {
+                    // 'data.url' è quello che restituisce la rotta temp-upload
+                    setFormData({ ...formData, icona: data.url });
+                  }}
+                />
+                {formData.icona && (
+                  <img 
+                    src={formData.icona} 
+                    alt="Preview" 
+                    style={{ width: "40px", height: "40px", objectFit: "cover" }} 
+                    className="rounded border"
+                  />
+                )}
+              </div>
+            </div>
           </Modal.Body>
           <Modal.Footer className="border-0">
             <Button variant="light" onClick={handleClose}>Annulla</Button>
-            <Button variant="primary" type="submit" disabled={loading}>
+            <Button variant="primary" type="submit" disabled={loading || !formData.nome}>
               {loading ? <Spinner size="sm" /> : "Salva Servizio"}
             </Button>
           </Modal.Footer>
@@ -96,4 +105,4 @@ const CreateServizio = ({ onCreated }) => {
   );
 };
 
-export default CreateServizio;
+export default CreateServizio

@@ -1,6 +1,7 @@
 import express from 'express'
 
-import { findAll, findById, canc, update, createNew} from '../CONTROLLERS/users.js'
+import cloudinaryUploadImg from '../MIDDLEWARES/cloudinary.js'
+import { findAll, findById, canc, update, createNew, updateAvatar} from '../CONTROLLERS/users.js'
 import { hasToken } from '../MIDDLEWARES/hasToken.js'
 import { isAdmin } from '../MIDDLEWARES/isAdmin.js'
 
@@ -20,7 +21,7 @@ userRouter.post('/', createNew ) // elemento nuovo
 
 userRouter.delete('/:id', hasToken, isAdmin,canc ) 
 userRouter.put('/:id', hasToken, update ) 
-//userRouter.patch('/:id/avatar'); 
+userRouter.patch('/:id/avatar', hasToken, cloudinaryUploadImg.single('avatar'), updateAvatar); 
 
 
 

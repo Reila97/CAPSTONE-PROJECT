@@ -9,7 +9,9 @@ const UserSchema = new mongoose.Schema({
     },
     cognome: {
         type: String,
-        required: [true, "Il cognome è obbligatorio"],
+        required: function() {
+            return !this.googleId;
+        },
         trim: true
     },
     email: {
@@ -21,15 +23,27 @@ const UserSchema = new mongoose.Schema({
         // Validazione semplice per l'email
         match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Inserisci un indirizzo email valido']
     },
+
+   googleId: {
+        type: String,
+        unique: true,
+        sparse: true // Permette di avere molti utenti senza googleId (quelli con email/pass)
+    },
+
     password: {
         type: String,
-        required: [true, "La password è obbligatoria"],
+        required: function() {
+            // La password è obbligatoria SOLO SE non c'è un googleId
+            return !this.googleId;
+        },
         minlength: [6, "La password deve essere di almeno 6 caratteri"],
         select: false // Fondamentale: non invia la password nelle query di default
     },
     dataDiNascita: {
         type: Date,
-        required: [true, "La data di nascita è obbligatoria"]
+        required: function() {
+            return !this.googleId;
+        }
     },
     avatar: String,
     isAdmin: {

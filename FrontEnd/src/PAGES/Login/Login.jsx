@@ -14,6 +14,7 @@ import { jwtDecode } from "jwt-decode";
 import { useAuth } from "../../CONTEXT/IsAdmin";
 
 import "./Login.css";
+import GoogleLoginBtn from "../../COMPONENTS/Button/GoogleLoginBtn";
 
 // Usa le variabili d'ambiente per l'URL dell'API (fallback su localhost se non definita)
 const API_URL = import.meta.env?.VITE_API_URL || "http://localhost:3002";
@@ -146,9 +147,14 @@ function Login() {
         if (resLogin.ok) {
           await handleLoginSuccess(dataLogin.token);
         } else {
-          setError("Registrazione completata, ma errore nel login automatico. Prova ad accedere manualmente.");
+          setError(
+            "Registrazione completata, ma errore nel login automatico. Prova ad accedere manualmente.",
+          );
           setView("login");
-          setLoginData({ email: registerData.email, password: registerData.password });
+          setLoginData({
+            email: registerData.email,
+            password: registerData.password,
+          });
         }
       } else {
         setError(dataRegister.message || "Errore durante la registrazione.");
@@ -161,10 +167,17 @@ function Login() {
     }
   };
 
+  //GOOGLE
+  const handleGoogleLogin = () => {
+    setIsLoading(true);
+    // Reindirizziamo l'utente al backend.
+    // Passport.js farà il resto e ci riporterà su /login-success
+    window.location.href = `${API_URL}/auth/google`;
+  };
+
   return (
     <Container className="d-flex justify-content-center my-5">
       <div className="loginContainer w-100" style={{ maxWidth: "450px" }}>
-        
         {/* Logo del Brand */}
         <div className="text-center mb-4">
           <img
@@ -204,19 +217,24 @@ function Login() {
 
         {/* Feedback messaggi */}
         {error && (
-          <Alert variant="danger" className="py-2 small rounded-0 border-0 shadow-sm">
+          <Alert
+            variant="danger"
+            className="py-2 small rounded-0 border-0 shadow-sm"
+          >
             {error}
           </Alert>
         )}
         {successMessage && (
-          <Alert variant="success" className="py-2 small rounded-0 border-0 shadow-sm">
+          <Alert
+            variant="success"
+            className="py-2 small rounded-0 border-0 shadow-sm"
+          >
             {successMessage}
           </Alert>
         )}
 
         {/* Form Container */}
         <div className="p-4 bg-white shadow-sm border rounded-4">
-
           {/* ==================== LOGIN ==================== */}
           {view === "login" && (
             <Form onSubmit={handleLoginSubmit}>
@@ -253,7 +271,11 @@ function Login() {
                 className="loginBtn w-100 rounded-4 fw-bold py-3 mt-2"
                 disabled={isLoading}
               >
-                {isLoading ? <Spinner animation="border" size="sm" /> : "ACCEDI"}
+                {isLoading ? (
+                  <Spinner animation="border" size="sm" />
+                ) : (
+                  "ACCEDI"
+                )}
               </Button>
             </Form>
           )}
@@ -306,7 +328,10 @@ function Login() {
                 />
               </FloatingLabel>
 
-              <FloatingLabel label="Password (almeno 6 caratteri)" className="formLabel mb-3">
+              <FloatingLabel
+                label="Password (almeno 6 caratteri)"
+                className="formLabel mb-3"
+              >
                 <Form.Control
                   type="password"
                   name="password"
@@ -335,10 +360,25 @@ function Login() {
                 className="loginBtn w-100 rounded-4 fw-bold py-3 mt-2"
                 disabled={isLoading}
               >
-                {isLoading ? <Spinner animation="border" size="sm" /> : "REGISTRATI"}
+                {isLoading ? (
+                  <Spinner animation="border" size="sm" />
+                ) : (
+                  "REGISTRATI"
+                )}
               </Button>
             </Form>
           )}
+        </div>
+
+        <div className="login-container">
+          <div className="separator my-4 text-center position-relative">
+            <hr />
+            <span className="px-3 bg-white position-absolute top-50 start-50 translate-middle text-muted small fw-bold">
+              OPPURE
+            </span>
+          </div>
+
+          <GoogleLoginBtn onClick={handleGoogleLogin} isLoading={isLoading} />
         </div>
       </div>
     </Container>
@@ -346,3 +386,5 @@ function Login() {
 }
 
 export default Login;
+
+//TODO,non funziona il login con google

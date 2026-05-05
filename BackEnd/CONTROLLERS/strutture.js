@@ -110,3 +110,56 @@ export async function createNew(req, res) {
     }
 
 }
+
+export async function updateimages(req, res) {
+    try {
+        //controllo id
+        const { id } = req.params
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            // Se l'ID è sbagliato ma il file è già arrivato, lo eliminiamo subito
+            if (req.file) await cloudinary.uploader.destroy(req.file.filename);
+
+            return res.status(400).json({ message: 'id autore non valido,, immagine rimossa dal cloud' })
+        }
+
+        //quando l'utente carica l'immagine, se il caricamento va a buon fine Express aggiunge req.file, quindi controllo che questo parametro ci sia, in caso contrario avviso che non c'è
+        if (!req.file) {
+            return res.status(400).json({ message: 'file non caricato' })
+        }
+
+        //colleghiamo il file caricato all'autore, aggiorno il database
+        const property = await Strutture.findByIdAndUpdate(
+            id, //id dell'autore
+            { images: req.file.path }, // percorso del file
+            { returnDocument: 'after' }//ritorn il documento modificato
+        )
+
+        //se l'id fornito non esiste, elimino l'img e restituisco errore(404)
+        if (!property) {
+            // L'autore non esiste, dobbiamo cancellare l'immagine dal cloud
+            await cloudinary.uploader.destroy(req.file.filename);
+            return res.status(404).json({ message: 'Autore non trovato, immagine rimossa dal cloud' });
+        }
+
+        // se ok, restituisco(200)
+        res.status(200).json(property)
+
+    } catch (error) {
+        // provo a pulire Cloudinary
+        if (req.file) {
+            try {
+                await cloudinary.uploader.destroy(req.file.filename);
+            } catch (cloudinaryError) {
+                // Non blocco il flusso e rispondo al client
+                console.error("Errore durante la pulizia del file:", cloudinaryError);
+            }
+        }
+        //  rispondo al cliente
+        res.status(500).json({
+            message: error.message + ', abbiamo tentato di rimuovere l\'immagine dal cloud'
+        });
+    }
+}
+
+
+

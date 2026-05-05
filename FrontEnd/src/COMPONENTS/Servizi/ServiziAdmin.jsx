@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
-import { Table, Badge, Spinner } from "react-bootstrap";
-import { PlusCircle, Gear } from "react-bootstrap-icons";
-import CreateServizio from "../Button/CreareServizio";
+import { Table, Badge, Spinner, Image } from "react-bootstrap"; 
+import { Gear } from "react-bootstrap-icons";
+import CreateServizio from "../Button/CreateServizio.jsx";
 import DeleteServizio from "../Button/DeleteServizio.jsx";
-import EditServizio from "../Button/EditServizio.jsx"
-
+import EditServizio from "../Button/EditServizio.jsx";
 
 function ServiziAdmin() {
   const [servizi, setServizi] = useState([]);
@@ -65,8 +64,21 @@ function ServiziAdmin() {
               <tr key={s._id} className="border-bottom">
                 <td className="py-3">
                   <div className="d-flex align-items-center">
-                    <div className="bg-light border rounded p-2 me-3">
-                      <Gear size={18} className="text-secondary" />
+                    {/* Anteprima Immagine Cloudinary o Icona Default */}
+                    <div className="me-3" style={{ width: "45px", height: "45px" }}>
+                      {s.icona ? (
+                        <Image
+                          src={s.icona}
+                          rounded
+                          fluid
+                          style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                          alt={s.nome}
+                        />
+                      ) : (
+                        <div className="bg-light border rounded d-flex align-items-center justify-content-center w-100 h-100">
+                          <Gear size={18} className="text-secondary" />
+                        </div>
+                      )}
                     </div>
                     <span className="fw-bold">{s.nome}</span>
                   </div>
@@ -83,13 +95,12 @@ function ServiziAdmin() {
                 </td>
                 <td>
                   <div className="d-flex justify-content-center gap-2">
-                  <EditServizio servizio={s} onUpdate={getServizi} />
+                    <EditServizio servizio={s} onUpdate={getServizi} />
                     <DeleteServizio
                       servizioId={s._id}
                       servizioNome={s.nome}
                       onDelete={getServizi}
                     />
-                    
                   </div>
                 </td>
               </tr>

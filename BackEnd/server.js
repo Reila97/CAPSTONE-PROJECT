@@ -4,6 +4,7 @@ dotenv.config()
 import express from "express";
 import cors from 'cors';
 import passport from "passport";
+import "./STRATEGY/googleStrategy.js"
 import { dbConnect } from "./dbConnect.js";
 
 import loginRouter from "./ROUTES/login.js"
