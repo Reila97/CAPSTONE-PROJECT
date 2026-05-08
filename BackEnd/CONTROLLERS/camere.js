@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
+import {v2 as cloudinary} from "cloudinary"
 import Camera from "../MODELS/Camere.js";
-import Servizi from "../MODELS/Servizi.js";
+
 
 export async function findAll(req, res) {
     try {
@@ -85,55 +86,113 @@ export async function createNew(req, res) {
 }
 
 // aggiungo img
-export async function updateImages(req, res) {
+export async function updateMainImage(req, res) {
     try {
-        //controllo id
-        const { id } = req.params
+        const { id } = req.params;
+
         if (!mongoose.Types.ObjectId.isValid(id)) {
-            // Se l'ID è sbagliato ma il file è già arrivato, lo eliminiamo subito
             if (req.file) await cloudinary.uploader.destroy(req.file.filename);
-
-            return res.status(400).json({ message: 'id autore non valido,, immagine rimossa dal cloud' })
+            return res.status(400).json({ message: 'ID camera non valido' });
         }
 
-        //quando l'utente carica l'immagine, se il caricamento va a buon fine Express aggiunge req.file, quindi controllo che questo parametro ci sia, in caso contrario avviso che non c'è
         if (!req.file) {
-            return res.status(400).json({ message: 'file non caricato' })
+            return res.status(400).json({ message: 'Nessun file caricato' });
         }
 
-        //colleghiamo il file caricato all'autore, aggiorno il database
+        // USIAMO $set sull'intero oggetto images per "sovrascrivere" la vecchia stringa
         const room = await Camera.findByIdAndUpdate(
-            id, //id dell'autore
-            { images: req.file.path }, // percorso del file
-            { returnDocument: 'after' }//ritorn il documento modificato
-        )
+            id,
+            { 
+                $set: { 
+                    images: {
+                        mainImage: req.file.path,
+                        gallery: [] // Inizializziamo la gallery se prima era una stringa
+                    }
+                } 
+            },
+            { returnDocument: 'after' }
+        );
 
-        //se l'id fornito non esiste, elimino l'img e restituisco errore(404)
         if (!room) {
-            // L'autore non esiste, dobbiamo cancellare l'immagine dal cloud
             await cloudinary.uploader.destroy(req.file.filename);
-            return res.status(404).json({ message: 'Autore non trovato, immagine rimossa dal cloud' });
+            return res.status(404).json({ message: 'Camera non trovata' });
         }
 
-        // se ok, restituisco(200)
-        res.status(200).json(room)
+        res.status(200).json(room);
 
     } catch (error) {
-        // provo a pulire Cloudinary
-        if (req.file) {
-            try {
-                await cloudinary.uploader.destroy(req.file.filename);
-            } catch (cloudinaryError) {
-                // Non blocco il flusso e rispondo al client
-                console.error("Errore durante la pulizia del file:", cloudinaryError);
-            }
-        }
-        //  rispondo al cliente
-        res.status(500).json({
-            message: error.message + ', abbiamo tentato di rimuovere l\'immagine dal cloud'
-        });
+        if (req.file) await cloudinary.uploader.destroy(req.file.filename);
+        console.error("Errore DB:", error);
+        res.status(500).json({ message: error.message });
     }
 }
 
 
 
+export async function updateGallery(req, res) {
+    try {
+        const { id } = req.params;
+
+        // 1. Controllo validità ID e pulizia file se errato
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            if (req.files) {
+                for (const file of req.files) await cloudinary.uploader.destroy(file.filename);
+            }
+            return res.status(400).json({ message: 'ID camera non valido' });
+        }
+
+        // 2. Controllo se i file sono arrivati
+        if (!req.files || req.files.length === 0) {
+            return res.status(400).json({ message: 'Nessun file caricato per la gallery' });
+        }
+
+        const newGalleryUrls = req.files.map(file => file.path);
+
+        // 3. RECUPERO DELLA CAMERA
+        // Dobbiamo verificare se 'images' è una stringa o un oggetto prima di fare il push
+        const currentRoom = await Camera.findById(id);
+        
+        if (!currentRoom) {
+            for (const file of req.files) await cloudinary.uploader.destroy(file.filename);
+            return res.status(404).json({ message: 'Camera non trovata' });
+        }
+
+        let updateQuery;
+
+        // 4. LOGICA DI CORREZIONE STRUTTURA
+        // Se 'images' è una stringa (vecchio formato), sovrascriviamo tutto l'oggetto
+        if (typeof currentRoom.images === 'string') {
+            updateQuery = {
+                $set: {
+                    images: {
+                        mainImage: currentRoom.images, // Salviamo la vecchia stringa come mainImage
+                        gallery: newGalleryUrls        // Inizializziamo la gallery con i nuovi file
+                    }
+                }
+            };
+        } else {
+            // Se è già un oggetto, usiamo il $push standard
+            updateQuery = {
+                $push: { "images.gallery": { $each: newGalleryUrls } }
+            };
+        }
+
+        const room = await Camera.findByIdAndUpdate(
+            id,
+            updateQuery,
+            { returnDocument: 'after' }
+        );
+
+        res.status(200).json(room);
+
+    } catch (error) {
+        // 5. Pulizia Cloudinary in caso di crash
+        if (req.files) {
+            for (const file of req.files) {
+                try { await cloudinary.uploader.destroy(file.filename); } catch (e) {}
+            }
+        }
+        console.error("Errore Gallery:", error);
+        res.status(500).json({ message: error.message });
+    }
+}

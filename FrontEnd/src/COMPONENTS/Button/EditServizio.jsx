@@ -3,6 +3,8 @@ import { Modal, Button, Form, Spinner, Alert } from "react-bootstrap";
 import { PencilSquare } from "react-bootstrap-icons";
 import UniversalUploader from "./UniversalUploader"; // Assicurati che il percorso sia corretto
 
+const API_URL = import.meta.env.VITE_BACK_END;
+
 function EditServizio({ servizio, onUpdate }) {
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);

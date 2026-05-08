@@ -113,6 +113,7 @@ function AllUser() {
           <tbody>
             {users.map((u) => (
               <tr key={u._id || u.id} className="border-bottom">
+
                 <td className="py-3">
                   <div className="d-flex align-items-center">
                     <div className="user-avatar-sm me-3">
@@ -120,12 +121,16 @@ function AllUser() {
                       {u.cognome?.charAt(0)}
                     </div>
                     <div>
+                      
                       <div className="fw-bold text-dark">
                         {u.nome} {u.cognome}
                       </div>
+
                     </div>
                   </div>
                 </td>
+
+
                 <td>
                   <span className="text-muted">{u.email}</span>
                 </td>

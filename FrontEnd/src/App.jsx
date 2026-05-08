@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 
-import MyNav from "./COMPONENTS/Navbar/MyNav.jsx";
+import MyNav from "./COMPONENTS/Prova.jsx";
 import User from "./COMPONENTS/User/User/User.jsx";
 import UserAdmin from "./COMPONENTS/User/UserAdmin/UserAdmin.jsx";
 import StruttureClient from "./COMPONENTS/Strutture/Struttura Clienti/StruttureClient.jsx";

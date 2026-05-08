@@ -1,46 +1,56 @@
-import { useState, useEffect } from "react";
-import { Modal, Button, Form, Row, Col, Spinner, Alert } from "react-bootstrap";
-import { PencilSquare } from "react-bootstrap-icons";
+import { useState, useEffect, useCallback } from "react";
+import { Modal, Button, Form, Row, Col, Spinner, Alert, Badge } from "react-bootstrap";
+import { PencilSquare, Images, Image as ImageIcon } from "react-bootstrap-icons";
+import UniversalUploader from "./UniversalUploader";
+
+const API_URL = import.meta.env.VITE_BACK_END;
 
 function EditCamera({ camera, onUpdate }) {
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [strutture, setStrutture] = useState([]);
+  const [formData, setFormData] = useState({});
 
-  const [formData, setFormData] = useState({
-    strutturaId: camera.strutturaId?._id || camera.strutturaId || "",
-    nome: camera.nome,
-    descrizione: camera.descrizione,
-    tipologia: camera.tipologia,
-    maxAdulti: camera.capienza.maxAdulti,
-    possibilitàLettino: camera.capienza.possibilitàLettino,
-    prezzoPerNotte: camera.prezzoPerNotte,
-    mainImage: camera.images.mainImage
-  });
-
-  // Carichiamo le strutture per il dropdown se necessario cambiare l'appartenenza
-  useEffect(() => {
-    if (show) {
-      fetch("http://localhost:3002/strutture")
-        .then(res => res.json())
-        .then(data => setStrutture(data))
-        .catch(err => console.error("Errore fetch strutture", err));
+  // Carica le strutture solo una volta all'apertura del modal
+  const fetchStrutture = useCallback(async () => {
+    if (strutture.length > 0) return;
+    try {
+      const res = await fetch(`${API_URL}/strutture`);
+      const data = await res.json();
+      setStrutture(data);
+    } catch (err) {
+      console.error("Errore fetch strutture", err);
     }
-  }, [show]);
+  }, [strutture.length]);
+
+  const handleShow = () => {
+    setFormData({
+      strutturaId: camera.strutturaId?._id || camera.strutturaId || "",
+      nome: camera.nome || "",
+      descrizione: camera.descrizione || "",
+      tipologia: camera.tipologia || "Singola",
+      maxAdulti: camera.capienza?.maxAdulti || 1,
+      possibilitàLettino: camera.capienza?.possibilitàLettino || false,
+      prezzoPerNotte: camera.prezzoPerNotte || 0,
+      mainImage: camera.images?.mainImage || "",
+      gallery: camera.images?.gallery || [],
+    });
+    fetchStrutture();
+    setShow(true);
+  };
 
   const handleClose = () => {
     setShow(false);
     setError(null);
   };
-  const handleShow = () => setShow(true);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
-      [name]: type === "checkbox" ? checked : value
-    });
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -48,6 +58,7 @@ function EditCamera({ camera, onUpdate }) {
     setLoading(true);
     setError(null);
 
+    // Costruiamo il payload rispettando la nidificazione del backend
     const bodyPayload = {
       strutturaId: formData.strutturaId,
       nome: formData.nome,
@@ -55,33 +66,32 @@ function EditCamera({ camera, onUpdate }) {
       tipologia: formData.tipologia,
       capienza: {
         maxAdulti: Number(formData.maxAdulti),
-        possibilitàLettino: formData.possibilitàLettino
+        possibilitàLettino: formData.possibilitàLettino,
       },
       prezzoPerNotte: Number(formData.prezzoPerNotte),
-      images: {
-        mainImage: formData.mainImage,
-        gallery: camera.images.gallery // Manteniamo la gallery esistente
-      }
+      // Nota: assicurati che il backend accetti "images.mainImage" come chiave piatta 
+      // o se preferisce l'oggetto images: { mainImage: ... }
+      "images.mainImage": formData.mainImage,
     };
 
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://localhost:3002/camere/${camera._id}`, {
+      const res = await fetch(`${API_URL}/camere/${camera._id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(bodyPayload),
       });
 
-      if (res.ok) {
-        onUpdate();
-        handleClose();
-      } else {
+      if (!res.ok) {
         const errData = await res.json();
         throw new Error(errData.message || "Errore aggiornamento camera");
       }
+
+      onUpdate();
+      handleClose();
     } catch (err) {
       setError(err.message);
     } finally {
@@ -91,23 +101,29 @@ function EditCamera({ camera, onUpdate }) {
 
   return (
     <>
-      <Button variant="outline-dark" size="sm" className="rounded-pill" onClick={handleShow}>
+      <Button variant="outline-dark" size="sm" className="rounded-pill shadow-sm" onClick={handleShow}>
         <PencilSquare />
       </Button>
 
-      <Modal show={show} onHide={handleClose} size="lg" centered>
+      <Modal show={show} onHide={handleClose} size="lg" centered backdrop="static">
         <Modal.Header closeButton className="border-0">
           <Modal.Title className="fw-bold">Modifica Camera</Modal.Title>
         </Modal.Header>
+        
         <Form onSubmit={handleSubmit}>
           <Modal.Body>
-            {error && <Alert variant="danger">{error}</Alert>}
+            {error && <Alert variant="danger" dismissible onClose={() => setError(null)}>{error}</Alert>}
 
             <Form.Group className="mb-3">
               <Form.Label className="small fw-bold">Struttura</Form.Label>
-              <Form.Select name="strutturaId" value={formData.strutturaId} onChange={handleChange} required>
+              <Form.Select 
+                name="strutturaId" 
+                value={formData.strutturaId} 
+                onChange={handleChange} 
+                required
+              >
                 <option value="">Seleziona Struttura</option>
-                {strutture.map(s => (
+                {strutture.map((s) => (
                   <option key={s._id} value={s._id}>{s.nome}</option>
                 ))}
               </Form.Select>
@@ -135,43 +151,89 @@ function EditCamera({ camera, onUpdate }) {
 
             <Form.Group className="mb-3">
               <Form.Label className="small fw-bold">Descrizione</Form.Label>
-              <Form.Control as="textarea" rows={2} name="descrizione" value={formData.descrizione} onChange={handleChange} required />
+              <Form.Control 
+                as="textarea" 
+                rows={3} 
+                name="descrizione" 
+                value={formData.descrizione} 
+                onChange={handleChange} 
+              />
             </Form.Group>
 
+            <hr className="my-4" />
+            <h6 className="fw-bold mb-3">Multimedia</h6>
+            
+            <Row className="g-3">
+              <Col md={6}>
+                <div className="p-3 border rounded bg-light h-100 shadow-sm text-center">
+                  <div className="d-flex align-items-center justify-content-center mb-2 text-primary">
+                    <ImageIcon className="me-2" />
+                    <span className="small fw-bold">Immagine Principale</span>
+                  </div>
+                  <UniversalUploader
+                    endpoint={`${API_URL}/camere/${camera._id}/images`}
+                    fieldName="images"
+                    onUploadSuccess={(updatedRoom) => {
+                      setFormData(prev => ({ ...prev, mainImage: updatedRoom.images?.mainImage }));
+                      onUpdate();
+                    }}
+                  />
+                  {formData.mainImage && <Badge bg="success" className="mt-2">Aggiornata</Badge>}
+                </div>
+              </Col>
+
+              <Col md={6}>
+                <div className="p-3 border rounded bg-light h-100 shadow-sm text-center">
+                  <div className="d-flex align-items-center justify-content-center mb-2 text-success">
+                    <Images className="me-2" />
+                    <span className="small fw-bold">Gallery Foto</span>
+                  </div>
+                  <UniversalUploader
+                    endpoint={`${API_URL}/camere/${camera._id}/gallery`}
+                    fieldName="gallery"
+                    method="PATCH"
+                    multiple={true}
+                    onUploadSuccess={(updatedRoom) => {
+                      setFormData(prev => ({ ...prev, gallery: updatedRoom.images?.gallery || [] }));
+                      onUpdate();
+                    }}
+                  />
+                  <div className="mt-2">
+                    <Badge bg="info" pill>{formData.gallery?.length || 0} foto</Badge>
+                  </div>
+                </div>
+              </Col>
+            </Row>
+
+            <hr className="my-4" />
             <Row>
               <Col md={4}>
                 <Form.Group className="mb-3">
                   <Form.Label className="small fw-bold">Max Adulti</Form.Label>
-                  <Form.Control type="number" name="maxAdulti" value={formData.maxAdulti} onChange={handleChange} required />
+                  <Form.Control type="number" name="maxAdulti" value={formData.maxAdulti} onChange={handleChange} min={1} required />
                 </Form.Group>
               </Col>
               <Col md={4}>
                 <Form.Group className="mb-3">
-                  <Form.Label className="small fw-bold">Prezzo (€)</Form.Label>
-                  <Form.Control type="number" name="prezzoPerNotte" value={formData.prezzoPerNotte} onChange={handleChange} required />
+                  <Form.Label className="small fw-bold">Prezzo (€/notte)</Form.Label>
+                  <Form.Control type="number" name="prezzoPerNotte" value={formData.prezzoPerNotte} onChange={handleChange} min={0} required />
                 </Form.Group>
               </Col>
-              <Col md={4} className="d-flex align-items-end">
+              <Col md={4} className="d-flex align-items-center justify-content-center">
                 <Form.Check 
-                  type="switch"
-                  label="Lettino disponibile"
-                  name="possibilitàLettino"
-                  className="mb-3"
-                  checked={formData.possibilitàLettino}
-                  onChange={handleChange}
+                    type="switch" 
+                    label="Lettino Extra" 
+                    name="possibilitàLettino" 
+                    checked={formData.possibilitàLettino} 
+                    onChange={handleChange} 
                 />
               </Col>
             </Row>
-
-            <Form.Group className="mb-3">
-              <Form.Label className="small fw-bold">URL Immagine Principale</Form.Label>
-              <Form.Control name="mainImage" value={formData.mainImage} onChange={handleChange} required />
-            </Form.Group>
-
           </Modal.Body>
+          
           <Modal.Footer className="border-0">
-            <Button variant="light" onClick={handleClose}>Annulla</Button>
-            <Button variant="dark" type="submit" disabled={loading}>
+            <Button variant="light" onClick={handleClose} disabled={loading}>Annulla</Button>
+            <Button variant="dark" type="submit" disabled={loading} className="px-4 fw-bold">
               {loading ? <Spinner size="sm" /> : "Salva Modifiche"}
             </Button>
           </Modal.Footer>

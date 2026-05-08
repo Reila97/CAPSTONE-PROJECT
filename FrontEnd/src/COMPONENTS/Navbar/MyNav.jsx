@@ -13,6 +13,8 @@ import { useAuth } from "../../CONTEXT/IsAdmin";
 
 import "./MyNav.css";
 
+const API_URL = import.meta.env.VITE_BACK_END;
+
 function MyNav() {
   const { user, isAdmin, logout } = useAuth();
   const navigate = useNavigate();

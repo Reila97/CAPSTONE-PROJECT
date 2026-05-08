@@ -15,9 +15,10 @@ import { useAuth } from "../../CONTEXT/IsAdmin";
 
 import "./Login.css";
 import GoogleLoginBtn from "../../COMPONENTS/Button/GoogleLoginBtn";
+import UniversalUploader from "../../COMPONENTS/Button/UniversalUploader.jsx";
 
-// Usa le variabili d'ambiente per l'URL dell'API (fallback su localhost se non definita)
-const API_URL = import.meta.env?.VITE_API_URL || "http://localhost:3002";
+
+const API_URL = import.meta.env.VITE_BACK_END 
 
 function Login() {
   const [view, setView] = useState("login");
@@ -354,6 +355,43 @@ function Login() {
                   required
                 />
               </FloatingLabel>
+
+              <div className="mb-4 p-3 border rounded-4 bg-light shadow-sm text-center">
+                <Form.Label className="small fw-bold text-secondary d-block mb-2 text-uppercase">
+                  Foto Profilo
+                </Form.Label>
+
+                {/* Anteprima se l'URL esiste nello stato */}
+                {registerData.avatar && (
+                  <div className="mb-2">
+                    <img
+                      src={registerData.avatar}
+                      alt="Preview"
+                      className="rounded-circle border shadow-sm"
+                      style={{
+                        width: "70px",
+                        height: "70px",
+                        objectFit: "cover",
+                      }}
+                    />
+                  </div>
+                )}
+
+                <UniversalUploader
+                  endpoint={`${API_URL}/auth/upload-temp`} // Endpoint per upload temporaneo o generico
+                  method="POST"
+                  fieldName="avatar"
+                  onUploadSuccess={(data) => {
+                    // Salviamo l'URL restituito dal server nello stato della registrazione
+                    setRegisterData({ ...registerData, avatar: data.avatar });
+                  }}
+                />
+                <small className="text-muted d-block mt-1">
+                  {registerData.avatar
+                    ? "Immagine caricata con successo!"
+                    : "Carica un'immagine (opzionale)"}
+                </small>
+              </div>
 
               <Button
                 type="submit"

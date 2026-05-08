@@ -2,7 +2,7 @@ import User from "../MODELS/User.js";
 
 export async function register(req, res) {
     try {
-        const { nome, cognome, email, password, dataDiNascita } = req.body;
+        const { nome, cognome, email, password, dataDiNascita, avatar } = req.body;
 
         // 1. Validazione base (Opzionale ma consigliata)
         if (!nome || !email || !password) {
@@ -22,7 +22,8 @@ export async function register(req, res) {
             cognome,
             email,
             password,
-            dataDiNascita
+            dataDiNascita,
+            avatar 
         });
 
         // 4. Salva e ritorna (Usa return per sicurezza)

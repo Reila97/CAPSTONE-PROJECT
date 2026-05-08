@@ -45,7 +45,7 @@ const strutturaSchema = new mongoose.Schema(
 
     // 4. MEDIA E VISUAL
     images: {
-      mainImage: { type: String, required: true },
+      mainImage: { type: String },
       gallery: [{ type: String }]
     },
 

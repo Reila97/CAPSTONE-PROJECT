@@ -47,7 +47,7 @@ const camereSchema = new mongoose.Schema({
     },
 
     images: {
-        mainImage: { type: String, required: true },
+        mainImage: { type: String },
         gallery: [{ type: String }]
     },
 

@@ -4,16 +4,27 @@ import jwt from 'jsonwebtoken';
 
 import { login } from "../CONTROLLERS/login.js"
 import { register } from '../CONTROLLERS/register.js'
+import cloudinaryUploadImg from '../MIDDLEWARES/cloudinary.js';
 
 
 const loginRouter = express.Router()
+
+loginRouter.post('/upload-temp', cloudinaryUploadImg.single('avatar'), (req, res) => {
+    try {
+        // req.file.path contiene l'URL di Cloudinary grazie al middleware
+        res.json({ avatar: req.file.path });
+    } catch (error) {
+        res.status(500).json({ message: "Errore durante l'upload" });
+    }
+});
+
 
 loginRouter.post('/registrazione', register)
 loginRouter.post('/login', login)
 
 //GOOGLE
 
-// Questa è la rotta che il bottone del frontend deve chiamare
+
 loginRouter.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
 loginRouter.get('/google/callback',
