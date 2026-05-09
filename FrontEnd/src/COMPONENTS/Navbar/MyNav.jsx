@@ -8,9 +8,7 @@ import {
 } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-
 import { useAuth } from "../../CONTEXT/IsAdmin";
-
 import "./MyNav.css";
 
 const API_URL = import.meta.env.VITE_BACK_END;
@@ -24,7 +22,7 @@ function MyNav() {
 
   useEffect(() => {
     setLoadingStrutture(true);
-    fetch("http://localhost:3002/strutture")
+    fetch(`${API_URL}/strutture`)
       .then((res) => res.json())
       .then((data) => setStrutture(Array.isArray(data) ? data : []))
       .catch((err) => console.error("Errore caricamento dropdown:", err))
@@ -37,85 +35,88 @@ function MyNav() {
   };
 
   return (
-    <Navbar expand="lg" className="sticky-top shadow-sm bg-white">
+    <Navbar expand="lg" className="sticky-top shadow-sm bg-white py-2" collapseOnSelect>
       <Container>
-        {/* Il logo porta a /home se l'utente è loggato, altrimenti alla landing/login "/" */}
-        <Navbar.Brand as={Link} to={user ? "/home" : "/"} className="main">
+        {/* LOGO */}
+        <Navbar.Brand as={Link} to={user ? "/home" : "/"} className="d-flex align-items-center">
           <img
             src="/Villa Fenix_Logo_Colore.png"
             className="logo"
             alt="logo villa fenix"
+            style={{ height: "50px" }}
           />
         </Navbar.Brand>
 
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="ms-auto bodyCopy align-items-lg-center">
-            
-            {/* 1. SEZIONE LOGGATO: La Home compare SOLO se l'utente esiste */}
-            {user && (
-           <Nav.Link as={Link} to="/home" className="fw-bold">
-              Home
-            </Nav.Link>
-            )}
-
-            {/* 2. SEZIONE PUBBLICA: Sempre visibile */}
           
-
-            <NavDropdown title="Strutture" id="nav-dropdown-strutture">
+          {/* MENU VISIBILE A TUTTI */}
+          <Nav className="ms-auto align-items-center fw-medium">
+            <Nav.Link as={Link} to="/home">Home</Nav.Link>
+            <Nav.Link as={Link} to="/chi-siamo">Chi Siamo</Nav.Link>
+            
+            {/* DROPDOWN STRUTTURE */}
+            <NavDropdown title="Le Nostre Strutture" id="nav-dropdown-strutture">
               <NavDropdown.Item as={Link} to="/strutture">
                 Tutte le Strutture
               </NavDropdown.Item>
               <NavDropdown.Divider />
-
               {loadingStrutture ? (
                 <div className="text-center py-2">
-                  <Spinner animation="border" size="sm" />
+                  <Spinner animation="border" size="sm" variant="warning" />
                 </div>
               ) : (
                 strutture.map((s) => (
-                  <NavDropdown.Item
-                    key={s._id}
-                    as={Link}
-                    to={`/strutture/${s._id}`}
-                  >
+                  <NavDropdown.Item key={s._id} as={Link} to={`/strutture/${s._id}`}>
                     {s.nome}
                   </NavDropdown.Item>
                 ))
               )}
             </NavDropdown>
 
-            {/* 3. SEZIONE PRIVATA UTENTE / ADMIN */}
+            <Nav.Link as={Link} to="/convenzioni">Convenzioni</Nav.Link>
+            <Nav.Link as={Link} to="/investi-con-noi">Investi con noi</Nav.Link>
+            <Nav.Link as={Link} to="/aziende">Aziende</Nav.Link>
+            <Nav.Link as={Link} to="/blog">Blog</Nav.Link>
+            <Nav.Link as={Link} to="/contatti">Contatti</Nav.Link>
+
+            {/* SEZIONE LOGGATO (PROFILO / ADMIN) */}
             {user ? (
-              <div className="d-flex align-items-center ms-lg-3">
-               
-                <Nav.Link as={Link} to="/profilo" className="me-2">
-                  Ciao,{" "}
-                  <span className="main orangeTxt">
-                    <strong>{user.nome}</strong>
-                  </span>
-                </Nav.Link>
-
-              
-                {isAdmin && (
-                  <Nav.Link as={Link} to="/admin" className="me-2">
-                    | <span className="main orangeTxt">Admin Panel</span>
-                  </Nav.Link>
-                )}
-
-                <Button
-                  variant="outline-danger"
-                  size="sm"
-                  onClick={handleLogout}
-                  className="rounded-pill ms-2"
-                >
-                  Logout
-                </Button>
-              </div>
+              <>
+                <div className="d-flex align-items-center ms-lg-3 gap-2">
+                  
+                  {/* DROPDOWN UTENTE */}
+                  <NavDropdown 
+                    title={<span>Ciao, <strong className="orangeTxt">{user.nome}</strong></span>} 
+                    id="user-dropdown"
+                    align="end"
+                  >
+                    <NavDropdown.Item as={Link} to="/profilo">Il mio Profilo</NavDropdown.Item>
+                    <NavDropdown.Item as={Link} to="/prenotazioni">Le mie Prenotazioni</NavDropdown.Item>
+                    
+                    {/* ADMIN PANEL (Se admin) */}
+                    {isAdmin && (
+                      <>
+                        <NavDropdown.Divider />
+                        <NavDropdown.Item as={Link} to="/admin" className="fw-bold text-primary">
+                          Admin Panel
+                        </NavDropdown.Item>
+                      </>
+                    )}
+                    
+                    <NavDropdown.Divider />
+                    <NavDropdown.Item onClick={handleLogout} className="text-danger">
+                      Logout
+                    </NavDropdown.Item>
+                  </NavDropdown>
+                </div>
+              </>
             ) : (
-              /* Se non è loggato */
-              <Nav.Link as={Link} to="/" className="ms-lg-3 fw-bold text-dark">
-                Accedi
+              /* SE NON LOGGATO */
+              <Nav.Link as={Link} to="/" className="ms-lg-3 fw-bold">
+                <Button variant="warning" size="sm" className="rounded-pill px-4 shadow-sm text-white">
+                  Accedi
+                </Button>
               </Nav.Link>
             )}
           </Nav>

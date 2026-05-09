@@ -425,4 +425,3 @@ function Login() {
 
 export default Login;
 
-//TODO,non funziona il login con google

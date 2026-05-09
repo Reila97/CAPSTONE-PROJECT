@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import {
   Alert,
   Card,
@@ -8,6 +8,7 @@ import {
   Spinner,
   Badge,
   ListGroup,
+  Image
 } from "react-bootstrap";
 import { useNavigate } from "react-router";
 import {
@@ -15,11 +16,14 @@ import {
   StarFill,
   CalendarCheck,
   Envelope,
+  PersonBadge
 } from "react-bootstrap-icons";
 
 import EditProfile from "../../Button/EditProfile";
 import DeleteProfile from "../../Button/DeleteProfile";
 import "./user.css";
+
+const API_URL = import.meta.env.VITE_BACK_END;
 
 function User() {
   const [userData, setUserData] = useState(null);
@@ -29,159 +33,149 @@ function User() {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  const handleUserUpdate = (newData) => {
+  const handleUserUpdate = useCallback((newData) => {
     setUserData(newData);
     localStorage.setItem("user", JSON.stringify(newData));
-  };
+  }, []);
+
+  const fetchUserData = useCallback(async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/");
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      // 1. Fetch dei dati utente tramite rotta protetta
+      const userRes = await fetch(`${API_URL}/users/me`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (!userRes.ok) throw new Error("Sessione scaduta o non valida");
+      
+      const userDataFetched = await userRes.json();
+      setUserData(userDataFetched);
+      localStorage.setItem("user", JSON.stringify(userDataFetched));
+
+      // 2. Fetch parallela di prenotazioni e recensioni
+      const [prenotazioniRes, recensioniRes] = await Promise.all([
+        fetch(`${API_URL}/prenotazioni/user/${userDataFetched._id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+        fetch(`${API_URL}/recensioni/user/${userDataFetched._id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+      ]);
+
+      if (prenotazioniRes.ok) {
+        const pData = await prenotazioniRes.json();
+        setPrenotazioni(Array.isArray(pData) ? pData : []);
+      }
+
+      if (recensioniRes.ok) {
+        const rData = await recensioniRes.json();
+        setRecensioni(Array.isArray(rData) ? rData : []);
+      }
+    } catch (err) {
+      console.error("Errore profilo:", err);
+      setError(err.message);
+      // Logout forzato se il token è invalido
+      localStorage.removeItem("token");
+      setTimeout(() => navigate("/"), 3000);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [navigate]);
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        navigate("/");
-        return;
-      }
-
-      try {
-        // 1. Fetch dei dati utente
-        const userRes = await fetch("http://localhost:3002/users/me", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        if (!userRes.ok) throw new Error("Sessione scaduta o non valida");
-        const userDataFetched = await userRes.json();
-        setUserData(userDataFetched);
-        localStorage.setItem("user", JSON.stringify(userDataFetched));
-
-        //TODO 2. Fetch delle prenotazioni e delle recensioni in parallelo
-        const [prenotazioniRes, recensioniRes] = await Promise.all([
-          fetch(
-            `http://localhost:3002/prenotazioni/user/${userDataFetched._id}`,
-            {
-              headers: { Authorization: `Bearer ${token}` },
-            },
-          ),
-          fetch(
-            `http://localhost:3002/recensioni/user/${userDataFetched._id}`,
-            {
-              headers: { Authorization: `Bearer ${token}` },
-            },
-          ),
-        ]);
-
-        if (prenotazioniRes.ok) {
-          const pData = await prenotazioniRes.json();
-          setPrenotazioni(Array.isArray(pData) ? pData : []);
-        }
-
-        if (recensioniRes.ok) {
-          const rData = await recensioniRes.json();
-          setRecensioni(Array.isArray(rData) ? rData : []);
-        }
-      } catch (err) {
-        setError(err.message);
-        setTimeout(() => navigate("/"), 3000);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     fetchUserData();
-  }, [navigate]);
+  }, [fetchUserData]);
 
   if (isLoading)
     return (
-      <Container className="text-center py-5">
-        <Spinner animation="border" variant="dark" />
+      <Container className="text-center py-5 vh-100 d-flex flex-column justify-content-center">
+        <Spinner animation="grow" variant="primary" />
+        <p className="mt-3 text-muted">Caricamento profilo...</p>
       </Container>
     );
 
   if (error)
     return (
       <Container className="mt-5">
-        <Alert variant="danger">{error}. Reindirizzamento...</Alert>
+        <Alert variant="danger" className="shadow-sm border-0">
+          <strong>Oops!</strong> {error}. Reindirizzamento...
+        </Alert>
       </Container>
     );
 
   return (
-    <Container className="py-5">
+    <Container className="py-5 bodyCopy">
       <Row className="g-4">
         {/* SIDEBAR: INFO UTENTE */}
         <Col lg={4}>
-          <Card className="border-0 shadow-sm text-center p-4 h-100">
-            <Card.Body className="d-flex flex-column justify-content-between h-100">
+          <Card className="border-0 shadow-sm text-center p-4 h-100 rounded-4">
+            <Card.Body className="d-flex flex-column justify-content-between">
               <div>
                 <div className="mb-3 d-flex justify-content-center">
                   {userData.avatar ? (
-                    <img
+                    <Image
                       src={userData.avatar}
                       alt="Avatar"
-                      className="rounded-circle shadow-sm border"
-                      style={{
-                        width: "100px",
-                        height: "100px",
-                        objectFit: "cover",
-                      }}
+                      roundedCircle
+                      className="shadow-sm border border-3 border-light"
+                      style={{ width: "120px", height: "120px", objectFit: "cover" }}
                     />
                   ) : (
-                    /* Fallback: se non c'è la foto, mostriamo le iniziali */
                     <div
-                      className="user-avatar-sm d-flex align-items-center justify-content-center fw-bold fs-3 rounded-circle bg-dark text-white shadow-sm"
-                      style={{ width: "100px", height: "100px" }}
+                      className="user-avatar-initials d-flex align-items-center justify-content-center fw-bold fs-2 rounded-circle bg-primary text-white shadow-sm"
+                      style={{ width: "120px", height: "120px" }}
                     >
-                      {userData.nome?.charAt(0)}
-                      {userData.cognome?.charAt(0)}
+                      {userData.nome?.[0]}{userData.cognome?.[0]}
                     </div>
                   )}
                 </div>
 
-                <h4 className="fw-bold mb-1">
+                <h3 className="fw-bold mb-1">
                   {userData.nome} {userData.cognome}
-                </h4>
+                </h3>
                 <div className="mb-3">
-                  {userData.isAdmin ? (
-                    <Badge
-                      bg="danger"
-                      className="px-3 py-2 rounded-pill fw-normal"
-                    >
-                      Amministratore
-                    </Badge>
-                  ) : (
-                    <Badge
-                      bg="dark"
-                      className="px-3 py-2 rounded-pill fw-normal"
-                    >
-                      Cliente
-                    </Badge>
-                  )}
+                  <Badge
+                    bg={userData.isAdmin ? "danger" : "dark"}
+                    className="px-3 py-2 rounded-pill fw-medium"
+                  >
+                    {userData.isAdmin ? "Amministratore" : "Cliente Fenix"}
+                  </Badge>
                 </div>
 
-                <hr className="my-4 text-muted opacity-25" />
+                <hr className="my-4 opacity-10" />
 
-                <div className="text-start">
-                  <h6 className="text-muted small fw-bold mb-3 text-uppercase">
-                    Informazioni Account
+                <div className="text-start bg-light p-3 rounded-3">
+                  <h6 className="text-muted small fw-bold mb-3 text-uppercase letter-spacing-1">
+                    Dettagli Account
                   </h6>
-                  <p className="mb-2 text-truncate">
-                    <Envelope className="me-2 text-secondary" />
-                    <strong>Email:</strong>
-                    <br />
-                    <span className="ms-4 text-muted">{userData.email}</span>
-                  </p>
-                  <p className="mb-3">
-                    <Calendar3 className="me-2 text-secondary" />
-                    <strong>Data Nascita:</strong>
-                    <br />
-                    <span className="ms-4 text-muted">
+                  <div className="mb-3">
+                    <div className="d-flex align-items-center text-dark small fw-bold">
+                       <Envelope className="me-2 text-primary" /> Email
+                    </div>
+                    <div className="ms-4 text-muted text-truncate">{userData.email}</div>
+                  </div>
+                  <div>
+                    <div className="d-flex align-items-center text-dark small fw-bold">
+                       <Calendar3 className="me-2 text-primary" /> Compleanno
+                    </div>
+                    <div className="ms-4 text-muted">
                       {userData.dataDiNascita
-                        ? new Date(userData.dataDiNascita).toLocaleDateString()
+                        ? new Date(userData.dataDiNascita).toLocaleDateString('it-IT', { 
+                            day: 'numeric', month: 'long', year: 'numeric' 
+                          })
                         : "Non specificata"}
-                    </span>
-                  </p>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              <div className="d-flex flex-column gap-2 mt-4">
+              <div className="d-grid gap-2 mt-4">
                 <EditProfile user={userData} onUpdate={handleUserUpdate} />
                 <DeleteProfile
                   userId={userData._id}
@@ -192,72 +186,79 @@ function User() {
           </Card>
         </Col>
 
-        {/* CONTENUTO PRINCIPALE: PRENOTAZIONI E RECENSIONI */}
+        {/* CONTENUTO PRINCIPALE */}
         <Col lg={8}>
           <Row className="g-4">
-            {/* STATISTICHE VELOCI */}
-            <Col md={6}>
-              <Card className="border-0 shadow-sm p-3 text-center bg-white h-100">
-                <Card.Body>
-                  <CalendarCheck size={32} className="text-secondary mb-2" />
-                  <h3 className="fw-bold mb-1">{prenotazioni.length}</h3>
-                  <p className="text-muted mb-0 small text-uppercase fw-bold">
-                    Prenotazioni effettuate
-                  </p>
+            {/* STATS */}
+            <Col sm={6}>
+              <Card className="border-0 shadow-sm p-3 bg-white h-100 rounded-4 border-start border-primary border-4">
+                <Card.Body className="d-flex align-items-center">
+                  <div className="bg-light p-3 rounded-circle me-3">
+                    <CalendarCheck size={24} className="text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="fw-bold mb-0">{prenotazioni.length}</h3>
+                    <p className="text-muted mb-0 small text-uppercase fw-bold">Soggiorni</p>
+                  </div>
                 </Card.Body>
               </Card>
             </Col>
 
-            <Col md={6}>
-              <Card className="border-0 shadow-sm p-3 text-center bg-white h-100">
-                <Card.Body>
-                  <StarFill size={32} className="text-warning mb-2" />
-                  <h3 className="fw-bold mb-1">{recensioni.length}</h3>
-                  <p className="text-muted mb-0 small text-uppercase fw-bold">
-                    Recensioni lasciate
-                  </p>
+            <Col sm={6}>
+              <Card className="border-0 shadow-sm p-3 bg-white h-100 rounded-4 border-start border-warning border-4">
+                <Card.Body className="d-flex align-items-center">
+                  <div className="bg-light p-3 rounded-circle me-3">
+                    <StarFill size={24} className="text-warning" />
+                  </div>
+                  <div>
+                    <h3 className="fw-bold mb-0">{recensioni.length}</h3>
+                    <p className="text-muted mb-0 small text-uppercase fw-bold">Feedback</p>
+                  </div>
                 </Card.Body>
               </Card>
             </Col>
 
-            {/* SEZIONE LISTE */}
+            {/* RECENSIONI */}
             <Col md={12}>
-              <Card className="border-0 shadow-sm">
-                <Card.Body className="p-4">
-                  <h5 className="fw-bold mb-4">Le tue Recensioni</h5>
-
+              <Card className="border-0 shadow-sm rounded-4 overflow-hidden">
+                <Card.Header className="bg-white py-3 border-0">
+                  <h5 className="fw-bold mb-0 d-flex align-items-center">
+                    <PersonBadge className="me-2 text-primary" /> Le tue Recensioni
+                  </h5>
+                </Card.Header>
+                <Card.Body className="px-4 pb-4">
                   {recensioni.length === 0 ? (
-                    <p className="text-muted my-3">
-                      Non hai ancora lasciato alcuna recensione.
-                    </p>
+                    <div className="text-center py-4">
+                      <p className="text-muted">Non hai ancora condiviso la tua esperienza.</p>
+                    </div>
                   ) : (
                     <ListGroup variant="flush">
-                      {recensioni.map((recensione) => (
-                        <ListGroup.Item
-                          key={recensione._id}
-                          className="px-0 py-3 border-bottom-dashed"
-                        >
-                          <div className="d-flex justify-content-between align-items-center mb-1">
-                            <span className="fw-bold text-dark">
-                              {recensione.strutturaId?.nome || "Struttura"}
-                            </span>
-                            <span className="text-warning d-flex align-items-center gap-1">
-                              {Array.from({ length: recensione.voto || 5 }).map(
-                                (_, i) => (
-                                  <StarFill key={i} size={12} />
-                                ),
-                              )}
-                            </span>
+                      {recensioni.map((rec) => (
+                        <ListGroup.Item key={rec._id} className="px-0 py-4 border-bottom">
+                          <div className="d-flex justify-content-between align-items-start mb-2">
+                            <div>
+                              <h6 className="fw-bold mb-1">
+                                {rec.strutturaId?.nome || "Struttura Villa Fenix"}
+                              </h6>
+                              <div className="text-warning">
+                                {[...Array(5)].map((_, i) => (
+                                  <StarFill 
+                                    key={i} 
+                                    size={14} 
+                                    className={i < (rec.voto || 5) ? "text-warning" : "text-light"} 
+                                  />
+                                ))}
+                              </div>
+                            </div>
+                            <small className="text-muted fw-medium">
+                              {new Date(rec.createdAt).toLocaleDateString()}
+                            </small>
                           </div>
-                          <p className="text-muted small mb-1">
-                            "{recensione.commento}"
+                          <p className="text-secondary italic mb-0">
+                            <span className="fs-4 lh-1 opacity-25">“</span>
+                            {rec.commento}
+                            <span className="fs-4 lh-1 opacity-25">”</span>
                           </p>
-                          <small className="text-muted opacity-75">
-                            Data:{" "}
-                            {new Date(
-                              recensione.createdAt,
-                            ).toLocaleDateString()}
-                          </small>
                         </ListGroup.Item>
                       ))}
                     </ListGroup>

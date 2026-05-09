@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import {
   Alert,
   Card,
@@ -11,17 +11,29 @@ import {
   Nav,
 } from "react-bootstrap";
 import { useNavigate } from "react-router";
+import { 
+  Person, 
+  House, 
+  DoorOpen, 
+  Gear, 
+  People, 
+  ShieldCheck,
+  BoxArrowRight 
+} from "react-bootstrap-icons";
 
+// Componenti Admin
+import StruttureAdmin from "../../Strutture/StruttureAdmin.jsx";
+import UserAdmin from "../UserAdmin/UserAdmin.jsx";
+import CamereAdmin from "../../Camere/CamereAdmin/CamereAdmin.jsx";
+import ServiziAdmin from "../../Servizi/ServiziAdmin.jsx";
+
+// Bottoni Azione Profilo
 import EditProfile from "../../Button/EditProfile";
 import DeleteProfile from "../../Button/DeleteProfile";
 
-import StruttureAdmin from "../../Strutture/StruttureAdmin.jsx"
-import UserAdmin from"../UserAdmin/UserAdmin.jsx"
-import CamereAdmin from "../../Camere/CamereAdmin/CamereAdmin.jsx";
-import ServiziAdmin from "../../Servizi/ServiziAdmin.jsx"
-
-
 import "./AdminDashboard.css";
+
+const API_URL = import.meta.env.VITE_BACK_END;
 
 function AdminDashboard() {
   const [userData, setUserData] = useState(null);
@@ -29,90 +41,130 @@ function AdminDashboard() {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  const handleUserUpdate = (newData) => {
+  // 1. Memoizzazione dell'aggiornamento per evitare render non necessari
+  const handleUserUpdate = useCallback((newData) => {
     setUserData(newData);
     localStorage.setItem("user", JSON.stringify(newData));
+  }, []);
+
+  // 2. Funzione di Logout centralizzata
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate("/");
   };
 
   useEffect(() => {
     const fetchUser = async () => {
       const token = localStorage.getItem("token");
+      
       if (!token) {
         navigate("/");
         return;
       }
 
       try {
-        const res = await fetch("http://localhost:3002/users/me", {
+        setIsLoading(true);
+        // Utilizzo di API_URL e backticks per l'endpoint corretto
+        const res = await fetch(`${API_URL}/users/me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
+
         if (res.ok) {
           const data = await res.json();
+          
+          // LOGICA RICHIESTA: Verifica che isAdmin sia strettamente true
+          if (data.isAdmin !== true) {
+            throw new Error("Accesso negato: non sei un amministratore");
+          }
+          
           setUserData(data);
           localStorage.setItem("user", JSON.stringify(data));
         } else {
-          throw new Error("Sessione scaduta");
+          throw new Error("Sessione scaduta o non valida");
         }
       } catch (err) {
         setError(err.message);
+        // Pulizia token se la sessione è invalida
+        localStorage.removeItem("token");
         setTimeout(() => navigate("/"), 3000);
       } finally {
         setIsLoading(false);
       }
     };
+
     fetchUser();
   }, [navigate]);
 
   if (isLoading)
     return (
-      <Container className="text-center mt-5">
-        <Spinner animation="border" variant="primary" />
-      </Container>
+      <div className="d-flex justify-content-center align-items-center vh-100">
+        <div className="text-center">
+          <Spinner animation="border" variant="primary" />
+          <p className="mt-3 text-muted fw-bold">Verifica autorizzazioni...</p>
+        </div>
+      </div>
     );
+
   if (error)
     return (
       <Container className="mt-5">
-        <Alert variant="danger">
-          {error}. Reindirizzamento...
+        <Alert variant="danger" className="shadow-sm border-0">
+          <ShieldCheck className="me-2" />
+          {error}. Reindirizzamento in corso...
         </Alert>
       </Container>
     );
 
   return (
-    <Container fluid className="mt-4 px-4 bodyCopy">
-      <h2 className="mb-4 fw-bold text-dark">Pannello di Controllo <small className="text-muted fs-6">Admin</small></h2>
+    <Container fluid className="mt-4 px-4 pb-5 bodyCopy">
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h2 className="fw-bold text-dark mb-0">
+          Pannello di Controllo <small className="text-muted fs-6 fw-normal">Administrator</small>
+        </h2>
+        <Badge bg="dark" className="p-2 px-3 shadow-sm">
+          <ShieldCheck className="me-1" /> ONLINE
+        </Badge>
+      </div>
       
       <Tab.Container id="admin-tabs" defaultActiveKey="profilo">
-        <Row>
+        <Row className="gy-4">
           {/* Sidebar di Navigazione */}
-          <Col lg={3} mb={4}>
-            <Card className="border-0 shadow-sm mb-4">
+          <Col lg={3}>
+            <Card className="border-0 shadow-sm sticky-top" style={{ top: "20px" }}>
               <Card.Body className="p-0">
-                <div className="bg-dark text-white p-4 text-center rounded-top">
-                    <div className="profile-avatar-circle mb-3 mx-auto shadow">
-                        <span className="initials">
+                <div className="bg-primary text-white p-4 text-center rounded-top">
+                    <div className="profile-avatar-circle mb-3 mx-auto shadow-lg border border-2 border-white">
+                        <span className="initials fs-4 fw-bold">
                             {userData.nome?.charAt(0)}{userData.cognome?.charAt(0)}
                         </span>
                     </div>
-                    <h5 className="mb-0">{userData.nome} {userData.cognome}</h5>
-                    <Badge bg="warning" text="dark" className="mt-2 text-uppercase">
-                        {userData.ruolo}
+                    <h5 className="mb-1 fw-bold">{userData.nome} {userData.cognome}</h5>
+                    <Badge bg="light" text="dark" className="text-uppercase tracking-wider">
+                        {userData.isAdmin ? "Amministratore" : "User"}
                     </Badge>
                 </div>
                 
-                <Nav variant="pills" className="flex-column p-3 custom-nav">
-                  <Nav.Item>
-                    <Nav.Link eventKey="camere" className="py-3">Gestione Camere</Nav.Link>
-                  </Nav.Item>
-                  <Nav.Item>
-                    <Nav.Link eventKey="servizi" className="py-3">Gestione Servizi</Nav.Link>
-                  </Nav.Item>
-                  <Nav.Item>
-                    <Nav.Link eventKey="strutture" className="py-3">Gestione Strutture</Nav.Link>
-                  </Nav.Item>
-                  <Nav.Item>
-                    <Nav.Link eventKey="utenti" className="py-3">Gestione Utenti</Nav.Link>
-                  </Nav.Item>
+                <Nav variant="pills" className="flex-column p-2 admin-nav">
+                  <Nav.Link eventKey="profilo" className="d-flex align-items-center gap-2 py-3">
+                    <Person /> Il Mio Profilo
+                  </Nav.Link>
+                  <Nav.Link eventKey="strutture" className="d-flex align-items-center gap-2 py-3">
+                    <House /> Gestione Strutture
+                  </Nav.Link>
+                  <Nav.Link eventKey="camere" className="d-flex align-items-center gap-2 py-3">
+                    <DoorOpen /> Gestione Camere
+                  </Nav.Link>
+                  <Nav.Link eventKey="servizi" className="d-flex align-items-center gap-2 py-3">
+                    <Gear /> Gestione Servizi
+                  </Nav.Link>
+                  <Nav.Link eventKey="utenti" className="d-flex align-items-center gap-2 py-3">
+                    <People /> Gestione Utenti
+                  </Nav.Link>
+                  <hr className="mx-3 my-2" />
+                  <Nav.Link onClick={handleLogout} className="text-danger d-flex align-items-center gap-2 py-3">
+                    <BoxArrowRight /> Esci
+                  </Nav.Link>
                 </Nav>
               </Card.Body>
             </Card>
@@ -120,54 +172,50 @@ function AdminDashboard() {
 
           {/* Area Contenuto */}
           <Col lg={9}>
-            <Card className="border-0 shadow-sm min-vh-75">
-              <Card.Body className="p-4">
+            <Card className="border-0 shadow-sm min-vh-75 overflow-hidden">
+              <Card.Body className="p-4 p-md-5">
                 <Tab.Content>
                   
                   {/* Sezione Profilo */}
                   <Tab.Pane eventKey="profilo">
-                    <h4 className="mb-4">Informazioni Account</h4>
-                    <Row>
+                    <h4 className="fw-bold mb-4 border-bottom pb-2">Dettagli Account</h4>
+                    <Row className="gy-4">
                         <Col md={6}>
-                            <p className="mb-1 text-muted small">Indirizzo Email</p>
-                            <p className="fw-bold">{userData.email}</p>
+                            <div className="p-3 bg-light rounded-3 border">
+                                <p className="mb-1 text-muted small text-uppercase">Email Aziendale</p>
+                                <p className="fw-bold mb-0 text-truncate">{userData.email}</p>
+                            </div>
                         </Col>
                         <Col md={6}>
-                            <p className="mb-1 text-muted small">Data di Nascita</p>
-                            <p className="fw-bold">
-                                {userData.dataDiNascita ? new Date(userData.dataDiNascita).toLocaleDateString() : "Non specificata"}
-                            </p>
+                            <div className="p-3 bg-light rounded-3 border">
+                                <p className="mb-1 text-muted small text-uppercase">Data di Nascita</p>
+                                <p className="fw-bold mb-0">
+                                    {userData.dataDiNascita ? new Date(userData.dataDiNascita).toLocaleDateString() : "Dato mancante"}
+                                </p>
+                            </div>
                         </Col>
                     </Row>
-                    <hr />
-                    <div className="d-flex gap-2 mt-4">
+                    <div className="d-flex gap-3 mt-5">
                         <EditProfile user={userData} onUpdate={handleUserUpdate} />
                         <DeleteProfile userId={userData._id} userName={`${userData.nome} ${userData.cognome}`} />
                     </div>
                   </Tab.Pane>
 
-                  {/* Sezione Camere */}
+                  {/* Sezioni Gestionali - Caricate solo quando selezionate */}
                   <Tab.Pane eventKey="camere">
-                    <h4 className="mb-4">Elenco e Gestione Camere</h4>
-                    <div className="p-5 text-center bg-light rounded"><CamereAdmin/></div>
+                    <CamereAdmin />
                   </Tab.Pane>
 
-                  {/* Sezione Servizi */}
                   <Tab.Pane eventKey="servizi">
-                    <h4 className="mb-4">Elenco e Gestione Servizi</h4>
-                    <div className="p-5 text-center bg-light rounded"><ServiziAdmin/></div>
+                    <ServiziAdmin />
                   </Tab.Pane>
 
-                  {/* Sezione Strutture */}
                   <Tab.Pane eventKey="strutture">
-                    <h4 className="mb-4">Elenco e Gestione Strutture</h4>
-                    <div className="p-5 text-center bg-light rounded"><StruttureAdmin/></div>
+                    <StruttureAdmin />
                   </Tab.Pane>
 
-                  {/* Sezione Utenti */}
                   <Tab.Pane eventKey="utenti">
-                    <h4 className="mb-4">Anagrafica Utenti di Sistema</h4>
-                    <div className="p-5 text-center bg-light rounded"><UserAdmin/></div>
+                    <UserAdmin />
                   </Tab.Pane>
 
                 </Tab.Content>

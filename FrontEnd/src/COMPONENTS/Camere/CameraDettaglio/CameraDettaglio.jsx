@@ -16,9 +16,10 @@ import {
   People,
   CheckCircleFill,
   ArrowLeft,
-  StarFill,
   GeoAlt,
 } from "react-bootstrap-icons";
+
+const API_URL = import.meta.env.VITE_BACK_END;
 
 function CameraDettaglio() {
   const { id } = useParams();
@@ -27,17 +28,19 @@ function CameraDettaglio() {
   const [camera, setCamera] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  // Stato per l'immagine principale visualizzata nella galleria
   const [activeImage, setActiveImage] = useState("");
 
   useEffect(() => {
     const fetchCamera = async () => {
       try {
-        const res = await fetch(`http://localhost:3002/camere/${id}`);
+        setLoading(true);
+        // Utilizziamo la variabile d'ambiente per l'endpoint
+        const res = await fetch(`${API_URL}/camere/${id}`);
+        
         if (!res.ok) {
           throw new Error("Impossibile caricare i dettagli della camera.");
         }
+        
         const data = await res.json();
         setCamera(data);
         setActiveImage(data.images?.mainImage || "");
@@ -48,31 +51,37 @@ function CameraDettaglio() {
       }
     };
 
-    fetchCamera();
+    if (id) fetchCamera();
   }, [id]);
 
   if (loading) {
     return (
       <Container className="text-center py-5">
-        <Spinner animation="border" variant="dark" />
+        <Spinner animation="border" variant="warning" />
+        <p className="mt-3 text-muted">Caricamento dettagli camera...</p>
       </Container>
     );
   }
 
-  if (error) {
+  if (error || !camera) {
     return (
-      <Container className="py-5">
-        <Alert variant="danger">{error}</Alert>
-        <Button variant="outline-dark" onClick={() => navigate(-1)}>
-          <ArrowLeft className="me-2" /> Torna indietro
+      <Container className="py-5 text-center">
+        <Alert variant="danger">{error || "Camera non trovata"}</Alert>
+        <Button variant="dark" className="rounded-pill" onClick={() => navigate(-1)}>
+          <ArrowLeft className="me-2" /> Torna alla lista
         </Button>
       </Container>
     );
   }
 
+  // Creiamo una lista unica di immagini per la galleria evitando duplicati
+  const allImages = [
+    camera.images?.mainImage,
+    ...(camera.images?.gallery || [])
+  ].filter(img => img); // Rimuove eventuali valori null/undefined
+
   return (
     <Container className="py-5">
-      {/* Pulsante per tornare indietro */}
       <Button
         variant="link"
         className="text-dark p-0 mb-4 d-inline-flex align-items-center fw-bold text-decoration-none"
@@ -82,49 +91,31 @@ function CameraDettaglio() {
       </Button>
 
       <Row className="g-4">
-        {/* COLONNA SINISTRA: IMMAGINI E DETTAGLI */}
+        {/* COLONNA SINISTRA: MEDIA E INFO */}
         <Col lg={8}>
-          {/* Galleria Immagini */}
           <div className="mb-4">
             <Image
-              src={activeImage || "https://placehold.co/800x500?text=Camera"}
+              src={activeImage || "https://placehold.co/800x500?text=Immagine+non+disponibile"}
               alt={camera.nome}
               fluid
-              className="rounded-4 shadow-sm mb-3 object-fit-cover w-100"
-              style={{ height: "450px" }}
+              className="rounded-4 shadow-sm mb-3 object-fit-cover w-100 shadow"
+              style={{ height: "480px", transition: "all 0.3s ease" }}
             />
 
-            {/* Miniature (Gallery) */}
-            {camera.images?.gallery && camera.images.gallery.length > 0 && (
-              <Row className="g-2">
-                <Col xs={3} md={2}>
-                  <Image
-                    src={camera.images.mainImage}
-                    alt="Principale"
-                    fluid
-                    role="button"
-                    className={`rounded-3 object-fit-cover w-100 h-100 border ${
-                      activeImage === camera.images.mainImage
-                        ? "border-dark border-2"
-                        : "border-transparent"
-                    }`}
-                    style={{ cursor: "pointer", height: "80px" }}
-                    onClick={() => setActiveImage(camera.images.mainImage)}
-                  />
-                </Col>
-                {camera.images.gallery.map((img, index) => (
-                  <Col xs={3} md={2} key={index}>
+            {/* Galleria Miniature */}
+            {allImages.length > 1 && (
+              <Row className="g-2 overflow-auto flex-nowrap pb-2 px-1">
+                {allImages.map((img, index) => (
+                  <Col xs={3} md={2} key={index} style={{ minWidth: '100px' }}>
                     <Image
                       src={img}
-                      alt={`Gallery ${index + 1}`}
+                      alt={`Vista ${index + 1}`}
                       fluid
                       role="button"
                       className={`rounded-3 object-fit-cover w-100 h-100 border ${
-                        activeImage === img
-                          ? "border-dark border-2"
-                          : "border-transparent"
+                        activeImage === img ? "border-warning border-3 shadow-sm" : "border-transparent opacity-75"
                       }`}
-                      style={{ cursor: "pointer", height: "80px" }}
+                      style={{ cursor: "pointer", height: "70px" }}
                       onClick={() => setActiveImage(img)}
                     />
                   </Col>
@@ -133,78 +124,72 @@ function CameraDettaglio() {
             )}
           </div>
 
-          {/* Intestazione Camera */}
           <div className="mb-4">
             <div className="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-2">
-              <h2 className="fw-bold mb-0">{camera.nome}</h2>
-              <Badge bg="dark" className="px-3 py-2 fs-6 fw-normal rounded-pill">
+              <h1 className="fw-bold mb-0">{camera.nome}</h1>
+              <Badge bg="warning" text="dark" className="px-3 py-2 fs-6 rounded-pill">
                 {camera.tipologia}
               </Badge>
             </div>
 
             {camera.strutturaId && (
               <p className="text-muted d-flex align-items-center mb-3">
-                <GeoAlt className="me-1 text-secondary" />
-                Presso: <strong className="ms-1 text-dark">{camera.strutturaId.nome}</strong>
+                <GeoAlt className="me-1 text-danger" />
+                Situata in: <strong className="ms-1 text-dark text-uppercase">{camera.strutturaId.nome}</strong>
               </p>
             )}
-            <hr className="text-muted opacity-25" />
+            <hr />
           </div>
 
-          {/* Caratteristiche principali (Badge veloci) */}
+          {/* Caratteristiche Box */}
           <Row className="g-3 mb-4">
             <Col xs={6} md={3}>
-              <div className="p-3 border rounded-4 text-center bg-light bg-opacity-50 h-100">
-                <People size={24} className="text-secondary mb-2" />
+              <div className="p-3 border rounded-4 text-center bg-white shadow-sm h-100">
+                <People size={24} className="text-warning mb-2" />
                 <h6 className="small fw-bold text-uppercase text-muted mb-1">Capienza</h6>
-                <span className="fw-bold text-dark">{camera.capienza?.maxAdulti} Adulti</span>
+                <span className="fw-bold">{camera.capienza?.maxAdulti} Ospiti</span>
               </div>
             </Col>
             <Col xs={6} md={3}>
-              <div className="p-3 border rounded-4 text-center bg-light bg-opacity-50 h-100">
-                <DoorOpen size={24} className="text-secondary mb-2" />
-                <h6 className="small fw-bold text-uppercase text-muted mb-1">Tipologia</h6>
-                <span className="fw-bold text-dark">{camera.tipologia}</span>
+              <div className="p-3 border rounded-4 text-center bg-white shadow-sm h-100">
+                <DoorOpen size={24} className="text-warning mb-2" />
+                <h6 className="small fw-bold text-uppercase text-muted mb-1">Letto</h6>
+                <span className="fw-bold">{camera.tipologia}</span>
               </div>
             </Col>
             {camera.capienza?.possibilitàLettino && (
               <Col xs={12} md={6}>
-                <div className="p-3 border rounded-4 d-flex align-items-center bg-success bg-opacity-10 border-success border-opacity-25 h-100">
-                  <CheckCircleFill size={20} className="text-success me-3 flex-shrink-0" />
+                <div className="p-3 border rounded-4 d-flex align-items-center bg-light h-100">
+                  <CheckCircleFill size={24} className="text-success me-3" />
                   <div>
-                    <h6 className="small fw-bold text-success text-uppercase mb-0">Servizio Lettino</h6>
-                    <span className="small text-muted">È possibile aggiungere un lettino </span>
+                    <h6 className="small fw-bold mb-0">Lettino Aggiuntivo</h6>
+                    <span className="small text-muted text-uppercase">Disponibile su richiesta</span>
                   </div>
                 </div>
               </Col>
             )}
           </Row>
 
-          {/* Descrizione */}
-          <div className="mb-4">
-            <h5 className="fw-bold mb-3">Informazioni sulla camera</h5>
-            <p className="text-secondary" style={{ lineHeight: "1.7", whiteSpace: "pre-line" }}>
+          <div className="mb-5">
+            <h5 className="fw-bold mb-3 border-start border-warning border-4 ps-3 text-uppercase">Descrizione Camera</h5>
+            <p className="text-secondary" style={{ lineHeight: "1.8", fontSize: "1.1rem" }}>
               {camera.descrizione}
             </p>
           </div>
 
-          {/* Servizi inclusi nella camera */}
-          {camera.servizi && camera.servizi.length > 0 && (
+          {/* Servizi */}
+          {camera.servizi?.length > 0 && (
             <div>
-              <h5 className="fw-bold mb-3">Cosa troverai in questa camera</h5>
-              <Row className="g-2">
-                {camera.servizi.map((servizio) => (
-                  <Col xs={12} sm={6} key={servizio._id}>
-                    <div className="d-flex align-items-center p-2 rounded-3">
-                      <CheckCircleFill className="text-success me-2" size={16} />
-                      <span className="text-dark">
-                        {servizio.nome}
-                        {servizio.costoExtra > 0 && (
-                          <small className="text-muted ms-1">
-                            (+€{servizio.costoExtra})
-                          </small>
-                        )}
-                      </span>
+              <h5 className="fw-bold mb-3 border-start border-warning border-4 ps-3 text-uppercase">Servizi inclusi</h5>
+              <Row className="g-3">
+                {camera.servizi.map((s) => (
+                  <Col xs={12} sm={6} key={s._id}>
+                    <div className="d-flex align-items-center p-3 bg-light rounded-4">
+                      <CheckCircleFill className="text-warning me-3" size={18} />
+                      <div className="d-flex flex-column">
+                        <span className="fw-bold">{s.nome}</span>
+                        {s.costoExtra > 0 && <small className="text-success fw-bold">+€{s.costoExtra.toFixed(2)}</small>}
+                      </div>
                     </div>
                   </Col>
                 ))}
@@ -213,43 +198,44 @@ function CameraDettaglio() {
           )}
         </Col>
 
-        {/* COLONNA DESTRA: PREZZO E CALL TO ACTION (PRENOTAZIONE) */}
+        {/* COLONNA DESTRA: BOOKING CARD */}
         <Col lg={4}>
-          <Card className="border-0 shadow-sm p-4 rounded-4 sticky-top" style={{ top: "100px" }}>
-            <Card.Body className="p-0">
-              <div className="mb-3">
-                <span className="fs-3 fw-bold text-success">€ {camera.prezzoPerNotte}</span>
-                <span className="text-muted"> / notte</span>
-              </div>
-
-              <div className="text-muted small mb-4">
-                Tasse e costi inclusi. La tariffa può variare in base alla stagionalità o ai servizi extra selezionati.
-              </div>
-
-              <hr className="text-muted opacity-25 mb-4" />
-
-              {/* Servizi Extra inclusi come Reminder */}
-              <div className="mb-4 bg-light p-3 rounded-3">
-                <h6 className="fw-bold small mb-2">Servizi disponibili</h6>
-                <div className="small text-secondary">
-                  Questa struttura offre l'accesso a tutti i comfort della categoria{" "}
-                  <strong>{camera.tipologia}</strong>.
+          <Card className="border-0 shadow-lg p-3 rounded-4 sticky-top" style={{ top: "110px" }}>
+            <Card.Body>
+              <div className="d-flex justify-content-between align-items-end mb-3">
+                <div>
+                    <h3 className="fw-bold text-dark mb-0">
+                        € {camera.prezzoPerNotte?.toLocaleString('it-IT')}
+                    </h3>
+                    <span className="text-muted small">Prezzo fisso per notte</span>
                 </div>
+                <Badge bg="success" className="mb-1">Miglior Prezzo</Badge>
               </div>
 
-              {/* Bottone d'azione con la tua classe personalizzata */}
+              <Alert variant="info" className="py-2 small border-0 bg-light">
+                <i className="bi bi-info-circle me-2"></i>
+                Nessun costo di prenotazione nascosto.
+              </Alert>
+
+              <hr className="opacity-25" />
+
+              <div className="mb-4">
+                <p className="small text-muted mb-0">Categoria della camera:</p>
+                <p className="fw-bold text-uppercase">{camera.tipologia}</p>
+              </div>
+
               <Button
                 variant="dark"
                 size="lg"
-                className="w-100 py-3 fw-bold rounded-pill dettagliButton text-uppercase mb-3"
+                className="w-100 py-3 fw-bold rounded-pill shadow mb-3 btn-hover-warning"
                 onClick={() => navigate(`/prenota/${camera._id}`)}
               >
-                Prenota ora
+                PRENOTA ADESSO
               </Button>
 
-              <div className="text-center text-muted small">
-                Nessun addebito immediato
-              </div>
+              <p className="text-center text-muted x-small mb-0" style={{fontSize: '0.75rem'}}>
+                Verrai reindirizzato alla pagina di checkout sicuro.
+              </p>
             </Card.Body>
           </Card>
         </Col>

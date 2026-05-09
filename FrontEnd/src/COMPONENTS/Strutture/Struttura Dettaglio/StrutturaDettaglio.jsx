@@ -1,119 +1,155 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Container, Spinner, Badge, Row, Col, Button } from "react-bootstrap";
-import { ArrowLeft } from "react-bootstrap-icons";
+import { Container, Spinner, Badge, Row, Col, Button, Alert } from "react-bootstrap";
+import { ArrowLeft, GeoAlt, Envelope, Telephone, InfoCircle } from "react-bootstrap-icons";
 
 import CamereClient from "../../Camere/CamereClient/CamereClient";
 import "./StrutturaDettaglio.css";
 
+const API_URL = import.meta.env.VITE_BACK_END;
+
 function StrutturaDettaglio() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [struttura, setStruttura] = useState(null);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchDettaglio = async () => {
       try {
-        const res = await fetch(`http://localhost:3002/strutture/${id}`);
-        if (res.ok) {
-          const data = await res.json();
-          setStruttura(data);
+        setLoading(true);
+        setError(null);
+        
+        // FIX: Sostituito localhost con variabile d'ambiente
+        const res = await fetch(`${API_URL}/strutture/${id}`);
+        
+        if (!res.ok) {
+          if (res.status === 404) throw new Error("Struttura non trovata.");
+          throw new Error("Errore nel caricamento dei dettagli.");
         }
+        
+        const data = await res.json();
+        setStruttura(data);
+        
+        // UX: Porta l'utente in cima alla pagina quando carica una nuova struttura
+        window.scrollTo(0, 0);
       } catch (err) {
-        console.error("Errore caricamento dettaglio:", err);
+        console.error("Errore dettaglio:", err);
+        setError(err.message);
       } finally {
         setLoading(false);
       }
     };
-    fetchDettaglio();
+
+    if (id) fetchDettaglio();
   }, [id]);
 
   if (loading)
     return (
-      <Container className="text-center mt-5">
-        <Spinner animation="border" />
+      <Container className="text-center py-5 my-5">
+        <Spinner animation="border" variant="primary" />
+        <p className="mt-3 text-muted">Caricamento dettagli struttura...</p>
       </Container>
     );
 
-  if (!struttura)
+  if (error || !struttura)
     return (
       <Container className="mt-5 text-center">
-        <h3>Struttura non trovata</h3>
-        <Button variant="dark" onClick={() => navigate("/strutture")}>
-          Torna alla vetrina
-        </Button>
+        <Alert variant="warning" className="py-4">
+          <InfoCircle size={30} className="mb-3" />
+          <h3>{error || "Struttura non trovata"}</h3>
+          <p>La struttura che cerchi potrebbe non essere più disponibile.</p>
+          <Button variant="dark" className="mt-2" onClick={() => navigate("/strutture")}>
+            Torna alla vetrina
+          </Button>
+        </Alert>
       </Container>
     );
 
   return (
-    <Container className="my-5">
+    <Container className="my-5 animate-in"> {/* Aggiunta classe per eventuale fade-in CSS */}
       <Button
         variant="link"
-        className="bodyCopy text-dark p-0 mb-4"
+        className="text-decoration-none text-dark p-0 mb-4 d-flex align-items-center gap-2 hover-link"
         onClick={() => navigate(-1)}
       >
-        <ArrowLeft /> Torna indietro
+        <ArrowLeft /> Torna alla lista
       </Button>
 
       <Row className="gy-4">
+        {/* Gallery Image Section */}
         <Col lg={7}>
-          <img
-            src={struttura.images?.mainImage}
-            alt={struttura.nome}
-            className="img-fluid rounded-0 shadow-sm w-100"
-            style={{ maxHeight: "500px", objectFit: "cover" }}
-          />
+          <div className="position-relative overflow-hidden rounded shadow-sm">
+            <img
+              src={struttura.images?.mainImage || "https://placehold.co/800x600?text=Villa+Fenix"}
+              alt={struttura.nome}
+              className="img-fluid w-100"
+              style={{ minHeight: "400px", maxHeight: "600px", objectFit: "cover" }}
+            />
+            {/* Overlay opzionale per eleganza */}
+            <div className="position-absolute top-0 end-0 m-3">
+              <Badge bg="white" className="text-dark border shadow-sm">
+                Top Location
+              </Badge>
+            </div>
+          </div>
         </Col>
 
+        {/* Info Section */}
         <Col lg={5}>
-          <div className="ps-lg-4">
-            <Badge bg="danger" className="mb-2 rounded-0 px-3 py-2">
-              a partire da €{struttura.policies?.basePrice} / notte
-            </Badge>
+          <div className="ps-lg-4 h-100 d-flex flex-column">
+            <div className="mb-3">
+              <Badge bg="danger" className="mb-3 rounded-1 px-3 py-2 fw-normal">
+                A partire da €{struttura.policies?.basePrice || "--"} / notte
+              </Badge>
+              <h1 className="headLine display-4 fw-bold mb-2">{struttura.nome}</h1>
+              <p className="text-muted d-flex align-items-center gap-2 mb-0">
+                <GeoAlt className="text-danger" />
+                {struttura.località?.città}, {struttura.località?.indirizzo}
+              </p>
+            </div>
 
-            <h1 className="headLine display-5 fw-bold">{struttura.nome}</h1>
+            <hr />
 
-            <p className="bodyCopy lead text-muted">
-              {struttura.località?.città} ({struttura.località?.provincia})
-            </p>
-
-            <div className="my-4">
-              <h5 className="headLine fw-bold text-uppercase small">
+            <div className="my-3 flex-grow-1">
+              <h5 className="text-uppercase small fw-bold tracking-wider text-muted mb-3">
                 Descrizione
               </h5>
-              <p className="bodyCopy">{struttura.descrizione}</p>
-            </div>
-
-            <div className="bg-light p-4 border">
-              <h5 className="headLine fw-bold small text-uppercase">
-                Informazioni e Contatti
-              </h5>
-              <p className="bodyCopy mb-1">
-                <strong>Indirizzo:</strong> {struttura.località?.indirizzo}
-              </p>
-              <p className=" bodyCopy mb-1">
-                <strong>Email:</strong> {struttura.contatti?.email}
-              </p>
-              <p className="bodyCopy mb-0">
-                <strong>Telefono:</strong> {struttura.contatti?.telefono}
+              <p className="bodyCopy leading-relaxed text-dark">
+                {struttura.descrizione}
               </p>
             </div>
 
-            <Button className="prenotaButton w-100 mt-4 py-3 rounded-0 fw-bold">
-              PRENOTA ORA
+            <div className="bg-light p-4 rounded border-start border-primary border-4 shadow-sm mb-4">
+              <h5 className="text-uppercase small fw-bold mb-3">Contatti & Supporto</h5>
+              <div className="small">
+                <p className="mb-2 d-flex align-items-center gap-2">
+                  <Envelope className="text-primary" /> {struttura.contatti?.email}
+                </p>
+                <p className="mb-0 d-flex align-items-center gap-2">
+                  <Telephone className="text-primary" /> {struttura.contatti?.telefono}
+                </p>
+              </div>
+            </div>
+
+            <Button className="prenotaButton w-100 py-3 rounded-2 fw-bold shadow-sm transition-all">
+              CONTATTACI PER PRENOTARE
             </Button>
           </div>
         </Col>
       </Row>
 
       {/* SEZIONE CAMERE DISPONIBILI */}
-      <hr className="my-5" />
-
-      <h2 className="headLine fw-bold mb-4">Le nostre camere</h2>
-
-      {/* Passa l'array di camere della singola struttura */}
-      <CamereClient camereDati={struttura.camere} />
+      <div className="mt-5 pt-5">
+        <div className="d-flex align-items-center gap-3 mb-4">
+          <h2 className="headLine fw-bold mb-0">Soluzioni Disponibili</h2>
+          <div className="flex-grow-1 border-bottom"></div>
+        </div>
+        
+        {/* Passa l'array di camere della singola struttura */}
+        <CamereClient camereDati={struttura.camere} />
+      </div>
     </Container>
   );
 }

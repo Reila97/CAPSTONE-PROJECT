@@ -1,0 +1,68 @@
+/* Layout Sidebar Fissa */
+.sticky-column {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    background-color: #f8f9fa;
+    border-right: 1px solid #e0e0e0;
+    overflow-y: auto;
+}
+
+.main-content {
+    background-color: #ffffff;
+}
+
+/* Gestione Sezioni */
+.home-section {
+    padding: 40px 0;
+}
+
+.section-header h2 {
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+}
+
+.section-divider {
+    margin: 0 40px;
+    opacity: 0.1;
+}
+
+/* Scroll Orizzontale Magico */
+/* Questo permette alle card di StruttureClient e CamereClient di scorrere */
+.horizontal-scroll-wrapper {
+    overflow-x: auto;
+    padding: 20px 0;
+    display: flex;
+}
+
+.horizontal-scroll-wrapper::-webkit-scrollbar {
+    height: 6px;
+}
+
+.horizontal-scroll-wrapper::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+}
+
+/* Griglia Servizi */
+.services-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.service-card {
+    background: #fff;
+    padding: 15px 25px;
+    border-radius: 50px;
+    border: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.service-icon { font-size: 1.2rem; }
+.service-name { font-weight: 600; color: #444; }

@@ -1,7 +1,7 @@
 .booking-card-wrapper {
   width: 100%;        
   max-width: 100%;    
-  height: 650px;     
+  height: 100%;     
   margin: 0;
   overflow: hidden; 
   
@@ -10,7 +10,8 @@
 
 .booking-card-inner {
   display: flex;
-  width: 200%; /* La card interna è larga il doppio del contenitore */
+  width: 200%; 
+  flex-direction: column;
   height: 100%;
   transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1); /* Animazione fluida */
 }
@@ -20,10 +21,19 @@
   transform: translateX(-50%);
 }
 
-.booking-image, .booking-form-content {
+.booking-image {
   width: 50%; /* Ognuno occupa metà della larghezza totale (che è 200%) */
   height: 100%;
   position: relative;
+  flex: 1;
+}
+
+.booking-form-content {
+  width: 50%; /* Ognuno occupa metà della larghezza totale (che è 200%) */
+  height: 100%;
+  position: relative;
+  flex: 2;
+  overflow-y: auto;
 }
 
 .booking-image img {
