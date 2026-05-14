@@ -12,6 +12,8 @@ import userRouter from "./ROUTES/users.js";
 import propertyRouter from "./ROUTES/strutture.js";
 import roomRouter from "./ROUTES/camere.js";
 import serviceRouter from "./ROUTES/servizi.js";
+import recensioniRouter from "./ROUTES/recensioni.js";
+import bookingRouter from "./ROUTES/booking.js";
 
 const server = express()
 server.use(express.json())
@@ -42,6 +44,8 @@ server.use('/users', userRouter)
 server.use('/strutture', propertyRouter)
 server.use('/camere', roomRouter)
 server.use('/servizi', serviceRouter)
+server.use('/recensioni', recensioniRouter)
+server.use('/bookings', bookingRouter)
 
 
 

@@ -5,13 +5,15 @@ import CreateServizio from "../Button/CreateServizio.jsx";
 import DeleteServizio from "../Button/DeleteServizio.jsx";
 import EditServizio from "../Button/EditServizio.jsx";
 
+const API_URL = import.meta.env.VITE_BACK_END;
+
 function ServiziAdmin() {
   const [servizi, setServizi] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const getServizi = async () => {
     try {
-      const res = await fetch("http://localhost:3002/servizi");
+      const res = await fetch(`${API_URL}/servizi`);
       const data = await res.json();
       setServizi(data);
     } catch (err) {

@@ -12,9 +12,9 @@ const camereSchema = new mongoose.Schema({
         trim: true
     },
 
-     descrizione: {
-      type: String,
-      required: [true, "La descrizione è obbligatoria"]
+    descrizione: {
+        type: String,
+        required: [true, "La descrizione è obbligatoria"]
     },
 
     tipologia: {
@@ -55,5 +55,5 @@ const camereSchema = new mongoose.Schema({
 
 camereSchema.index({ strutturaId: 1, nome: 1 }, { unique: true })
 
-const Camera = mongoose.model("camera", camereSchema);
-export default Camera
+const camera = mongoose.model("camera", camereSchema);
+export default camera

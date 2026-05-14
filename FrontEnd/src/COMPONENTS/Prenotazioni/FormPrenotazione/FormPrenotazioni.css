@@ -1,0 +1,67 @@
+/* Layout principale a due lati */
+.booking-card-wrapper {
+    max-width: 900px;
+    margin: 2rem auto;
+    background: #fff;
+}
+
+.booking-card-inner {
+    display: flex;
+    flex-wrap: wrap;
+    min-height: 550px;
+}
+
+/* Lato Logo */
+.booking-logo-side {
+    flex: 1 1 40%;
+    background-color: #f8f6f2; /* Colore crema tenue per contrastare col logo */
+    border-right: 1px solid #eee;
+}
+
+/* Lato Form */
+.booking-form-content {
+    flex: 1 1 60%;
+}
+
+/* Tipografia e Colori Villa Fenix */
+.headLine {
+    font-family: "Metrophobic", sans-serif;
+    font-weight: 600;
+    color: #6d634f;
+}
+
+.bodyCopy {
+    font-family: "Ubuntu", sans-serif;
+    font-weight: 300;
+    color: #6d634f;
+}
+
+/* Bottoni */
+.prenotaButton {
+    font-family: "Metrophobic", sans-serif;
+    font-weight: 600;
+    color: white !important; 
+    background-color: #f1901f;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.prenotaButton:hover {
+    background-color: #cb781a;
+    transform: translateY(-2px);
+}
+
+.prenotaButton:active {
+    background-color: #cb781a !important;
+    transform: scale(0.98);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .booking-card-inner {
+        flex-direction: column;
+    }
+    .booking-logo-side {
+        padding: 2rem 1rem;
+    }
+}

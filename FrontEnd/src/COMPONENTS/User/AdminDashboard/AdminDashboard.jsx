@@ -18,7 +18,8 @@ import {
   Gear, 
   People, 
   ShieldCheck,
-  BoxArrowRight 
+  BoxArrowRight,
+  CalendarDate 
 } from "react-bootstrap-icons";
 
 // Componenti Admin
@@ -26,6 +27,7 @@ import StruttureAdmin from "../../Strutture/StruttureAdmin.jsx";
 import UserAdmin from "../UserAdmin/UserAdmin.jsx";
 import CamereAdmin from "../../Camere/CamereAdmin/CamereAdmin.jsx";
 import ServiziAdmin from "../../Servizi/ServiziAdmin.jsx";
+import PrenotazioniAdmin from "../../Prenotazioni/PrenotazioniAdmin.jsx";
 
 // Bottoni Azione Profilo
 import EditProfile from "../../Button/EditProfile";
@@ -161,6 +163,9 @@ function AdminDashboard() {
                   <Nav.Link eventKey="utenti" className="d-flex align-items-center gap-2 py-3">
                     <People /> Gestione Utenti
                   </Nav.Link>
+                  <Nav.Link eventKey="prenotazioni" className="d-flex align-items-center gap-2 py-3">
+                    <CalendarDate /> Prenotazioni
+                  </Nav.Link>
                   <hr className="mx-3 my-2" />
                   <Nav.Link onClick={handleLogout} className="text-danger d-flex align-items-center gap-2 py-3">
                     <BoxArrowRight /> Esci
@@ -216,6 +221,10 @@ function AdminDashboard() {
 
                   <Tab.Pane eventKey="utenti">
                     <UserAdmin />
+                  </Tab.Pane>
+
+                   <Tab.Pane eventKey="prenotazioni">
+                    <PrenotazioniAdmin />
                   </Tab.Pane>
 
                 </Tab.Content>
