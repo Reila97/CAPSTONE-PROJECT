@@ -1,0 +1,57 @@
+/* ==========================================================================
+   VILLA FENIX - CAMERE CLIENT COMPONENT STYLES
+   ========================================================================== */
+
+.vf-camere-wrapper {
+  font-family: 'Ubuntu', sans-serif;
+  color: #65513D; /* Colore istituzionale primario */
+}
+
+/* Spinner e Stati di Caricamento */
+.vf-spinner-container {
+  display: block;
+  text-align: center;
+  padding: 3rem 0;
+}
+
+.vf-spinner-brand {
+  color: #65513D !important; /* Marrone Primario */
+}
+
+.vf-loading-text {
+  font-family: 'Gotham', sans-serif;
+  color: #65513D;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+}
+
+/* Alert ed Errori Personalizzati */
+.vf-alert-error {
+  background-color: #BAB2A2 !important; /* Sfondo colore Mirra desaturato */
+  border: 1px solid rgba(101, 81, 61, 0.2) !important;
+  color: #ffffff !important;
+  border-radius: 12px !important;
+  font-family: 'Ubuntu', sans-serif;
+}
+
+/* Messaggio Stato Vuoto (No Camere) */
+.vf-empty-message {
+  font-family: 'Ubuntu', sans-serif;
+  color: #65513D;
+  opacity: 0.85;
+  line-height: 1.6;
+  font-size: 1.05rem;
+  border-left: 3px solid #F28B2D; /* Dettaglio Arancione Secondario */
+  padding-left: 1rem;
+}
+
+/* Contenitore Card per allineamento perfetto */
+.vf-card-container {
+  width: 100%;
+  max-width: 350px;
+  transition: transform 0.3s ease;
+}
+
+.vf-card-container:hover {
+  transform: translateY(-5px); /* Effetto elevazione allineato allo stile del brand */
+}

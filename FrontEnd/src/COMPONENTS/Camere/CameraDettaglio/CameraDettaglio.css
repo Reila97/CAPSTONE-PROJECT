@@ -1,0 +1,108 @@
+/* ==========================================================================
+   VILLA FENIX - CUSTOM COMPONENT STYLES
+   ========================================================================== */
+
+.villafenix-container {
+  font-family: 'Ubuntu', sans-serif;
+  color: #65513D; /* Colore istituzionale primario per il testo base */
+}
+
+/* Tipografia e Titoli (Gotham) */
+.vf-headline {
+  font-family: 'Gotham', sans-serif;
+  color: #65513D;
+}
+
+.vf-badge-tipologia {
+  background-color: #F28B2D !important; /* Arancione Secondario */
+  color: #ffffff !important;
+  font-family: 'Gotham', sans-serif;
+  letter-spacing: 0.5px;
+}
+
+/* Pulsante Indietro */
+.vf-btn-back {
+  color: #65513D !important;
+  font-family: 'Gotham', sans-serif;
+  transition: color 0.2s ease-in-out;
+}
+
+.vf-btn-back:hover {
+  color: #F28B2D !important;
+}
+
+/* Galleria Immagini */
+.vf-main-img {
+  border: 1px solid rgba(101, 81, 61, 0.1);
+}
+
+.vf-thumb {
+  transition: all 0.2s ease-in-out;
+}
+
+.vf-thumb.active {
+  border-color: #F28B2D !important; /* Bordo arancione su attiva */
+  transform: scale(1.03);
+}
+
+.vf-thumb.inactive {
+  border-color: transparent !important;
+  opacity: 0.6;
+}
+
+.vf-thumb:hover {
+  opacity: 1;
+}
+
+/* Box Caratteristiche e Servizi */
+.vf-border-warning-custom {
+  border-left: 4px solid #F28B2D !important; /* Sostituisce il border-warning */
+}
+
+.vf-icon-primary {
+  color: #65513D !important;
+}
+
+.vf-icon-secondary {
+  color: #F28B2D !important;
+}
+
+.vf-bg-light {
+  background-color: #F7F9FA !important; /* Approssimazione RAL 9010 (Bianco) */
+  border: 1px solid rgba(101, 81, 61, 0.08);
+}
+
+.vf-card-info {
+  background-color: #BAB2A2 !important; /* Colore Mirra */
+  color: #ffffff;
+}
+
+/* Booking Card & Buttons */
+.vf-booking-card {
+  border: 1px solid rgba(101, 81, 61, 0.1) !important;
+}
+
+.vf-price {
+  color: #65513D;
+  font-family: 'Gotham', sans-serif;
+}
+
+.vf-btn-primary {
+  background-color: #65513D !important;
+  border-color: #65513D !important;
+  color: #ffffff !important;
+  font-family: 'Gotham', sans-serif;
+  letter-spacing: 1px;
+  transition: all 0.3s ease-in-out !important;
+}
+
+.vf-btn-primary:hover {
+  background-color: #F28B2D !important; /* Hover virato sull'arancione */
+  border-color: #F28B2D !important;
+  transform: translateY(-2px);
+}
+
+/* Spinner personalizzato */
+.vf-spinner {
+  color: #65513D !important;
+}

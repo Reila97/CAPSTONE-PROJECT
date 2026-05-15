@@ -1,0 +1,93 @@
+/* ==========================================================================
+   VILLA FENIX - CHI SIAMO COMPONENT STYLES
+   ========================================================================= */
+
+.bg-about-fenix {
+  font-family: 'Ubuntu', sans-serif;
+  color: #65513D; /* Colore istituzionale primario */
+  background-color: #ffffff;
+}
+
+/* Tipografia Corporate (Gotham per Titoli) */
+.vf-main-title {
+  font-family: 'Gotham', sans-serif;
+  color: #65513D;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.vf-section-title {
+  font-family: 'Gotham', sans-serif;
+  color: #65513D;
+  font-weight: 600;
+}
+
+/* Payoff e Testi */
+.vf-corporate-payoff {
+  font-family: 'Ubuntu', sans-serif;
+  color: #F28B2D; /* Arancione Secondario istituzionale */
+  font-size: 1.25rem;
+  letter-spacing: 0.5px;
+}
+
+.vf-body-text {
+  font-family: 'Ubuntu', sans-serif;
+  color: #65513D;
+  line-height: 1.7;
+  opacity: 0.9;
+}
+
+/* Stile delle Card Istituzionali */
+.card-fenix {
+  background-color: #ffffff;
+  border: 1px solid rgba(101, 81, 61, 0.1) !important;
+  transition: all 0.3s ease-in-out;
+}
+
+.card-fenix:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(101, 81, 61, 0.08) !important;
+}
+
+/* Evidenziazione Card Visione (Arancione Secondario) */
+.highlight-card {
+  border-top: 4px solid #F28B2D !important;
+}
+
+/* Wrapper delle Icone */
+.icon-wrapper.text-warning-fenix {
+  color: #F28B2D !important; /* Allineato all'arancione istituzionale */
+  background-color: rgba(242, 139, 45, 0.08);
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+}
+
+/* Box per la citazione di Ovidio (Stile Incenso/Mirra) */
+.vf-quote-box {
+  background-color: #F7F9FA !important; /* RAL 9010 Bianco */
+  border-left: 3px solid #65513D;
+  color: #65513D;
+}
+
+/* Elenco aromatico delle camere */
+.vf-aroma-tagline {
+  font-family: 'Gotham', sans-serif;
+  color: #65513D;
+  background-color: #F7F9FA;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(101, 81, 61, 0.05);
+}
+
+/* Utility layout */
+.max-width-700 {
+  max-width: 700px;
+}
+
+.italic-text {
+  font-style: italic;
+}

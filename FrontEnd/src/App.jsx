@@ -17,6 +17,8 @@ import CamereClient from "./COMPONENTS/Camere/CamereClient/CamereClient.jsx";
 import Footer from "./COMPONENTS/Footer/Footer.jsx";
 import LoginSuccess from "./PAGES/Login/LoginSuccess.jsx";
 import WhatsappButton from "./COMPONENTS/Button/WhatsappButton.jsx";
+import ChiSiamo from "./COMPONENTS/ChiSiamo/ChiSiamo.jsx";
+import ComingSoon from "./COMPONENTS/ComingSoon/ComingSoon.jsx";
 
 // --- PROTEZIONE ROTTE ADMIN ---
 const AdminRoute = ({ children }) => {
@@ -54,6 +56,10 @@ function App() {
           <Route path="/camere" element={<CamereClient />} />
           <Route path="/camere/:id" element={<CameraDettaglio />} />
 
+          <Route path="/chiSiamo" element={<ChiSiamo />} />
+
+          <Route path="/comingSoon" element={<ComingSoon />} />
+
           {/* UTENTE LOGGATO */}
           <Route
             path="/profilo"
@@ -79,8 +85,7 @@ function App() {
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
 
-         {/* <WhatsappButton/> */}
-
+        {/* <WhatsappButton/> */}
 
         <Footer />
       </AuthProvider>

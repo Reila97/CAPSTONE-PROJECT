@@ -1,0 +1,78 @@
+/* ==========================================================================
+   VILLA FENIX - CAMERA CARD COMPONENT STYLES
+   ========================================================================== */
+
+.vf-card-wrapper {
+  font-family: 'Ubuntu', sans-serif;
+}
+
+.vf-camera-card {
+  border: 1px solid rgba(101, 81, 61, 0.08) !important;
+  background-color: #ffffff;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.vf-camera-card:hover {
+  box-shadow: 0 10px 25px rgba(101, 81, 61, 0.12) !important;
+}
+
+/* Immagine con sfondo RAL 9010 (Bianco) */
+.vf-card-img-wrapper {
+  height: 200px;
+  overflow: hidden;
+  background-color: #F7F9FA; 
+}
+
+.vf-card-img {
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+/* Tipografia e Badge (Gotham per titoli) */
+.vf-card-title {
+  font-family: 'Gotham', sans-serif;
+  color: #65513D; /* Marrone Primario */
+  font-size: 1.15rem;
+}
+
+.vf-badge-secondary {
+  background-color: #F7F9FA !important;
+  color: #65513D !important;
+  border: 1px solid rgba(101, 81, 61, 0.15) !important;
+  font-family: 'Ubuntu', sans-serif;
+  font-size: 0.75rem;
+}
+
+/* Dettagli Prezzo e Capienza */
+.vf-card-label {
+  font-size: 0.75rem;
+  letter-spacing: 0.5px;
+  color: #BAB2A2; /* Colore Mirra */
+}
+
+.vf-card-price {
+  font-family: 'Gotham', sans-serif;
+  color: #65513D; /* Marrone Primario */
+  font-size: 1.25rem;
+}
+
+.vf-text-accent {
+  color: #F28B2D !important; /* Arancione Secondario per evidenziare il lettino */
+  font-weight: 500;
+}
+
+/* Pulsante d'Azione Istituzionale */
+.vf-btn-outline-brand {
+  border: 1.5px solid #65513D !important;
+  color: #65513D !important;
+  background-color: transparent !important;
+  font-family: 'Gotham', sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+  transition: all 0.25s ease-in-out !important;
+}
+
+.vf-btn-outline-brand:hover {
+  background-color: #65513D !important; /* Inversione colore all'hover */
+  color: #ffffff !important;
+}

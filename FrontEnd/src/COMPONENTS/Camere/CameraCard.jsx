@@ -1,5 +1,6 @@
 import { Button, Card, Col } from "react-bootstrap";
-import { Link } from "react-router"; // Assicurati che sia "react-router-dom" se usi la versione standard
+import { Link } from "react-router"; // Mantenuto l'import originale dell'ambiente
+import "./CameraCard.css"; // Importazione degli stili Villa Fenix
 
 function CameraCard({ camera }) {
   // Destrutturazione per pulizia del codice
@@ -27,49 +28,48 @@ function CameraCard({ camera }) {
   });
 
   return (
-    <Col className="d-flex align-items-stretch">
-      <Card className="h-100 border-0 shadow-sm rounded-3 overflow-hidden">
+    <Col className="d-flex align-items-stretch vf-card-wrapper">
+      <Card className="h-100 border-0 shadow-sm rounded-4 overflow-hidden vf-camera-card">
         {/* Immagine con fallback */}
-        <div style={{ height: "200px", overflow: "hidden", backgroundColor: "#f8f9fa" }}>
+        <div className="vf-card-img-wrapper">
           <Card.Img
             variant="top"
             src={mainImage || "https://placehold.co/600x400?text=Immagine+Non+Disponibile"}
             alt={nome}
-            className="rounded-0 h-100 w-100"
-            style={{ objectFit: "cover", transition: "transform 0.3s ease" }}
-            // Effetto hover semplice per la UX
+            className="rounded-0 h-100 w-100 vf-card-img"
+            // Mantenuta la logica inline dell'effetto hover UX originale
             onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
             onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
           />
         </div>
 
-        <Card.Body className="d-flex flex-column p-3">
+        <Card.Body className="d-flex flex-column p-3.5">
           <div className="mb-2">
-            <h4 className="h5 fw-bold text-dark mb-1">{nome || "Camera Senza Nome"}</h4>
+            <h4 className="fw-bold mb-1 vf-card-title">{nome || "Camera Senza Nome"}</h4>
             {/* Badge opzionale per tipologia se presente */}
             {camera.tipologia && (
-              <span className="badge bg-light text-muted fw-normal border">{camera.tipologia}</span>
+              <span className="badge rounded-pill vf-badge-secondary">{camera.tipologia}</span>
             )}
           </div>
 
-          <Card.Text className="text-muted small mb-3 flex-grow-1">
+          <Card.Text className="text-muted small mb-3 flex-grow-1" style={{ lineHeight: "1.6" }}>
             {troncaTesto(descrizione, 90)}
           </Card.Text>
 
-          <div className="border-top pt-3 mt-auto">
+          <div className="border-top pt-3 mt-auto" style={{ borderColor: "rgba(101, 81, 61, 0.1)" }}>
             <div className="d-flex justify-content-between align-items-end mb-3">
               <div>
-                <div className="small text-muted mb-1">A notte</div>
-                <span className="h5 fw-bold text-primary mb-0">
+                <div className="vf-card-label mb-0">A notte</div>
+                <span className="fw-bold mb-0 vf-card-price">
                   {prezzoFormattato}
                 </span>
               </div>
               
               {capienza && (
                 <div className="text-end small text-muted">
-                  <div className="fw-medium">Ospiti: {capienza.maxAdulti}</div>
+                  <div className="fw-medium text-dark">Ospiti: {capienza.maxAdulti}</div>
                   {capienza.possibilitàLettino && (
-                    <div className="text-success" style={{ fontSize: "0.75rem" }}>
+                    <div className="vf-text-accent" style={{ fontSize: "0.75rem" }}>
                       + Lettino disp.
                     </div>
                   )}
@@ -80,8 +80,7 @@ function CameraCard({ camera }) {
             <Button
               as={Link}
               to={`/camere/${_id}`}
-              variant="outline-primary"
-              className="w-100 fw-bold py-2 rounded-2"
+              className="w-100 fw-bold py-2 rounded-pill vf-btn-outline-brand"
             >
               VEDI DETTAGLI
             </Button>

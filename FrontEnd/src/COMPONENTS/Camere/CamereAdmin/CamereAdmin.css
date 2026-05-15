@@ -1,0 +1,20 @@
+/* Custom Table Overrides */
+.custom-admin-table tbody tr {
+  transition: background-color 0.2s ease-in-out;
+}
+
+/* Effetto Hover personalizzato con colore morbido della palette */
+.custom-admin-table tbody tr:hover {
+  background-color: rgba(247, 249, 250, 0.8) !important;
+}
+
+/* Normalizzazione Font Intestazioni */
+.custom-admin-table th {
+  font-family: var(--font-family-headlines, 'Gotham', sans-serif);
+}
+
+/* Fix per i pulsanti all'interno dei componenti figli (Edit/Delete) se usano Bootstrap */
+.custom-admin-table .btn {
+  border-radius: 6px !important;
+  font-family: var(--font-family-body, 'Ubuntu', sans-serif);
+}

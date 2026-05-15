@@ -27,7 +27,7 @@ function Home() {
         {/* SIDEBAR DESKTOP: Resta Col 3/4 solo su grandi schermi */}
         <Col lg={4} xl={3} className="d-none d-lg-block sticky-column bg-white shadow-sm">
           <div className="sidebar-content p-4">
-            {/* <FormPrenotazione /> */} //TODO
+            <FormPrenotazione /> 
           </div>
         </Col>
 

@@ -35,35 +35,35 @@ function MyNav() {
   };
 
   return (
-    <Navbar expand="lg" className="sticky-top shadow-sm bg-white py-2" collapseOnSelect>
+    <Navbar expand="lg" className="sticky-top bg-white fenix-navbar py-3" collapseOnSelect>
       <Container>
         {/* LOGO */}
         <Navbar.Brand as={Link} to={user ? "/home" : "/"} className="d-flex align-items-center">
           <img
             src="/Villa Fenix_Logo_Colore.png"
-            className="logo"
+            className="logo-img"
             alt="logo villa fenix"
-            style={{ height: "50px" }}
+            style={{ height: "45px", objectFit: "contain" }}
           />
         </Navbar.Brand>
 
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Toggle aria-controls="basic-navbar-nav" className="border-0 fenix-toggle" />
         <Navbar.Collapse id="basic-navbar-nav">
           
-          {/* MENU VISIBILE A TUTTI */}
-          <Nav className="ms-auto align-items-center fw-medium">
+          {/* MENU LINK */}
+          <Nav className="ms-auto align-items-lg-center navigation-links">
             <Nav.Link as={Link} to="/home">Home</Nav.Link>
-            <Nav.Link as={Link} to="/chi-siamo">Chi Siamo</Nav.Link>
+            <Nav.Link as={Link} to="/chiSiamo">Chi Siamo</Nav.Link>
             
             {/* DROPDOWN STRUTTURE */}
-            <NavDropdown title="Le Nostre Strutture" id="nav-dropdown-strutture">
-              <NavDropdown.Item as={Link} to="/strutture">
+            <NavDropdown title="Le Nostre Strutture" id="nav-dropdown-strutture" className="fenix-dropdown">
+              <NavDropdown.Item as={Link} to="/strutture" className="fw-bold text-uppercase" style={{ fontSize: '0.8rem', letterSpacing: '0.5px' }}>
                 Tutte le Strutture
               </NavDropdown.Item>
               <NavDropdown.Divider />
               {loadingStrutture ? (
                 <div className="text-center py-2">
-                  <Spinner animation="border" size="sm" variant="warning" />
+                  <Spinner animation="border" size="sm" className="spinner-fenix" />
                 </div>
               ) : (
                 strutture.map((s) => (
@@ -74,47 +74,43 @@ function MyNav() {
               )}
             </NavDropdown>
 
-            <Nav.Link as={Link} to="/convenzioni">Convenzioni</Nav.Link>
-            <Nav.Link as={Link} to="/investi-con-noi">Investi con noi</Nav.Link>
-            <Nav.Link as={Link} to="/aziende">Aziende</Nav.Link>
-            <Nav.Link as={Link} to="/blog">Blog</Nav.Link>
-            <Nav.Link as={Link} to="/contatti">Contatti</Nav.Link>
+            <Nav.Link as={Link} to="/comingSoon">Convenzioni</Nav.Link>
+            <Nav.Link as={Link} to="/comingSoon">Investi con noi</Nav.Link>
+            <Nav.Link as={Link} to="/comingSoon">Aziende</Nav.Link>
+            <Nav.Link as={Link} to="/comingSoon">Blog</Nav.Link>
+            <Nav.Link as={Link} to="/comingSoon">Contatti</Nav.Link>
 
-            {/* SEZIONE LOGGATO (PROFILO / ADMIN) */}
+            {/* SEZIONE AUTHENTICATED */}
             {user ? (
-              <>
-                <div className="d-flex align-items-center ms-lg-3 gap-2">
+              <div className="d-flex align-items-center ms-lg-3 mt-3 mt-lg-0 user-section">
+                <NavDropdown 
+                  title={<span>Ciao, <strong className="user-highlight">{user.nome}</strong></span>} 
+                  id="user-dropdown"
+                  align="end"
+                  className="fenix-dropdown user-menu"
+                >
+                  <NavDropdown.Item as={Link} to="/profilo">Il mio Profilo</NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/prenotazioni">Le mie Prenotazioni</NavDropdown.Item>
                   
-                  {/* DROPDOWN UTENTE */}
-                  <NavDropdown 
-                    title={<span>Ciao, <strong className="orangeTxt">{user.nome}</strong></span>} 
-                    id="user-dropdown"
-                    align="end"
-                  >
-                    <NavDropdown.Item as={Link} to="/profilo">Il mio Profilo</NavDropdown.Item>
-                    <NavDropdown.Item as={Link} to="/prenotazioni">Le mie Prenotazioni</NavDropdown.Item>
-                    
-                    {/* ADMIN PANEL (Se admin) */}
-                    {isAdmin && (
-                      <>
-                        <NavDropdown.Divider />
-                        <NavDropdown.Item as={Link} to="/admin" className="fw-bold text-primary">
-                          Admin Panel
-                        </NavDropdown.Item>
-                      </>
-                    )}
-                    
-                    <NavDropdown.Divider />
-                    <NavDropdown.Item onClick={handleLogout} className="text-danger">
-                      Logout
-                    </NavDropdown.Item>
-                  </NavDropdown>
-                </div>
-              </>
+                  {isAdmin && (
+                    <>
+                      <NavDropdown.Divider />
+                      <NavDropdown.Item as={Link} to="/admin" className="fw-bold text-admin-link">
+                        Admin Panel
+                      </NavDropdown.Item>
+                    </>
+                  )}
+                  
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item onClick={handleLogout} className="text-danger-fenix">
+                    Logout
+                  </NavDropdown.Item>
+                </NavDropdown>
+              </div>
             ) : (
               /* SE NON LOGGATO */
-              <Nav.Link as={Link} to="/" className="ms-lg-3 fw-bold">
-                <Button variant="warning" size="sm" className="rounded-pill px-4 shadow-sm text-white">
+              <Nav.Link as={Link} to="/" className="ms-lg-3 p-0 mt-3 mt-lg-0">
+                <Button className="fenix-nav-btn rounded-pill px-4 shadow-sm text-white border-0">
                   Accedi
                 </Button>
               </Nav.Link>

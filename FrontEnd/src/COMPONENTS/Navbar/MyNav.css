@@ -1,20 +1,95 @@
-.main {
-    font-family: "Metrophobic", sans-serif;
-    font-weight: 600;
-    font-style: normal;
+/* ==========================================================================
+   VILLA FENIX - NAVBAR COMPONENT STYLES
+   ========================================================================== */
+
+.fenix-navbar {
+  border-bottom: 1px solid rgba(101, 81, 61, 0.1);
+  background-color: #ffffff !important;
+  transition: all 0.3s ease;
 }
 
-.bodyCopy{
-    font-family: "Ubuntu", sans-serif;
-    font-weight: 300;
-    font-style: normal;
+/* Stile Link di Navigazione (Gotham per Headline/CTA) */
+.navigation-links .nav-link {
+  font-family: 'Gotham', sans-serif;
+  color: #65513D !important; /* Marrone Primario */
+  font-weight: 500;
+  font-size: 0.95rem;
+  padding: 0.5rem 1rem !important;
+  transition: color 0.25s ease-in-out;
 }
 
-
-.orangeTxt {
-    color: #f1901f !important ;
+.navigation-links .nav-link:hover,
+.navigation-links .nav-link:focus {
+  color: #F28B2D !important; /* Arancione Secondario su Hover */
 }
 
-.logo {
-    max-width: 200px;
+/* Dropdown Menu Istituzionali */
+.fenix-dropdown .dropdown-menu {
+  border: 1px solid rgba(101, 81, 61, 0.12) !important;
+  box-shadow: 0 8px 24px rgba(101, 81, 61, 0.08);
+  border-radius: 12px !important;
+  padding: 0.5rem 0;
+}
+
+.fenix-dropdown .dropdown-item {
+  font-family: 'Ubuntu', sans-serif;
+  color: #65513D !important;
+  font-size: 0.9rem;
+  padding: 0.6rem 1.2rem;
+  transition: all 0.2s ease;
+}
+
+.fenix-dropdown .dropdown-item:hover {
+  background-color: #F7F9FA !important; /* Bianco RAL 9010 */
+  color: #F28B2D !important; /* Arancione per l'elemento attivo/selezionato */
+}
+
+/* Highlight Utente e link Amministratore */
+.user-highlight {
+  color: #F28B2D;
+  font-family: 'Gotham', sans-serif;
+}
+
+.text-admin-link {
+  color: #65513D !important;
+  border-left: 3px solid #F28B2D;
+}
+
+.text-danger-fenix {
+  color: #dc3545 !important;
+}
+
+.text-danger-fenix:hover {
+  background-color: rgba(220, 53, 69, 0.05) !important;
+}
+
+/* Pulsante Accedi (Stile CTA Istituzionale) */
+.fenix-nav-btn {
+  background-color: #65513D !important;
+  border: 1px solid #65513D !important;
+  font-family: 'Gotham', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  font-size: 0.9rem;
+  transition: all 0.25s ease-in-out !important;
+}
+
+.fenix-nav-btn:hover {
+  background-color: #F28B2D !important; /* Transizione sull'Arancione Secondario */
+  border-color: #F28B2D !important;
+  transform: translateY(-1px);
+}
+
+/* Bottone Burger Toggle per Mobile */
+.fenix-toggle {
+  padding: 0.25rem 0.5rem;
+}
+
+.fenix-toggle:focus {
+  box-shadow: 0 0 0 3px rgba(242, 139, 45, 0.25) !important;
+}
+
+/* Spinner personalizzato */
+.spinner-fenix {
+  color: #F28B2D !important;
 }

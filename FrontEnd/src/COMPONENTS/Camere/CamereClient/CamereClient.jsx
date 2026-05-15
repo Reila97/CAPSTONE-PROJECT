@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Container, Row, Col, Spinner, Alert } from "react-bootstrap";
 import CameraCard from "../CameraCard";
+import "./CamereCliente.css"
 
 const API_URL = import.meta.env.VITE_BACK_END;
 
@@ -20,7 +21,6 @@ function CamereClient({ camereDati }) {
       const fetchTutteLeCamere = async () => {
         try {
           setError(null);
-          // FIX: Sostituito localhost con la variabile d'ambiente
           const res = await fetch(`${API_URL}/camere`);
           
           if (!res.ok) throw new Error("Errore nel recupero delle camere");
@@ -40,28 +40,32 @@ function CamereClient({ camereDati }) {
 
   if (loading) {
     return (
-      <div className="text-center my-5 py-5">
-        <Spinner animation="border" variant="dark" />
-        <p className="mt-2 text-muted small">Ricerca stanze disponibili...</p>
+      <div className="vf-spinner-container">
+        <Spinner animation="border" className="vf-spinner-brand" />
+        <p className="mt-3 vf-loading-text">Ricerca stanze disponibili...</p>
       </div>
     );
   }
 
   if (error) {
-    return <Alert variant="warning" className="my-3">{error}</Alert>;
+    return (
+      <Alert className="my-4 vf-alert-error shadow-sm">
+        <i className="bi bi-exclamation-triangle me-2"></i>
+        {error}
+      </Alert>
+    );
   }
 
   if (camere.length === 0) {
     return (
-      <p className="bodyCopy text-muted my-4">
+      <p className="vf-empty-message my-4">
         Non ci sono camere disponibili al momento per questa struttura.
       </p>
     );
   }
 
   return (
-    <Container className="px-0">
-      
+    <Container className="px-0 vf-camere-wrapper">
       <Row className="g-4 m-0">
         {camere.slice(0, 6).map((c) => (
           <Col 
@@ -71,7 +75,7 @@ function CamereClient({ camereDati }) {
             lg={4} 
             className="d-flex justify-content-center"
           >
-            <div style={{ width: "100%", maxWidth: "350px" }}>
+            <div className="vf-card-container">
               <CameraCard camera={c} />
             </div>
           </Col>

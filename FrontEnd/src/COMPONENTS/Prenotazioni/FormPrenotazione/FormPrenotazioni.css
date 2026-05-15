@@ -1,67 +1,109 @@
-/* Layout principale a due lati */
+/* ==========================================================================
+   VILLA FENIX - FORM PRENOTAZIONI COMPONENT STYLES
+   ========================================================================== */
+
 .booking-card-wrapper {
-    max-width: 900px;
-    margin: 2rem auto;
-    background: #fff;
+  background-color: #ffffff;
+  border: 1px solid rgba(101, 81, 61, 0.1);
+  border-radius: 16px !important;
 }
 
+/* Layout split a due lati su schermi grandi */
 .booking-card-inner {
-    display: flex;
-    flex-wrap: wrap;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 768px) {
+  .booking-card-inner {
+    flex-direction: row;
     min-height: 550px;
+  }
+  .booking-logo-side {
+    flex: 0 0 40%;
+    border-right: 1px solid rgba(101, 81, 61, 0.1);
+  }
+  .booking-form-content {
+    flex: 0 0 60%;
+  }
 }
 
-/* Lato Logo */
+/* Lato A: Branding Istituzionale */
 .booking-logo-side {
-    flex: 1 1 40%;
-    background-color: #f8f6f2; /* Colore crema tenue per contrastare col logo */
-    border-right: 1px solid #eee;
+  background-color: #F7F9FA; /* Sfondo RAL 9010 neutro e luminoso */
+  font-family: 'Ubuntu', sans-serif;
+  color: #65513D;
 }
 
-/* Lato Form */
-.booking-form-content {
-    flex: 1 1 60%;
+.booking-logo-side h2 {
+  font-family: 'Gotham', sans-serif;
+  color: #65513D; /* Marrone Primario */
+  font-weight: 700;
+  letter-spacing: 0.5px;
 }
 
-/* Tipografia e Colori Villa Fenix */
-.headLine {
-    font-family: "Metrophobic", sans-serif;
-    font-weight: 600;
-    color: #6d634f;
+.booking-logo-side p {
+  color: #F28B2D; /* Arancione Secondario */
+  font-weight: 500;
+  font-size: 0.95rem;
 }
 
-.bodyCopy {
-    font-family: "Ubuntu", sans-serif;
-    font-weight: 300;
-    color: #6d634f;
+/* Lato B: Formulario di Input */
+.booking-form-content h3 {
+  font-family: 'Gotham', sans-serif;
+  color: #65513D;
+  font-weight: 600;
 }
 
-/* Bottoni */
+/* Campi del modulo e Label (Ubuntu Font) */
+.vf-form-label {
+  font-family: 'Ubuntu', sans-serif;
+  color: #65513D;
+  font-weight: 600;
+  font-size: 0.85rem;
+  margin-bottom: 0.4rem;
+}
+
+.vf-form-input {
+  font-family: 'Ubuntu', sans-serif;
+  color: #65513D !important;
+  background-color: #F7F9FA !important;
+  border: 1px solid rgba(101, 81, 61, 0.1) !important;
+  font-size: 0.9rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.vf-form-input:focus {
+  border-color: #F28B2D !important;
+  box-shadow: 0 0 0 3px rgba(242, 139, 45, 0.15) !important;
+}
+
+/* Alert Personalizzati */
+.vf-booking-alert {
+  font-family: 'Ubuntu', sans-serif;
+  border-radius: 8px;
+  font-size: 0.85rem;
+}
+
+/* Pulsante d'Invia Tradizionale */
 .prenotaButton {
-    font-family: "Metrophobic", sans-serif;
-    font-weight: 600;
-    color: white !important; 
-    background-color: #f1901f;
-    border: none;
-    transition: all 0.3s ease;
+  background-color: #65513D !important;
+  border: 1px solid #65513D !important;
+  font-family: 'Gotham', sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+  transition: all 0.25s ease-in-out !important;
 }
 
-.prenotaButton:hover {
-    background-color: #cb781a;
-    transform: translateY(-2px);
+.prenotaButton:hover:not(:disabled) {
+  background-color: #F28B2D !important; /* Passaggio all'arancione in hover */
+  border-color: #F28B2D !important;
+  transform: translateY(-1px);
 }
 
-.prenotaButton:active {
-    background-color: #cb781a !important;
-    transform: scale(0.98);
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .booking-card-inner {
-        flex-direction: column;
-    }
-    .booking-logo-side {
-        padding: 2rem 1rem;
-    }
+.prenotaButton:disabled {
+  opacity: 0.7;
+  background-color: #BAB2A2 !important;
+  border-color: #BAB2A2 !important;
 }

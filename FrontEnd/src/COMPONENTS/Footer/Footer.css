@@ -1,20 +1,81 @@
-.main {
-    font-family: "Metrophobic", sans-serif;
-    font-weight: 600;
-    font-style: normal;
+/* ==========================================================================
+   VILLA FENIX - FOOTER COMPONENT STYLES
+   ========================================================================== */
+
+.vf-footer {
+  font-family: 'Ubuntu', sans-serif;
+  color: #65513D;
+  background-color: #ffffff;
+  border-top: 1px solid rgba(101, 81, 61, 0.15) !important;
 }
 
-.bodyCopy{
-    font-family: "Ubuntu", sans-serif;
-    font-weight: 300;
-    font-style: normal;
+/* Tipografia e Logotipo */
+.vf-footer-brand {
+  font-family: 'Gotham', sans-serif;
+  color: #65513D; /* Marrone Primario */
+  letter-spacing: 1px;
 }
 
-
-.orangeTxt {
-    color: #f1901f !important ;
+.vf-footer-subbrand {
+  font-family: 'Gotham', sans-serif;
+  color: #F28B2D; /* Arancione Secondario */
+  font-size: 0.75rem;
+  letter-spacing: 2px;
 }
 
-.logo {
-    max-width: 200px;
+.vf-footer-title {
+  font-family: 'Gotham', sans-serif;
+  color: #65513D;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+}
+
+/* Link e Navigazione */
+.vf-footer-link {
+  color: #65513D !important;
+  opacity: 0.85;
+  transition: all 0.2s ease-in-out;
+}
+
+.vf-footer-link:hover {
+  color: #F28B2D !important; /* Vira all'arancione */
+  opacity: 1;
+  padding-left: 2px; /* Leggero feedback di movimento */
+}
+
+/* Social Buttons */
+.vf-social-btn {
+  color: #65513D;
+  background-color: #F7F9FA; /* RAL 9010 Bianco approssimato */
+  border: 1px solid rgba(101, 81, 61, 0.1);
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.25s ease-in-out;
+}
+
+.vf-social-btn:hover {
+  color: #ffffff;
+  background-color: #F28B2D; /* Sfondo arancione all'hover */
+  border-color: #F28B2D;
+  transform: translateY(-3px);
+}
+
+/* Icone e Dettagli */
+.vf-footer-icon {
+  color: #F28B2D;
+  flex-shrink: 0;
+}
+
+.vf-text-muted {
+  color: #65513D;
+  opacity: 0.75;
+}
+
+.vf-holding-info {
+  font-size: 0.8rem;
+  border-top: 1px solid rgba(101, 81, 61, 0.08);
 }

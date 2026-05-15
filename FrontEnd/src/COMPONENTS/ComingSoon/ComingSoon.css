@@ -1,0 +1,70 @@
+/* Wrapper a tutto schermo */
+.coming-soon-wrapper {
+    min-height: 85vh; /* Lascia spazio alla navbar se presente */
+    background-color: #fdfcf9; /* Crema Villa Fenix */
+}
+
+.max-width-550 {
+    max-width: 550px;
+}
+
+/* Logo Stile */
+.fenix-logo-cs {
+    max-height: 70px;
+    object-fit: contain;
+}
+
+/* Colore Icona principale */
+.text-orange-fenix {
+    color: #f1901f;
+}
+
+/* Animazione pulsante per l'icona */
+.icon-pulse {
+    animation: fenixPulse 2.5s infinite ease-in-out;
+}
+
+@keyframes fenixPulse {
+    0% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(1); opacity: 0.8; }
+}
+
+/* Animazione ingresso pagina */
+.animation-fade-in {
+    animation: fenixFadeIn 0.6s ease-out;
+}
+
+@keyframes fenixFadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Bottone di ritorno personalizzato */
+.fenix-btn-back {
+    font-family: "Metrophobic", sans-serif;
+    color: #6d634f !important;
+    border-color: rgba(109, 99, 79, 0.3) !important;
+    background: transparent;
+    transition: all 0.25s ease;
+}
+
+.fenix-btn-back:hover {
+    background-color: #6d634f !important;
+    border-color: #6d634f !important;
+    color: #ffffff !important;
+}
+
+/* Typography di Villa Fenix */
+.headLine {
+    font-family: "Metrophobic", sans-serif;
+    font-weight: 600;
+    color: #6d634f;
+}
+
+.bodyCopy {
+    font-family: "Ubuntu", sans-serif;
+    font-weight: 300;
+    color: #6d634f;
+    line-height: 1.6;
+}
