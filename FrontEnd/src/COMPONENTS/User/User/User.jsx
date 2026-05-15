@@ -21,7 +21,7 @@ import {
 
 import EditProfile from "../../Button/EditProfile";
 import DeleteProfile from "../../Button/DeleteProfile";
-import "./user.css";
+import "./User.css";
 
 const API_URL = import.meta.env.VITE_BACK_END;
 

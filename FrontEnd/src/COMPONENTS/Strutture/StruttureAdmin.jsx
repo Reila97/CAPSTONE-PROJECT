@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { Table, Spinner, Image, Alert } from "react-bootstrap";
-import DeleteStruttura from "../Button/DeleteStruttura"; 
-import EditStruttura from "../Button/EditStruttura"; 
-import CreateStruttura from "../Button/createStruttura";
+import DeleteStruttura from "../Button/DeleteStruttura.jsx"; 
+import EditStruttura from "../Button/EditStruttura.jsx"; 
+import CreateStruttura from "../Button/CreateStruttura.jsx";
 
 // Utilizzo della variabile d'ambiente per il backend
 const API_URL = import.meta.env.VITE_BACK_END;
