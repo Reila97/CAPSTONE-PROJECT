@@ -18,7 +18,7 @@ import {
 } from "react-bootstrap-icons";
 
 import CamereClient from "../../Camere/CamereClient/CamereClient";
-import ReviewForm from "../../Recensioni/ReviewForm"; // Assicurati che il percorso sia corretto
+import ReviewForm from "../../Recensioni/ReviewForm/ReviewForm.jsx"
 import "./StrutturaDettaglio.css";
 import ReviewList from "../../Recensioni/ReviewList/ReviewList";
 
@@ -28,7 +28,7 @@ function StrutturaDettaglio() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [struttura, setStruttura] = useState(null);
-  const [cameraSelezionata, setCameraSelezionata] = useState(null); // AGGIUNTO
+  const [cameraSelezionata, setCameraSelezionata] = useState(null); 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -48,7 +48,6 @@ function StrutturaDettaglio() {
         const data = await res.json();
         setStruttura(data);
 
-        // Pre-selezioniamo la prima camera disponibile per il form recensioni
         if (data.camere && data.camere.length > 0) {
           setCameraSelezionata(data.camere[0]);
         }
@@ -67,26 +66,24 @@ function StrutturaDettaglio() {
 
   const handleUpdateList = (newReview) => {
     console.log("Recensione aggiunta con successo:", newReview);
-    // Qui potresti triggerare un refresh delle recensioni se necessario
   };
 
   if (loading)
     return (
-      <Container className="text-center py-5 my-5">
-        <Spinner animation="border" variant="primary" />
-        <p className="mt-3 text-muted">Caricamento dettagli struttura...</p>
+      <Container className="text-center py-5 my-5 font-ubuntu">
+        <Spinner animation="border" className="vf-spinner-brand" />
+        <p className="mt-3 text-muted small">Caricamento dettagli struttura...</p>
       </Container>
     );
 
   if (error || !struttura)
     return (
       <Container className="mt-5 text-center">
-        <Alert variant="warning" className="py-4">
-          <InfoCircle size={30} className="mb-3" />
-          <h3>{error || "Struttura non trovata"}</h3>
+        <Alert variant="warning" className="py-4 vf-alert-warning-brand shadow-sm">
+          <InfoCircle size={32} className="mb-3 vf-geo-icon-detail" />
+          <h3 className="fw-bold font-gotham mb-3">{error || "Struttura non trovata"}</h3>
           <Button
-            variant="dark"
-            className="mt-2"
+            className="vf-contact-cta-btn px-4 py-2"
             onClick={() => navigate("/strutture")}
           >
             Torna alla vetrina
@@ -96,19 +93,19 @@ function StrutturaDettaglio() {
     );
 
   return (
-    <Container className="my-5 animate-in">
+    <Container className="my-5">
       <Button
         variant="link"
-        className="text-decoration-none text-dark p-0 mb-4 d-flex align-items-center gap-2 hover-link"
+        className="p-0 mb-4 d-flex align-items-center gap-2 vf-back-link text-decoration-none"
         onClick={() => navigate(-1)}
       >
-        <ArrowLeft /> Torna alla lista
+        <ArrowLeft size={16} /> Torna alla lista
       </Button>
 
       <Row className="gy-4">
         {/* Gallery Image Section */}
         <Col lg={7}>
-          <div className="position-relative overflow-hidden rounded shadow-sm">
+          <div className="position-relative overflow-hidden rounded-4 shadow-sm" style={{ borderRadius: '14px' }}>
             <img
               src={
                 struttura.images?.mainImage ||
@@ -118,12 +115,12 @@ function StrutturaDettaglio() {
               className="img-fluid w-100"
               style={{
                 minHeight: "400px",
-                maxHeight: "600px",
+                maxHeight: "550px",
                 objectFit: "cover",
               }}
             />
             <div className="position-absolute top-0 end-0 m-3">
-              <Badge bg="white" className="text-dark border shadow-sm">
+              <Badge className="vf-location-badge shadow-sm">
                 Top Location
               </Badge>
             </div>
@@ -132,55 +129,68 @@ function StrutturaDettaglio() {
 
         {/* Info Section */}
         <Col lg={5}>
-          <div className="ps-lg-4 h-100 d-flex flex-column">
+          <div className="ps-lg-3 h-100 d-flex flex-column justify-content-between">
             <div className="mb-3">
-              <h1 className="headLine display-4 fw-bold mb-2">
+              <h1 className="vf-detail-title display-5 mb-2">
                 {struttura.nome}
               </h1>
-              <p className="text-muted d-flex align-items-center gap-2 mb-0">
-                <GeoAlt className="text-danger" />
+              <p className="vf-detail-geo d-flex align-items-center gap-2 mb-0 mt-2">
+                <GeoAlt className="vf-geo-icon-detail" size={16} />
                 {struttura.località?.città}, {struttura.località?.indirizzo}
               </p>
             </div>
-            <hr />
+            
+            <hr className="my-2 opacity-25" style={{ color: '#65513D' }} />
+            
             <div className="my-3 flex-grow-1">
-              <h5 className="text-uppercase small fw-bold tracking-wider text-muted mb-3">
+              <h5 className="text-uppercase small fw-bold vf-section-subtitle mb-2">
                 Descrizione
               </h5>
-              <p className="bodyCopy leading-relaxed text-dark">
+              <p className="vf-detail-description small">
                 {struttura.descrizione}
               </p>
             </div>
-            <div className="bg-light p-4 rounded border-start border-primary border-4 shadow-sm mb-4">
-              <h5 className="text-uppercase small fw-bold mb-3">
+
+            <div className="vf-contacts-box p-4 rounded-3 shadow-sm mb-4">
+              <h5 className="text-uppercase small fw-bold mb-3" style={{ letterSpacing: '0.5px' }}>
                 Contatti & Supporto
               </h5>
-              <div className="small">
-                <p className="mb-2 d-flex align-items-center gap-2">
-                  <Envelope className="text-primary" />{" "}
+              <div className="small d-flex flex-column gap-2">
+                <p className="mb-0 d-flex align-items-center gap-2 fw-medium">
+                  <Envelope className="vf-contacts-icon" size={14} />{" "}
                   {struttura.contatti?.email}
                 </p>
-                <p className="mb-0 d-flex align-items-center gap-2">
-                  <Telephone className="text-primary" />{" "}
+                <p className="mb-0 d-flex align-items-center gap-2 fw-medium">
+                  <Telephone className="vf-contacts-icon" size={14} />{" "}
                   {struttura.contatti?.telefono}
                 </p>
               </div>
             </div>
-            <Button className="prenotaButton w-100 py-3 rounded-2 fw-bold shadow-sm transition-all">
+
+            <Button className="vf-contact-cta-btn w-100 py-2.5 shadow-sm">
               CONTATTACI PER PRENOTARE
             </Button>
           </div>
         </Col>
       </Row>
 
-      {/* SEZIONE RECENSIONI */}
-      <div className="mt-5 pt-5">
+      {/* SEZIONE CAMERE DISPONIBILI */}
+      <div className="mt-5 pt-4">
         <div className="d-flex align-items-center gap-3 mb-4">
-          <h2 className="headLine fw-bold mb-0">Recensioni</h2>
-          <div className="flex-grow-1 border-bottom"></div>
+          <h2 className="vf-section-subtitle h3 mb-0">Soluzioni Disponibili</h2>
+          <div className="flex-grow-1 vf-section-divider"></div>
+        </div>
+        <CamereClient camereDati={struttura.camere} />
+      </div>
+
+      {/* SEZIONE LASCIA RECENSIONE */}
+      <div className="mt-5 pt-4">
+        <div className="d-flex align-items-center gap-3 mb-4">
+          <h2 className="vf-section-subtitle h3 mb-0">Lascia una Recensione</h2>
+          <div className="flex-grow-1 vf-section-divider"></div>
         </div>
         <Row>
-          <Col lg={7} className="mx-auto">
+          <Col lg={8} className="mx-auto">
             {cameraSelezionata && (
               <ReviewForm
                 strutturaId={struttura._id}
@@ -192,25 +202,17 @@ function StrutturaDettaglio() {
         </Row>
       </div>
 
-      <Row className="mt-5">
-        <Col lg={10} className="mx-auto">
-          <div className="d-flex align-items-center gap-3 mb-4">
-            <h2 className="headLine fw-bold mb-0">Cosa dicono gli ospiti</h2>
-            <div className="flex-grow-1 border-bottom"></div>
-          </div>
-
-          {/* Passiamo l'array delle recensioni della struttura */}
-          <ReviewList reviews={struttura.recensioni} />
-        </Col>
-      </Row>
-
-      {/* SEZIONE CAMERE DISPONIBILI */}
-      <div className="mt-5 pt-5">
+      {/* SEZIONE FEEDBACK OSPITI */}
+      <div className="mt-5">
         <div className="d-flex align-items-center gap-3 mb-4">
-          <h2 className="headLine fw-bold mb-0">Soluzioni Disponibili</h2>
-          <div className="flex-grow-1 border-bottom"></div>
+          <h2 className="vf-section-subtitle h3 mb-0">Cosa dicono gli ospiti</h2>
+          <div className="flex-grow-1 vf-section-divider"></div>
         </div>
-        <CamereClient camereDati={struttura.camere} />
+        <Row>
+          <Col lg={12}>
+            <ReviewList reviews={struttura.recensioni} />
+          </Col>
+        </Row>
       </div>
     </Container>
   );

@@ -1,0 +1,98 @@
+/* ==========================================================================
+   VILLA FENIX - CORE COMPONENTS & TOKENS
+   ========================================================================== */
+
+.v-fenix-admin-wrapper {
+  background-color: var(--admin-bg-main, #F7F9FA);
+  font-family: var(--font-family-body, 'Ubuntu', Helvetica, Arial, sans-serif);
+}
+
+.v-fenix-title {
+  font-family: var(--font-family-headlines, 'Gotham', sans-serif);
+  color: var(--admin-text-main, #2C2520);
+  letter-spacing: -0.5px;
+}
+
+/* ==========================================================================
+   STRUTTURA TABELLA GESTIONALE
+   ========================================================================== */
+
+.custom-admin-table thead {
+  background-color: #FDFDFD;
+  border-bottom: 2px solid var(--admin-border-color, #D4D6D6);
+}
+
+.custom-admin-table th {
+  font-family: var(--font-family-headlines, 'Gotham', sans-serif);
+  color: #6C757D;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.row-fenix-service {
+  border-bottom: 1px solid rgba(212, 214, 216, 0.5);
+  transition: background-color 0.2s ease-in-out;
+}
+
+.row-fenix-service:hover {
+  background-color: rgba(247, 249, 250, 0.8) !important;
+}
+
+/* Elementi Cella Servizio */
+.service-name {
+  color: var(--admin-text-main, #2C2520);
+}
+
+.service-image-wrapper {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.service-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 6px !important;
+  border: 1px solid var(--admin-border-color, #D4D6D6);
+}
+
+.service-icon-placeholder {
+  background-color: rgba(101, 81, 61, 0.08);
+  color: var(--brand-primary-hex, #65513D);
+  border: 1px solid rgba(101, 81, 61, 0.15);
+  border-radius: 6px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Cella Prezzi */
+.service-price {
+  font-family: var(--font-family-headlines, 'Gotham', sans-serif);
+  color: var(--admin-text-main, #2C2520);
+}
+
+/* Badge Semantico per Servizi Gratuiti */
+.badge-fenix-free {
+  font-weight: 500;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px !important;
+  background-color: rgba(46, 125, 50, 0.08);
+  color: #2E7D32;
+  border: 1px solid rgba(46, 125, 50, 0.2);
+}
+
+/* ==========================================================================
+   FEEDBACK DI CARICAMENTO
+   ========================================================================== */
+
+.spinner-fenix {
+  color: var(--brand-primary-hex, #65513D);
+}

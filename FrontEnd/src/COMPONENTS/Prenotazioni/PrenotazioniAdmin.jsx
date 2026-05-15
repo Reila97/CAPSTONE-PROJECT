@@ -1,8 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
 import { Table, Spinner, Badge, Alert } from "react-bootstrap";
-// Immaginiamo di avere bottoni simili per le azioni sulle prenotazioni
 // import EditBooking from "../Button/EditBooking"; 
 // import DeleteBooking from "../Button/DeleteBooking"; 
+
+import "./PrenotazioniAdmin.css"
 
 const API_URL = import.meta.env.VITE_BACK_END;
 
@@ -15,10 +16,9 @@ function PrenotazioniAdmin() {
     try {
       setLoading(true);
       setError(null);
-      // Chiamata all'endpoint getAllBookings (richiede token admin nel fetch)
       const res = await fetch(`${API_URL}/bookings/all`, {
         headers: {
-          "Authorization": `Bearer ${localStorage.getItem("token")}` // O il tuo metodo di recupero token
+          "Authorization": `Bearer ${localStorage.getItem("token")}`
         }
       });
       
@@ -38,82 +38,120 @@ function PrenotazioniAdmin() {
     getBookings(); 
   }, [getBookings]);
 
-  // Helper per il colore del Badge
   const getStatusBadge = (stato) => {
     switch (stato) {
-      case 'Confermata': return <Badge bg="success" className="rounded-pill px-3">Confermata</Badge>;
-      case 'In attesa': return <Badge bg="warning" text="dark" className="rounded-pill px-3">In attesa</Badge>;
-      case 'Cancellata': return <Badge bg="danger" className="rounded-pill px-3">Cancellata</Badge>;
-      default: return <Badge bg="secondary" className="rounded-pill px-3">{stato}</Badge>;
+      case 'Confermata': 
+        return <Badge bg="none" className="badge-fenix badge-fenix-success">Confermata</Badge>;
+      case 'In attesa': 
+        return <Badge bg="none" className="badge-fenix badge-fenix-warning">In attesa</Badge>;
+      case 'Cancellata': 
+        return <Badge bg="none" className="badge-fenix badge-fenix-danger">Cancellata</Badge>;
+      default: 
+        return <Badge bg="none" className="badge-fenix badge-fenix-muted">{stato}</Badge>;
     }
   };
 
   if (loading) return (
-    <div className="text-center py-5">
-      <Spinner animation="border" variant="primary" />
-      <p className="mt-2 text-muted small">Caricamento gestionale...</p>
+    <div className="text-center py-5 v-fenix-loading">
+      <Spinner animation="border" className="spinner-fenix" />
+      <p className="mt-3 text-muted small text-uppercase tracking-wider">Caricamento gestionale...</p>
     </div>
   );
 
   return (
-    <div className="admin-section">
+    <div className="admin-section p-4 v-fenix-admin-wrapper">
+      
+      {/* Header Sezione */}
       <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
         <div>
-          <h4 className="fw-bold mb-1">Gestione Prenotazioni</h4>
-          <p className="text-muted small mb-0">Monitora i soggiorni, gli arrivi e lo stato dei pagamenti</p>
+          <h4 className="fw-bold mb-1 v-fenix-title">
+            Gestione Prenotazioni
+          </h4>
+          <p className="text-muted small mb-0">Monitora i soggiorni, gli arrivi e lo stato dei pagamenti della holding</p>
         </div>
       </div>
 
-      {error && <Alert variant="danger" className="py-2 small">{error}</Alert>}
+      {error && <Alert variant="danger" className="border-0 shadow-sm py-2 small">{error}</Alert>}
 
-      <div className="table-responsive shadow-sm rounded">
+      {/* Tabella Gestionale Prenotazioni */}
+      <div className="table-responsive shadow-sm rounded-3 border-0 bg-white">
         <Table hover className="align-middle custom-admin-table mb-0">
-          <thead className="bg-light">
+          <thead>
             <tr>
-              <th className="border-0 text-muted small text-uppercase ps-3">Cliente</th>
-              <th className="border-0 text-muted small text-uppercase">Soggiorno</th>
-              <th className="border-0 text-muted small text-uppercase">Struttura / Camera</th>
-              <th className="border-0 text-muted small text-uppercase text-center">Stato</th>
-              <th className="border-0 text-muted small text-uppercase text-end pe-3">Totale</th>
+              <th className="ps-4 py-3">Cliente</th>
+              <th className="py-3">Soggiorno</th>
+              <th className="py-3">Struttura / Camera</th>
+              <th className="text-center py-3">Stato</th>
+              <th className="text-end pe-4 py-3">Totale</th>
             </tr>
           </thead>
           <tbody>
             {bookings.length > 0 ? (
               bookings.map((b) => (
-                <tr key={b._id} className="border-bottom">
-                  <td className="py-3 ps-3">
-                    <div className="fw-bold text-dark">{b.utente?.nome} {b.utente?.cognome}</div>
-                    <div className="text-muted small" style={{ fontSize: '0.75rem' }}>{b.utente?.email}</div>
-                  </td>
-                  <td>
-                    <div className="small">
-                      <div><i className="bi bi-calendar-check me-1"></i><strong>In:</strong> {new Date(b.checkIn).toLocaleDateString()}</div>
-                      <div><i className="bi bi-calendar-x me-1"></i><strong>Out:</strong> {new Date(b.checkOut).toLocaleDateString()}</div>
+                <tr key={b._id} className="align-middle row-fenix-booking">
+                  
+                  {/* Informazioni Cliente */}
+                  <td className="py-3 ps-4">
+                    <div className="fw-bold client-name">
+                      {b.utente?.nome} {b.utente?.cognome}
+                    </div>
+                    <div className="text-muted small client-email">
+                      {b.utente?.email}
                     </div>
                   </td>
+                  
+                  {/* Date di Soggiorno */}
                   <td>
-                    <div className="fw-medium text-primary">{b.struttura?.nome}</div>
-                    <div className="text-muted small italic">{b.camera?.nome}</div>
+                    <div className="small text-dark booking-dates">
+                      <div className="mb-1">
+                        <strong className="text-muted me-1 label-date">IN:</strong> 
+                        <span className="fw-medium">{new Date(b.checkIn).toLocaleDateString('it-IT')}</span>
+                      </div>
+                      <div>
+                        <strong className="text-muted me-1 label-date">OUT:</strong> 
+                        <span className="fw-medium">{new Date(b.checkOut).toLocaleDateString('it-IT')}</span>
+                      </div>
+                    </div>
                   </td>
+                  
+                  {/* Riferimento Struttura e Camera */}
+                  <td>
+                    <div className="fw-bold structure-name">
+                      {b.struttura?.nome}
+                    </div>
+                    <div className="text-muted small camera-name">
+                      {b.camera?.nome}
+                    </div>
+                  </td>
+                  
+                  {/* Stato della Prenotazione */}
                   <td className="text-center">
                     {getStatusBadge(b.stato)}
                   </td>
-                  <td className="text-end pe-3 fw-bold">
-                    € {b.prezzoTotale}
+                  
+                  {/* Totale Economico */}
+                  <td className="text-end pe-4 fw-bold price-total">
+                    {Number(b.prezzoTotale).toLocaleString('it-IT', { style: 'currency', currency: 'EUR' })}
                   </td>
+
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="5" className="text-center py-5 text-muted">Nessuna prenotazione trovata.</td>
+                <td colSpan="5" className="text-center py-5 text-muted small">
+                  Nessuna prenotazione trovata nel registro digitale.
+                </td>
               </tr>
             )}
           </tbody>
         </Table>
       </div>
 
-      <div className="mt-3 d-flex justify-content-between align-items-center">
-        <div className="text-muted small">Prenotazioni totali: <strong>{bookings.length}</strong></div>
+      {/* Footer della tabella con contatore */}
+      <div className="mt-3 d-flex justify-content-between align-items-center px-2 counter-footer">
+        <div className="text-muted small">
+          Prenotazioni totali in elenco: <strong className="counter-highlight">{bookings.length}</strong>
+        </div>
       </div>
     </div>
   );

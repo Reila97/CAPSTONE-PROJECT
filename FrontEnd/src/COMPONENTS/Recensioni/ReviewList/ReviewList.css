@@ -1,53 +1,118 @@
+/* ==========================================================================
+   VILLA FENIX - REVIEW LIST COMPONENT STYLES
+   ========================================================================== */
+
 .reviews-container {
-    padding: 20px 0;
+  font-family: 'Ubuntu', sans-serif;
+  color: #65513D; /* Marrone Primario */
 }
 
-.stat-card {
-    border: none !important;
-    border-radius: 20px !important;
-    background: #f8f9fa !important;
+/* Stato Vuoto (Nessuna Recensione) */
+.vf-empty-reviews {
+  background-color: #F7F9FA !important; /* Colore di sfondo istituzionale chiaro */
+  border: 1px solid rgba(101, 81, 61, 0.1) !important;
+  color: #65513D;
 }
 
-.review-item {
-    border: none !important;
-    border-bottom: 1px solid #eee !important;
-    border-radius: 0 !important;
-    padding: 25px 0 !important;
-    transition: background 0.3s ease;
+.vf-text-brand-muted {
+  color: #65513D;
+  opacity: 0.6;
 }
 
-.review-item:last-child {
-    border-bottom: none !important;
+/* Card Riepilogo Statistico */
+.vf-stat-card {
+  background-color: #ffffff;
+  border: 1px solid rgba(101, 81, 61, 0.1) !important;
+  border-radius: 14px !important;
 }
 
-.avatar-circle {
-    width: 45px;
-    height: 45px;
-    background: #007bff;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    font-weight: bold;
-    font-size: 1.1rem;
+.vf-stat-number {
+  font-family: 'Gotham', sans-serif;
+  color: #65513D;
+  line-height: 1.1;
 }
 
-.review-date {
-    font-size: 0.85rem;
-    color: #999;
-}
-
+/* Barra delle valutazioni (Progress Bar) */
 .rating-bar-container {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 5px;
-    font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
+  color: #65513D;
 }
 
-.progress {
-    height: 8px !important;
-    flex-grow: 1;
-    border-radius: 10px !important;
+.rating-bar-container .progress {
+  flex-grow: 1;
+  height: 8px;
+  background-color: #F7F9FA;
+  border-radius: 4px;
+}
+
+/* Colore Arancione Fenix per le stelle e il riempimento delle barre */
+.vf-progress-bar-fill {
+  background-color: #F28B2D !important;
+}
+
+.vf-star-active {
+  color: #F28B2D !important;
+}
+
+.vf-star-inactive {
+  color: #BAB2A2 !important;
+  opacity: 0.3;
+}
+
+/* Lista Recensioni (Elementi Singoli) */
+.vf-review-item {
+  padding: 1.75rem 0;
+  border-bottom: 1px solid rgba(101, 81, 61, 0.08);
+}
+
+.vf-review-item:last-child {
+  border-bottom: none;
+}
+
+/* Elementi Utente e Avatar */
+.vf-avatar-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-color: #F7F9FA;
+  border: 1px solid rgba(101, 81, 61, 0.15);
+  color: #65513D;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Gotham', sans-serif;
+  font-weight: 700;
+  overflow: hidden;
+}
+
+.vf-review-user-name {
+  font-family: 'Gotham', sans-serif;
+  color: #65513D;
+  font-size: 0.95rem;
+}
+
+.vf-review-date {
+  font-size: 0.8rem;
+  color: #BAB2A2; /* Tonalità Mirra/Sabbia per i metadati */
+}
+
+.vf-review-comment {
+  color: #65513D;
+  font-style: italic;
+  line-height: 1.6;
+}
+
+/* Badge della Camera Selezionata */
+.vf-camera-badge {
+  background-color: #F7F9FA !important;
+  color: #65513D !important;
+  border: 1px solid rgba(101, 81, 61, 0.12) !important;
+  font-family: 'Ubuntu', sans-serif;
+  font-weight: 400 !important;
+  padding: 0.4rem 0.75rem !important;
+  border-radius: 6px;
 }

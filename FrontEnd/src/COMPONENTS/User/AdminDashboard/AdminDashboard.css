@@ -1,36 +1,178 @@
-.main {
-    font-family: "Metrophobic", sans-serif;
-    font-weight: 600;
-    font-style: normal;
+/* ==========================================================================
+   DASHBOARD STRUTTURA & FONT GENERALE
+   ========================================================================== */
+
+.v-fenix-dashboard-container {
+  background-color: var(--admin-bg-main, #F7F9FA);
+  font-family: var(--font-family-body, 'Ubuntu', Helvetica, Arial, sans-serif);
 }
 
-.bodyCopy{
-    font-family: "Ubuntu", sans-serif;
-    font-weight: 300;
-    font-style: normal;
+.v-fenix-dashboard-title {
+  font-family: var(--font-family-headlines, 'Gotham', sans-serif);
+  color: var(--admin-text-main, #2C2520);
+  letter-spacing: -0.5px;
 }
 
-/* Colore di base per i link (opzionale, se vuoi cambiarlo) */
-.custom-nav .nav-link {
-    color: #333; /* Grigio scuro di default */
-    transition: all 0.3s ease; /* Rende il cambio colore fluido */
+.title-sub-role {
+  color: #6C757D;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-left: 8px;
 }
 
-/* Hover: quando passi sopra con il mouse */
-.custom-nav .nav-link:hover {
-    color: #f1901f !important;
-    background-color: rgba(241, 144, 31, 0.1); /* Sfondo arancio leggerissimo al passaggio */
+/* Status Badge (Online) */
+.badge-fenix-status {
+  font-weight: 600;
+  font-size: 0.75rem;
+  letter-spacing: 0.5px;
+  padding: 0.5rem 1rem;
+  border-radius: 6px !important;
+  background-color: #2C2520; /* Scuro istituzionale */
+  color: #FFFFFF;
 }
 
-/* Active/On Click: quando il link è selezionato (usando variant="pills") */
-.custom-nav .nav-link.active {
-    background-color: #f1901f !important; /* Sfondo arancione pieno */
-    color: white !important; /* Testo bianco quando attivo */
+/* ==========================================================================
+   SIDEBAR & MINI WIDGET PROFILO (LEFT)
+   ========================================================================== */
+
+.sidebar-fenix-card {
+  border-radius: 12px !important;
+  overflow: hidden;
+  border: 1px solid rgba(212, 214, 216, 0.4) !important;
 }
 
-/* Focus: rimuove l'alone blu tipico dei browser se clicchi */
-.custom-nav .nav-link:focus {
-    box-shadow: 0 0 0 0.25 margin-left rgba(241, 144, 31, 0.25);
+.profile-header-widget {
+  background-color: var(--brand-primary-hex, #65513D); /* Marrone Fenix */
+  padding: 2rem 1.5rem;
+  color: #FFFFFF;
 }
 
+.profile-avatar-circle {
+  width: 64px;
+  height: 64px;
+  background-color: rgba(255, 255, 255, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
+.profile-avatar-circle .initials {
+  font-family: var(--font-family-headlines, 'Gotham', sans-serif);
+  letter-spacing: 0px;
+  color: #FFFFFF;
+}
+
+.profile-widget-name {
+  font-family: var(--font-family-headlines, 'Gotham', sans-serif);
+  font-size: 1.1rem;
+}
+
+.badge-fenix-role {
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+  font-weight: 500;
+  padding: 0.35rem 0.75rem;
+  background-color: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #FFFFFF;
+  border-radius: 4px !important;
+}
+
+/* ==========================================================================
+   SISTEMA DI NAVIGAZIONE (PILLS)
+   ========================================================================== */
+
+.admin-nav-pills .nav-link {
+  color: #5A5245; /* Testo morbido */
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: 8px !important;
+  margin: 2px 6px;
+  transition: all 0.2s ease-in-out;
+}
+
+.admin-nav-pills .nav-link:hover {
+  background-color: rgba(101, 81, 61, 0.05);
+  color: var(--brand-primary-hex, #65513D);
+}
+
+/* Tab Attivo basato sulla palette Fenix */
+.admin-nav-pills .nav-link.active {
+  background-color: rgba(101, 81, 61, 0.08) !important;
+  color: var(--brand-primary-hex, #65513D) !important;
+  font-weight: 600;
+  box-shadow: none;
+}
+
+.nav-divider {
+  border-top: 1px solid var(--admin-border-color, #D4D6D6);
+}
+
+.nav-logout-btn {
+  color: #C62828 !important;
+}
+
+.nav-logout-btn:hover {
+  background-color: rgba(198, 40, 40, 0.05) !important;
+}
+
+/* ==========================================================================
+   AREA CONTENUTI PRINCIPALE (RIGHT)
+   ========================================================================== */
+
+.main-content-fenix-card {
+  border-radius: 12px !important;
+  border: 1px solid rgba(212, 214, 216, 0.4) !important;
+  min-height: 70vh;
+}
+
+.content-section-title {
+  font-family: var(--font-family-headlines, 'Gotham', sans-serif);
+  color: var(--admin-text-main, #2C2520);
+  font-size: 1.25rem;
+  border-bottom: 2px solid var(--admin-border-color, #D4D6D6);
+  padding-bottom: 0.75rem;
+}
+
+/* Box Informative Profilo */
+.info-box-profile {
+  background-color: #FFFFFF;
+  border-radius: 8px;
+  border: 1px solid var(--admin-border-color, #D4D6D6);
+}
+
+.info-box-label {
+  display: block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: #6C757D;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.info-box-value {
+  color: var(--admin-text-main, #2C2520);
+  font-size: 1rem;
+}
+
+/* ==========================================================================
+   LOADER E UTILITY FEEDBACK
+   ========================================================================== */
+
+.spinner-fenix-dashboard {
+  color: var(--brand-primary-hex, #65513D);
+}
+
+.v-fenix-alert {
+  border-radius: 8px !important;
+}
+
+.profile-actions-group .btn {
+  border-radius: 6px !important;
+  padding: 0.5rem 1.25rem;
+  font-size: 0.9rem;
+}

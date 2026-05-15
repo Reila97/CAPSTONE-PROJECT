@@ -1,0 +1,28 @@
+/* ==========================================================================
+   VILLA FENIX - STAR RATING COMPONENT STYLES
+   ========================================================================== */
+
+.vf-star-rating-container {
+  display: inline-flex;
+  align-items: center;
+}
+
+.vf-star-item {
+  transition: transform 0.15s ease-in-out;
+}
+
+/* Effetto ingrandimento solo se il componente è editabile */
+.vf-star-item.editable:hover {
+  transform: scale(1.18);
+}
+
+/* Colore Arancione Istituzionale per stelle attive */
+.vf-star-icon-active {
+  color: #F28B2D !important;
+}
+
+/* Colore Grigio/Sabbia per stelle inattive */
+.vf-star-icon-inactive {
+  color: #BAB2A2 !important;
+  opacity: 0.35;
+}

@@ -1,70 +1,230 @@
-/* Background Generale */
-.bg-light-fenix {
-    background-color: #fdfcf9;
-}
-
-/* Sticky Column solo Desktop */
-@media (min-width: 992px) {
-    .sticky-column {
-        position: sticky;
-        top: 0;
-        height: 100vh;
-        overflow-y: auto;
-        z-index: 1000;
-        border-right: 1px solid #eee;
-    }
-}
-
-/* Gestione Scroll Orizzontale per Mobile */
-.horizontal-scroll-wrapper {
+/* ==========================================================================
+   VILLA FENIX - CORE SYSTEM VARIABLES (Brand Book Design System)
+   ========================================================================== */
+   :root {
+    /* Brand Colors */
+    --vf-primary: #65513D;       /* Pantone 7532 - Istituzionale */
+    --vf-secondary: #F28B2D;     /* Pantone 715 - Scritta Affittacamere */
+    
+    /* Secondary Palette (RAL Approximations) */
+    --vf-spigonardo: #D4D6D6;    /* RAL 7047 */
+    --vf-mirra: #BAB2A2;         /* RAL 1019 */
+    --vf-bianco-ral: #F7F9FA;    /* RAL 9010 */
+    --vf-dark-cohesion: #4A3B2C; /* Variante di contrasto scura */
+  
+    /* Font System */
+    --vf-font-headlines: 'Gotham', 'Helvetica Neue', sans-serif;
+    --vf-font-body: 'Ubuntu', Arial, sans-serif;
+  
+    /* Layout Constraints */
+    --vf-logo-min-width: 30mm;
+  }
+  
+  /* ==========================================================================
+     GLOBAL & TYPOGRAPHY COHESION
+     ========================================================================== */
+  .vf-home-wrapper {
+    font-family: var(--vf-font-body);
+    background-color: var(--vf-bianco-ral);
+    color: var(--vf-dark-cohesion);
+    overflow-x: hidden;
+  }
+  
+  /* Forzatura font istituzionale per titoli e bottoni d'azione */
+  .vf-hero-title, 
+  .vf-home-section-title, 
+  .vf-brand-name-mobile, 
+  .vf-mobile-floating-btn,
+  .vf-offcanvas-title {
+    font-family: var(--vf-font-headlines) !important;
+    font-weight: 700 !important;
+    letter-spacing: 1px;
+  }
+  
+  /* ==========================================================================
+     MOBILE HEADER & RESPONSIVE LOGO LAW
+     ========================================================================== */
+  .vf-mobile-header {
+    border-bottom: 2px solid var(--vf-spigonardo) !important;
+  }
+  
+  .vf-responsive-logo-wrapper {
     display: flex;
-    overflow-x: auto;
-    gap: 15px;
-    padding-bottom: 15px;
-    scrollbar-width: none; /* Firefox */
-}
-
-.horizontal-scroll-wrapper::-webkit-scrollbar {
-    display: none; /* Chrome/Safari */
-}
-
-/* Divider Sottili */
-.section-divider {
-    border-top: 1px solid #e0ddd5;
-    opacity: 0.5;
-    margin: 2rem 0;
-}
-
-/* Service Card Style */
-.service-card {
-    border: 1px solid transparent;
-    transition: all 0.3s ease;
-}
-
-.service-card:hover {
-    border-color: #f1901f;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .brand-symbol-fallback {
+    font-size: 1.4rem;
+    color: var(--vf-primary);
+  }
+  
+  .vf-brand-name-mobile {
+    color: var(--vf-primary);
+    font-size: 1.1rem;
+  }
+  
+  .vf-brand-sub-mobile {
+    display: block;
+    font-size: 0.65rem;
+    color: var(--vf-secondary);
+    letter-spacing: 2px;
+    font-weight: 500;
+  }
+  
+  .vf-menu-toggle-btn {
+    color: var(--vf-primary) !important;
+  }
+  
+  /* ==========================================================================
+     HERO SECTION (B&B Experience Accent)
+     ========================================================================== */
+  .vf-hero-section {
+    background: linear-gradient(rgba(74, 59, 44, 0.6), rgba(101, 81, 61, 0.75)), 
+                url('/2026_01_Scatti Villa Fenix SERIATE_16.jpg') no-repeat center center;
+    background-size: cover;
+    min-height: 60vh;
+    padding: 100px 0;
+  }
+  
+  .vf-hero-content {
+    max-width: 800px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  }
+  
+  .vf-hero-title {
+    color: #FFFFFF;
+    font-size: calc(2.5rem + 2vw);
+  }
+  
+  .vf-hero-divider {
+    width: 60px;
+    height: 3px;
+    background-color: var(--vf-secondary);
+  }
+  
+  .vf-hero-subtitle {
+    color: var(--vf-spigonardo);
+    font-size: 0.95rem;
+    font-weight: 500;
+    letter-spacing: 3px;
+  }
+  
+  .vf-hero-payoff {
+    font-family: var(--vf-font-body);
+    color: #FFFFFF;
+    font-size: 1.2rem;
+    opacity: 0.9;
+    margin-top: 15px;
+  }
+  
+  /* ==========================================================================
+     BOOKING BAR (DESKTOP OVERLAP)
+     ========================================================================== */
+  .vf-booking-bar-container {
+    margin-top: -60px;
+    position: relative;
+    z-index: 99;
+  }
+  
+  .vf-booking-card-wrapper {
+    background-color: #FFFFFF !important;
+    border-radius: 12px !important;
+    border: 1px solid rgba(166, 150, 134, 0.2) !important;
+    box-shadow: 0 15px 35px rgba(101, 81, 61, 0.15) !important;
+  }
+  
+  /* ==========================================================================
+     SECTIONS STRUCTURE
+     ========================================================================== */
+  .vf-home-section-title {
+    color: var(--vf-primary);
+    position: relative;
+    padding-bottom: 8px;
+  }
+  
+  .vf-home-section-subtitle {
+    font-family: var(--vf-font-body);
+    color: var(--vf-mirra);
+    font-size: 0.95rem;
+  }
+  
+  .vf-section-divider {
+    border-top: 1px solid var(--vf-spigonardo);
+    opacity: 0.6;
+  }
+  
+  /* ==========================================================================
+     SERVICES CARDS
+     ========================================================================== */
+  .vf-service-card {
+    background-color: #FFFFFF !important;
+    border: 1px solid transparent !important;
+    border-radius: 8px !important;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .vf-service-card:hover {
     transform: translateY(-5px);
-}
-
-/* Rounded top per l'offcanvas mobile */
-.rounded-top-5 {
-    border-top-left-radius: 2rem !important;
-    border-top-right-radius: 2rem !important;
-}
-
-/* Floating button mobile z-index */
-.fixed-bottom {
-    z-index: 1050;
-}
-
-/* Typography Helpers (Assicurati che siano anche in index.css) */
-.headLine {
-    font-family: "Metrophobic", sans-serif;
-    font-weight: 600;
-    color: #6d634f;
-}
-
-.bodyCopy {
-    font-family: "Ubuntu", sans-serif;
-    color: #6d634f;
-}
+    border-color: var(--vf-mirra) !important;
+    box-shadow: 0 8px 20px rgba(101, 81, 61, 0.08) !important;
+  }
+  
+  .vf-service-icon-box {
+    color: var(--vf-secondary);
+    font-size: 1.8rem;
+    transition: color 0.3s ease;
+  }
+  
+  .vf-service-card:hover .vf-service-icon-box {
+    color: var(--vf-primary);
+  }
+  
+  .vf-service-text {
+    font-family: var(--vf-font-headlines);
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--vf-primary);
+    letter-spacing: 0.5px;
+  }
+  
+  /* ==========================================================================
+     MOBILE SMART ELEMENTS
+     ========================================================================== */
+  .vf-mobile-floating-btn {
+    background-color: var(--vf-secondary) !important;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    box-shadow: 0 8px 25px rgba(242, 139, 45, 0.4) !important;
+    transition: background-color 0.2s ease;
+  }
+  
+  .vf-mobile-floating-btn:active {
+    background-color: var(--vf-primary) !important;
+  }
+  
+  .vf-offcanvas-custom {
+    border-top: 3px solid var(--vf-secondary) !important;
+  }
+  
+  .vf-offcanvas-title {
+    color: var(--vf-primary);
+    font-size: 1.15rem;
+  }
+  
+  /* ==========================================================================
+     MEDIA QUERIES (Logo Layout Safety Check)
+     ========================================================================== */
+  @media (min-width: 992px) {
+    /* Assicuriamo che su desktop l'ingombro del layout generale rispetti i vincoli del brand book */
+    .vf-home-section-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 40px;
+      height: 2px;
+      background-color: var(--vf-secondary);
+    }
+  }

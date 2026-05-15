@@ -1,0 +1,117 @@
+/* ==========================================================================
+   VILLA FENIX - CORE COMPONENTS & TOKENS
+   ========================================================================== */
+
+.v-fenix-admin-wrapper {
+  background-color: var(--admin-bg-main, #F7F9FA);
+  font-family: var(--font-family-body, 'Ubuntu', Helvetica, Arial, sans-serif);
+}
+
+/* Tipografia Principale */
+.v-fenix-title {
+  font-family: var(--font-family-headlines, 'Gotham', sans-serif);
+  color: var(--admin-text-main, #2C2520);
+  letter-spacing: -0.5px;
+}
+
+/* ==========================================================================
+   STRUTTURA TABELLA GESTIONALE
+   ========================================================================== */
+
+.custom-admin-table thead {
+  background-color: #FDFDFD;
+  border-bottom: 2px solid var(--admin-border-color, #D4D6D6);
+}
+
+.custom-admin-table th {
+  font-family: var(--font-family-headlines, 'Gotham', sans-serif);
+  color: #6C757D; /* Grigio neutro per l'intestazione */
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.row-fenix-booking {
+  border-bottom: 1px solid rgba(212, 214, 216, 0.5);
+  transition: background-color 0.2s ease-in-out;
+}
+
+.row-fenix-booking:hover {
+  background-color: rgba(247, 249, 250, 0.8) !important;
+}
+
+/* Celle Specifiche */
+.client-name {
+  color: var(--admin-text-main, #2C2520);
+}
+
+.client-email {
+  font-size: 0.8rem;
+}
+
+.label-date {
+  font-size: 0.75rem;
+  display: inline-block;
+  width: 32px;
+}
+
+.structure-name {
+  color: var(--brand-primary-hex, #65513D);
+}
+
+.camera-name {
+  font-style: italic;
+  font-size: 0.8rem;
+}
+
+.price-total {
+  font-family: var(--font-family-headlines, 'Gotham', sans-serif);
+  color: var(--admin-text-main, #2C2520);
+}
+
+/* ==========================================================================
+   BADGES SEMANTICI (VILLA FENIX BRAND PALETTE)
+   ========================================================================== */
+
+.badge-fenix {
+  font-weight: 500;
+  padding: 0.4rem 1rem;
+  border-radius: 50rem !important; /* Forza l'effetto pill */
+}
+
+.badge-fenix-success {
+  background-color: rgba(46, 125, 50, 0.08);
+  color: #2E7D32;
+  border: 1px solid rgba(46, 125, 50, 0.2);
+}
+
+.badge-fenix-warning {
+  background-color: rgba(242, 139, 45, 0.1);
+  color: var(--brand-secondary-hex, #F28B2D);
+  border: 1px solid rgba(242, 139, 45, 0.25);
+}
+
+.badge-fenix-danger {
+  background-color: rgba(198, 40, 40, 0.08);
+  color: #C62828;
+  border: 1px solid rgba(198, 40, 40, 0.2);
+}
+
+.badge-fenix-muted {
+  background-color: rgba(186, 178, 162, 0.15);
+  color: #5A5245;
+  border: 1px solid rgba(186, 178, 162, 0.3);
+}
+
+/* ==========================================================================
+   FEEDBACK ELEMENTI DI CARICAMENTO E FOOTER
+   ========================================================================== */
+
+.spinner-fenix {
+  color: var(--brand-primary-hex, #65513D);
+}
+
+.counter-footer .counter-highlight {
+  color: var(--brand-primary-hex, #65513D);
+}

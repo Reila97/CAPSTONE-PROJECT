@@ -5,8 +5,6 @@ import CreateCamera from "../../Button/CreateCamera";
 import EditCamera from "../../Button/EditCamera.jsx";
 import DeleteCamera from "../../Button/DeleteCamera.jsx";
 
-import "./CamereAdmin.css"
-
 const API_URL = import.meta.env.VITE_BACK_END;
 
 function CamereAdmin() {

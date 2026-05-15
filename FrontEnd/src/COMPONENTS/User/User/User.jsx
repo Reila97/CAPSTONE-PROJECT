@@ -47,7 +47,8 @@ function User() {
 
     try {
       setIsLoading(true);
-      // 1. Fetch dei dati utente tramite rotta protetta
+      setError(null);
+
       const userRes = await fetch(`${API_URL}/users/me`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -58,7 +59,6 @@ function User() {
       setUserData(userDataFetched);
       localStorage.setItem("user", JSON.stringify(userDataFetched));
 
-      // 2. Fetch parallela di prenotazioni e recensioni
       const [prenotazioniRes, recensioniRes] = await Promise.all([
         fetch(`${API_URL}/prenotazioni/user/${userDataFetched._id}`, {
           headers: { Authorization: `Bearer ${token}` },
@@ -80,7 +80,6 @@ function User() {
     } catch (err) {
       console.error("Errore profilo:", err);
       setError(err.message);
-      // Logout forzato se il token è invalido
       localStorage.removeItem("token");
       setTimeout(() => navigate("/"), 3000);
     } finally {
@@ -94,28 +93,28 @@ function User() {
 
   if (isLoading)
     return (
-      <Container className="text-center py-5 vh-100 d-flex flex-column justify-content-center">
-        <Spinner animation="grow" variant="primary" />
-        <p className="mt-3 text-muted">Caricamento profilo...</p>
+      <Container className="text-center py-5 vh-100 d-flex flex-column justify-content-center font-ubuntu">
+        <Spinner animation="border" className="vf-spinner-brand" size="lg" />
+        <p className="mt-3 text-muted small">Caricamento del tuo profilo Villa Fenix...</p>
       </Container>
     );
 
   if (error)
     return (
-      <Container className="mt-5">
-        <Alert variant="danger" className="shadow-sm border-0">
-          <strong>Oops!</strong> {error}. Reindirizzamento...
+      <Container className="mt-5 font-ubuntu">
+        <Alert variant="danger" className="shadow-sm border-0 py-3">
+          <strong>Oops!</strong> {error}. Verrai reindirizzato alla homepage...
         </Alert>
       </Container>
     );
 
   return (
-    <Container className="py-5 bodyCopy">
+    <Container className="py-5 font-ubuntu">
       <Row className="g-4">
         {/* SIDEBAR: INFO UTENTE */}
         <Col lg={4}>
-          <Card className="border-0 shadow-sm text-center p-4 h-100 rounded-4">
-            <Card.Body className="d-flex flex-column justify-content-between">
+          <Card className="shadow-sm text-center p-4 h-100 rounded-4 vf-profile-card">
+            <Card.Body className="d-flex flex-column justify-content-between p-2">
               <div>
                 <div className="mb-3 d-flex justify-content-center">
                   {userData.avatar ? (
@@ -128,7 +127,7 @@ function User() {
                     />
                   ) : (
                     <div
-                      className="user-avatar-initials d-flex align-items-center justify-content-center fw-bold fs-2 rounded-circle bg-primary text-white shadow-sm"
+                      className="vf-avatar-initials d-flex align-items-center justify-content-center fw-bold fs-2 rounded-circle shadow-sm"
                       style={{ width: "120px", height: "120px" }}
                     >
                       {userData.nome?.[0]}{userData.cognome?.[0]}
@@ -136,35 +135,35 @@ function User() {
                   )}
                 </div>
 
-                <h3 className="fw-bold mb-1">
+                <h3 className="vf-profile-name mb-2">
                   {userData.nome} {userData.cognome}
                 </h3>
-                <div className="mb-3">
+                
+                <div className="mb-4">
                   <Badge
-                    bg={userData.isAdmin ? "danger" : "dark"}
-                    className="px-3 py-2 rounded-pill fw-medium"
+                    className={`px-3 py-2 rounded-pill fw-medium ${userData.isAdmin ? "vf-badge-admin" : "vf-badge-client"}`}
                   >
                     {userData.isAdmin ? "Amministratore" : "Cliente Fenix"}
                   </Badge>
                 </div>
 
-                <hr className="my-4 opacity-10" />
+                <hr className="my-4 opacity-25" style={{ color: '#65513D' }} />
 
-                <div className="text-start bg-light p-3 rounded-3">
-                  <h6 className="text-muted small fw-bold mb-3 text-uppercase letter-spacing-1">
+                <div className="text-start vf-account-details-box p-3">
+                  <h6 className="vf-details-section-title text-uppercase mb-3 fw-bold">
                     Dettagli Account
                   </h6>
                   <div className="mb-3">
-                    <div className="d-flex align-items-center text-dark small fw-bold">
-                       <Envelope className="me-2 text-primary" /> Email
+                    <div className="d-flex align-items-center text-dark small fw-bold mb-1">
+                       <Envelope className="me-2 vf-profile-icon" size={14} /> Email
                     </div>
-                    <div className="ms-4 text-muted text-truncate">{userData.email}</div>
+                    <div className="ms-4 text-muted small text-truncate">{userData.email}</div>
                   </div>
                   <div>
-                    <div className="d-flex align-items-center text-dark small fw-bold">
-                       <Calendar3 className="me-2 text-primary" /> Compleanno
+                    <div className="d-flex align-items-center text-dark small fw-bold mb-1">
+                       <Calendar3 className="me-2 vf-profile-icon" size={14} /> Data di nascita
                     </div>
-                    <div className="ms-4 text-muted">
+                    <div className="ms-4 text-muted small">
                       {userData.dataDiNascita
                         ? new Date(userData.dataDiNascita).toLocaleDateString('it-IT', { 
                             day: 'numeric', month: 'long', year: 'numeric' 
@@ -189,75 +188,75 @@ function User() {
         {/* CONTENUTO PRINCIPALE */}
         <Col lg={8}>
           <Row className="g-4">
-            {/* STATS */}
+            {/* STATS CARDS */}
             <Col sm={6}>
-              <Card className="border-0 shadow-sm p-3 bg-white h-100 rounded-4 border-start border-primary border-4">
+              <Card className="shadow-sm p-2 rounded-4 vf-profile-card vf-stat-card-soggiorni">
                 <Card.Body className="d-flex align-items-center">
-                  <div className="bg-light p-3 rounded-circle me-3">
-                    <CalendarCheck size={24} className="text-primary" />
+                  <div className="vf-stat-icon-wrapper p-3 rounded-circle me-3">
+                    <CalendarCheck size={24} />
                   </div>
                   <div>
-                    <h3 className="fw-bold mb-0">{prenotazioni.length}</h3>
-                    <p className="text-muted mb-0 small text-uppercase fw-bold">Soggiorni</p>
+                    <h3 className="vf-stat-number mb-0">{prenotazioni.length}</h3>
+                    <p className="text-muted mb-0 small text-uppercase fw-bold" style={{ letterSpacing: '0.3px' }}>Soggiorni Prenotati</p>
                   </div>
                 </Card.Body>
               </Card>
             </Col>
 
             <Col sm={6}>
-              <Card className="border-0 shadow-sm p-3 bg-white h-100 rounded-4 border-start border-warning border-4">
+              <Card className="shadow-sm p-2 rounded-4 vf-profile-card vf-stat-card-feedback">
                 <Card.Body className="d-flex align-items-center">
-                  <div className="bg-light p-3 rounded-circle me-3">
-                    <StarFill size={24} className="text-warning" />
+                  <div className="vf-stat-icon-wrapper-orange p-3 rounded-circle me-3">
+                    <StarFill size={24} />
                   </div>
                   <div>
-                    <h3 className="fw-bold mb-0">{recensioni.length}</h3>
-                    <p className="text-muted mb-0 small text-uppercase fw-bold">Feedback</p>
+                    <h3 className="vf-stat-number mb-0">{recensioni.length}</h3>
+                    <p className="text-muted mb-0 small text-uppercase fw-bold" style={{ letterSpacing: '0.3px' }}>Feedback Lasciati</p>
                   </div>
                 </Card.Body>
               </Card>
             </Col>
 
-            {/* RECENSIONI */}
+            {/* LISTA RECENSIONI */}
             <Col md={12}>
-              <Card className="border-0 shadow-sm rounded-4 overflow-hidden">
-                <Card.Header className="bg-white py-3 border-0">
-                  <h5 className="fw-bold mb-0 d-flex align-items-center">
-                    <PersonBadge className="me-2 text-primary" /> Le tue Recensioni
+              <Card className="shadow-sm rounded-4 overflow-hidden vf-profile-card">
+                <Card.Header className="bg-white py-3 vf-reviews-card-header">
+                  <h5 className="fw-bold mb-0 d-flex align-items-center h6 text-uppercase" style={{ letterSpacing: '0.5px' }}>
+                    <PersonBadge className="me-2 vf-profile-icon" size={18} /> Cronologia Recensioni
                   </h5>
                 </Card.Header>
                 <Card.Body className="px-4 pb-4">
                   {recensioni.length === 0 ? (
                     <div className="text-center py-4">
-                      <p className="text-muted">Non hai ancora condiviso la tua esperienza.</p>
+                      <p className="text-muted small mb-0">Non hai ancora condiviso recensioni sulle nostre strutture.</p>
                     </div>
                   ) : (
                     <ListGroup variant="flush">
                       {recensioni.map((rec) => (
-                        <ListGroup.Item key={rec._id} className="px-0 py-4 border-bottom">
+                        <ListGroup.Item key={rec._id} className="px-0 py-4 bg-transparent">
                           <div className="d-flex justify-content-between align-items-start mb-2">
                             <div>
-                              <h6 className="fw-bold mb-1">
+                              <h6 className="vf-review-item-title mb-1">
                                 {rec.strutturaId?.nome || "Struttura Villa Fenix"}
                               </h6>
-                              <div className="text-warning">
+                              <div className="d-flex gap-0.5 mt-1">
                                 {[...Array(5)].map((_, i) => (
                                   <StarFill 
                                     key={i} 
-                                    size={14} 
-                                    className={i < (rec.voto || 5) ? "text-warning" : "text-light"} 
+                                    size={13} 
+                                    className={i < (rec.voto || 5) ? "vf-star-active" : "vf-star-inactive"} 
                                   />
                                 ))}
                               </div>
                             </div>
-                            <small className="text-muted fw-medium">
-                              {new Date(rec.createdAt).toLocaleDateString()}
+                            <small className="text-muted fw-medium small">
+                              {new Date(rec.createdAt).toLocaleDateString('it-IT')}
                             </small>
                           </div>
-                          <p className="text-secondary italic mb-0">
-                            <span className="fs-4 lh-1 opacity-25">“</span>
+                          <p className="vf-quote-text small fst-italic mb-0 mt-2">
+                            <span className="fs-5 fw-bold lh-1 opacity-25 me-1">“</span>
                             {rec.commento}
-                            <span className="fs-4 lh-1 opacity-25">”</span>
+                            <span className="fs-5 fw-bold lh-1 opacity-25 ms-1">”</span>
                           </p>
                         </ListGroup.Item>
                       ))}

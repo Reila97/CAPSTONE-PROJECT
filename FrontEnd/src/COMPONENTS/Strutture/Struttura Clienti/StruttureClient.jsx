@@ -9,7 +9,7 @@ import {
   Alert
 } from "react-bootstrap";
 import { GeoAlt } from "react-bootstrap-icons";
-import { Link } from "react-router"; // Utilizziamo Link per una navigazione fluida senza refresh
+import { Link } from "react-router"; 
 
 import "./StruttureClienti.css";
 
@@ -21,7 +21,6 @@ function StruttureClient() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // FIX: Sostituito localhost con variabile d'ambiente
     fetch(`${API_URL}/strutture`)
       .then((res) => {
         if (!res.ok) throw new Error("Impossibile caricare le strutture");
@@ -37,26 +36,26 @@ function StruttureClient() {
 
   if (loading)
     return (
-      <div className="text-center my-5 py-5">
-        <Spinner animation="border" variant="primary" />
-        <p className="mt-2 text-muted">Stiamo preparando le migliori proposte per te...</p>
+      <div className="text-center my-5 py-5 font-ubuntu">
+        <Spinner animation="border" className="vf-spinner-brand" />
+        <p className="mt-3 text-muted small">Stiamo preparando le migliori proposte per te...</p>
       </div>
     );
 
   if (error)
     return (
       <Container className="my-5">
-        <Alert variant="danger">{error}</Alert>
+        <Alert variant="danger" className="vf-alert-brand">{error}</Alert>
       </Container>
     );
 
   return (
     <Container className="my-5 px-4 px-md-0">
       <div className="mb-5 text-center">
-        <h2 className="headLine fw-bold text-uppercase mb-2">
+        <h2 className="vf-section-title fw-bold text-uppercase mb-2">
           Le Nostre Strutture
         </h2>
-        <div className="bg-primary mx-auto" style={{ width: "60px", height: "3px" }}></div>
+        <div className="vf-title-divider mx-auto" style={{ width: "50px", height: "3px" }}></div>
       </div>
 
       {/* Row responsive: scrollabile su mobile, griglia su desktop */}
@@ -71,28 +70,28 @@ function StruttureClient() {
               className="d-flex align-items-stretch"
               style={{ minWidth: window.innerWidth < 768 ? '300px' : 'auto' }}
             >
-              <Card className="h-100 border-0 shadow-sm overflow-hidden card-hover transition">
-                <div style={{ height: "200px", overflow: "hidden" }}>
+              <Card className="h-100 border-0 shadow-sm overflow-hidden vf-structure-card">
+                <div className="vf-img-container">
                   <Card.Img
                     variant="top"
                     src={s.images?.mainImage || "https://placehold.co/600x400?text=Villa+Fenix"}
-                    className="h-100 w-100 object-fit-cover transition-transform"
+                    className="h-100 w-100 object-fit-cover vf-card-img"
                     alt={s.nome}
                   />
                 </div>
 
                 <Card.Body className="d-flex flex-column p-4">
                   <div className="mb-3">
-                    <Card.Title className="headLine fw-bold h4 mb-1">
+                    <Card.Title className="vf-card-title h4 mb-1">
                       {s.nome}
                     </Card.Title>
-                    <Card.Text className="text-muted small d-flex align-items-center">
-                      <GeoAlt className="me-1 text-primary" /> 
+                    <Card.Text className="text-muted small d-flex align-items-center mt-1">
+                      <GeoAlt className="me-1 vf-geo-icon" size={14} /> 
                       {s.località?.città}, {s.località?.indirizzo}
                     </Card.Text>
                   </div>
 
-                  <Card.Text className="bodyCopy text-muted small flex-grow-1">
+                  <Card.Text className="vf-card-description small flex-grow-1">
                     {s.descrizione && s.descrizione.length > 120 
                       ? `${s.descrizione.substring(0, 120)}...` 
                       : s.descrizione || "Esplora questa magnifica struttura targata Villa Fenix."}
@@ -101,8 +100,7 @@ function StruttureClient() {
                   <Button
                     as={Link}
                     to={`/strutture/${s._id}`}
-                    className="dettagliButton mt-4 w-100 rounded-0 py-2 fw-bold"
-                    variant="primary"
+                    className="vf-dettagli-btn mt-4 w-100 py-2.5 text-white"
                   >
                     SCOPRI LA STRUTTURA
                   </Button>
@@ -112,7 +110,7 @@ function StruttureClient() {
           ))
         ) : (
           <Col xs={12} className="text-center py-5">
-            <p className="text-muted">Nessuna struttura disponibile al momento.</p>
+            <p className="text-muted small font-ubuntu">Nessuna struttura disponibile al momento.</p>
           </Col>
         )}
       </Row>

@@ -1,35 +1,107 @@
-.headLine {
-    font-family: "Metrophobic", sans-serif;
-    font-weight: 600;
-    font-style: normal;
-    color: #6d634f;
+/* ==========================================================================
+   VILLA FENIX - STRUTTURA DETTAGLIO COMPONENT STYLES
+   ========================================================================== */
+
+/* Pulsante indietro e link */
+.vf-back-link {
+  font-family: 'Ubuntu', sans-serif;
+  color: #65513D !important;
+  font-weight: 500;
+  transition: opacity 0.2s ease-in-out;
 }
 
-.bodyCopy {
-    font-family: "Ubuntu", sans-serif;
-    font-weight: 300;
-    font-style: normal;
-    color: #6d634f;
+.vf-back-link:hover {
+  opacity: 0.75;
 }
 
-.prenotaButton {
-    font-family: "Metrophobic", sans-serif;
-    font-weight: 600;
-    font-style: normal;
-    color: white !important; 
-    background-color: #f1901f;
-    border: #f1901f;
-    
+/* Tipografia e Titoli */
+.vf-detail-title {
+  font-family: 'Gotham', sans-serif;
+  color: #65513D; /* Marrone Primario */
+  font-weight: 700;
 }
 
-.prenotaButton:hover {
-    background-color: #cb781a;
-    border: #f1901f;
+.vf-section-subtitle {
+  font-family: 'Gotham', sans-serif;
+  color: #65513D;
+  font-weight: 600;
+  letter-spacing: 0.5px;
 }
 
-.prenotaButton:active {
-    background-color: #cb781a !important;
-    border-color: #f1901f !important;
-    outline: none; 
+.vf-detail-geo {
+  font-family: 'Ubuntu', sans-serif;
+  color: #BAB2A2; /* Tonalità Sabbia */
+  font-size: 0.95rem;
 }
 
+.vf-geo-icon-detail {
+  color: #F28B2D; /* Arancione Secondario */
+}
+
+.vf-detail-description {
+  font-family: 'Ubuntu', sans-serif;
+  color: #65513D;
+  opacity: 0.85;
+  line-height: 1.7;
+}
+
+/* Badge di posizionamento sulla foto */
+.vf-location-badge {
+  font-family: 'Gotham', sans-serif;
+  background-color: #ffffff !important;
+  color: #65513D !important;
+  border: 1px solid rgba(101, 81, 61, 0.15) !important;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  padding: 0.45rem 0.8rem !important;
+}
+
+/* Box Contatti Laterale */
+.vf-contacts-box {
+  background-color: #F7F9FA !important; /* Sfondo chiaro RAL 9010 */
+  border-left: 4px solid #65513D !important; /* Accento Marrone Primario */
+  border-top: 1px solid rgba(101, 81, 61, 0.08);
+  border-right: 1px solid rgba(101, 81, 61, 0.08);
+  border-bottom: 1px solid rgba(101, 81, 61, 0.08);
+  font-family: 'Ubuntu', sans-serif;
+  color: #65513D;
+}
+
+.vf-contacts-icon {
+  color: #F28B2D !important;
+}
+
+/* Bottone di Contatto Principale (CTA Stile Firmato) */
+.vf-contact-cta-btn {
+  background-color: #65513D !important;
+  border: 1px solid #65513D !important;
+  font-family: 'Gotham', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  font-size: 0.9rem;
+  border-radius: 30px !important;
+  transition: all 0.25s ease-in-out !important;
+}
+
+.vf-contact-cta-btn:hover {
+  background-color: #F28B2D !important;
+  border-color: #F28B2D !important;
+}
+
+/* Divisori di Sezione */
+.vf-section-divider {
+  border-bottom: 2px solid rgba(101, 81, 61, 0.1) !important;
+}
+
+/* Stati di controllo: Spinner e Alert */
+.vf-spinner-brand {
+  color: #F28B2D !important;
+}
+
+.vf-alert-warning-brand {
+  font-family: 'Ubuntu', sans-serif;
+  background-color: #F7F9FA !important;
+  border: 1px solid rgba(101, 81, 61, 0.15) !important;
+  color: #65513D !important;
+  border-radius: 12px;
+}

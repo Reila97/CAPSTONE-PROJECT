@@ -1,49 +1,135 @@
-/* Stile per il piccolo avatar nella tabella utenti */
+/* ==========================================================================
+   VILLA FENIX - CORE COMPONENTS & TOKENS
+   ========================================================================== */
+
+.v-fenix-admin-wrapper {
+  background-color: var(--admin-bg-main, #F7F9FA);
+  font-family: var(--font-family-body, 'Ubuntu', Helvetica, Arial, sans-serif);
+}
+
+.v-fenix-title {
+  font-family: var(--font-family-headlines, 'Gotham', sans-serif);
+  color: var(--admin-text-main, #2C2520);
+  letter-spacing: -0.5px;
+}
+
+/* ==========================================================================
+   STRUTTURA TABELLA INTERFACCIA UTENTI
+   ========================================================================== */
+
+.custom-admin-table thead {
+  background-color: #FDFDFD;
+  border-bottom: 2px solid var(--admin-border-color, #D4D6D6);
+}
+
+.custom-admin-table th {
+  font-family: var(--font-family-headlines, 'Gotham', sans-serif);
+  color: #6C757D;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.row-fenix-user {
+  border-bottom: 1px solid rgba(212, 214, 216, 0.5);
+  transition: background-color 0.2s ease-in-out;
+}
+
+.row-fenix-user:hover {
+  background-color: rgba(247, 249, 250, 0.8) !important;
+}
+
+/* Componenti Cella Profilo */
 .user-avatar-sm {
-    width: 40px;
-    height: 40px;
-    background-color: #e9ecef;
-    color: #495057;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    border: 1px solid #dee2e6;
+  width: 38px;
+  height: 38px;
+  background-color: var(--brand-primary-hex, #65513D); /* Marrone Firma Fenix */
+  color: #FFFFFF;
+  border-radius: 50%;
+  font-size: 0.85rem;
+  letter-spacing: -0.5px;
 }
 
-/* Hover sulla riga della tabella */
-.custom-admin-table tbody tr:hover {
-    background-color: #fcfcfc;
+.user-fullname-text {
+  color: var(--admin-text-main, #2C2520);
 }
 
-/* Stile base del bottone toggle admin */
-.btn-orange-toggle {
-    background-color: #f8f9fa; /* Grigio chiarissimo di base */
-    color: #6c757d;
-    transition: all 0.2s ease-in-out;
+.user-email-text {
+  color: #5A5245;
+  font-size: 0.9rem;
 }
 
-/* Quando l'utente è ADMIN, diamo un tocco di colore al bottone */
-.btn-orange-toggle.active-admin {
-    background-color: rgba(241, 144, 31, 0.15) !important; /* Sfondo arancio molto tenue */
+/* ==========================================================================
+   BADGES SEMANTICI RUOLO (SISTEMA INTEGRATO)
+   ========================================================================== */
+
+.badge-fenix-role {
+  font-weight: 600;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.7rem !important;
+  letter-spacing: 0.5px;
+  border-radius: 4px !important;
 }
 
-/* Hover sull'icona e sul bottone */
-.btn-orange-toggle:hover {
-    background-color: #f1901f !important;
-    color: white !important;
+.badge-fenix-role.role-admin {
+  background-color: rgba(198, 40, 40, 0.08);
+  color: #C62828;
+  border: 1px solid rgba(198, 40, 40, 0.2);
 }
 
-/* Se passi sopra l'icona ShieldCheck specifica */
-.btn-orange-toggle:hover svg {
-    fill: white !important;
-    color: white !important;
+.badge-fenix-role.role-user {
+  background-color: rgba(101, 81, 61, 0.08);
+  color: var(--brand-primary-hex, #65513D);
+  border: 1px solid rgba(101, 81, 61, 0.18);
 }
 
-/* Badge del Ruolo: Uniformiamo l'arancione anche qui se preferisci */
-.badge.bg-danger {
-    background-color: #f1901f !important; /* Opzionale: rende anche il badge ADMIN arancione */
+/* ==========================================================================
+   BOTTONI AZIONE & TOGGLE PERMESSI PRIVILEGIATI
+   ========================================================================== */
+
+.btn-fenix-toggle-admin {
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border-radius: 6px !important;
+  background-color: #FFFFFF;
+  border: 1px solid var(--admin-border-color, #D4D6D6);
+  color: #8C9399;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Hover base dello scudo */
+.btn-fenix-toggle-admin:hover {
+  border-color: var(--brand-secondary-hex, #F28B2D);
+  color: var(--brand-secondary-hex, #F28B2D);
+  background-color: rgba(242, 139, 45, 0.02);
+}
+
+/* Stato attivo quando l'utente è effettivamente un amministratore */
+.btn-fenix-toggle-admin.is-admin-active {
+  background-color: rgba(242, 139, 45, 0.1) !important;
+  border-color: rgba(242, 139, 45, 0.4) !important;
+  color: var(--brand-secondary-hex, #F28B2D) !important;
+}
+
+.btn-fenix-toggle-admin.is-admin-active:hover {
+  background-color: rgba(242, 139, 45, 0.15) !important;
+  box-shadow: 0 2px 4px rgba(242, 139, 45, 0.15);
+}
+
+/* ==========================================================================
+   FEEDBACK ELEMENTI DI INTERFACCIA
+   ========================================================================== */
+
+.spinner-fenix {
+  color: var(--brand-primary-hex, #65513D);
+}
+
+.v-fenix-alert {
+  border-radius: 8px !important;
+}
+
+.counter-footer .counter-highlight {
+  color: var(--brand-primary-hex, #65513D);
 }

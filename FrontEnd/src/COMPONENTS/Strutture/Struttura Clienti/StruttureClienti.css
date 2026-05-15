@@ -1,54 +1,103 @@
-.headLine {
-    font-family: "Metrophobic", sans-serif;
-    font-weight: 600;
-    font-style: normal;
-    color: #6d634f;
+/* ==========================================================================
+   VILLA FENIX - STRUTTURE VETRINA CLIENT COMPONENT STYLES
+   ========================================================================== */
+
+/* Titolo Istituzionale */
+.vf-section-title {
+  font-family: 'Gotham', sans-serif;
+  color: #65513D; /* Marrone Primario */
+  letter-spacing: 0.5px;
 }
 
-.bodyCopy {
-    font-family: "Ubuntu", sans-serif;
-    font-weight: 300;
-    font-style: normal;
-    color: #6d634f;
+.vf-title-divider {
+  background-color: #F28B2D !important; /* Arancione Secondario */
+  border-radius: 2px;
 }
 
-.dettagliButton {
-    font-family: "Metrophobic", sans-serif;
-    font-weight: 600;
-    font-style: normal;
-    background-color: #f1901f;
-    border: #f1901f;
-    font-family: "Metrophobic", sans-serif;
-    font-weight: 600;
-    font-style: normal;
-    color: white;
+/* Scrollbar Mobile orizzontale personalizzata e discreta */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(101, 81, 61, 0.2) transparent;
 }
 
-.dettagliButton:hover {
-    background-color: #cb781a;
-    border: #f1901f;
+.custom-scrollbar::-webkit-scrollbar {
+  height: 5px;
 }
 
-.dettagliButton:active {
-    background-color: #cb781a !important;
-    border-color: #f1901f !important;
-    outline: none; 
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(101, 81, 61, 0.2);
+  border-radius: 10px;
 }
 
-
-.card-hover {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+/* Card Struttura Villa Fenix */
+.vf-structure-card {
+  font-family: 'Ubuntu', sans-serif;
+  border: 1px solid rgba(101, 81, 61, 0.1) !important;
+  border-radius: 14px !important;
+  background-color: #ffffff;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
 }
 
-.card-hover:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+.vf-structure-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(101, 81, 61, 0.08) !important;
 }
 
-.transition-transform {
-  transition: transform 0.5s ease;
+/* Animazione Zoom Immagine di Copertina */
+.vf-img-container {
+  height: 220px;
+  overflow: hidden;
 }
 
-.card-hover:hover .transition-transform {
-  transform: scale(1.1);
+.vf-card-img {
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.vf-structure-card:hover .vf-card-img {
+  transform: scale(1.06);
+}
+
+/* Dettagli della Struttura */
+.vf-card-title {
+  font-family: 'Gotham', sans-serif;
+  color: #65513D;
+  font-weight: 600;
+}
+
+.vf-geo-icon {
+  color: #F28B2D !important;
+}
+
+.vf-card-description {
+  color: #65513D;
+  opacity: 0.8;
+  line-height: 1.6;
+}
+
+/* Bottone Scopri Struttura (Stile CTA Firmato) */
+.vf-dettagli-btn {
+  background-color: #65513D !important;
+  border: 1px solid #65513D !important;
+  font-family: 'Gotham', sans-serif;
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+  border-radius: 30px !important; /* Arrotondato coerente con le CTA principali */
+  transition: all 0.25s ease-in-out !important;
+}
+
+.vf-dettagli-btn:hover {
+  background-color: #F28B2D !important;
+  border-color: #F28B2D !important;
+}
+
+/* Stati di Controllo: Loading, Error & Empty */
+.vf-spinner-brand {
+  color: #F28B2D !important;
+}
+
+.vf-alert-brand {
+  font-family: 'Ubuntu', sans-serif;
+  border-radius: 8px;
+  color: #65513D;
 }

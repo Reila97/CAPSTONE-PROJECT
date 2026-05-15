@@ -1,0 +1,104 @@
+/* ==========================================================================
+   VILLA FENIX - CORE COMPONENTS & TOKENS
+   ========================================================================== */
+
+.v-fenix-admin-wrapper {
+  background-color: var(--admin-bg-main, #F7F9FA);
+  font-family: var(--font-family-body, 'Ubuntu', Helvetica, Arial, sans-serif);
+}
+
+.v-fenix-title {
+  font-family: var(--font-family-headlines, 'Gotham', sans-serif);
+  color: var(--admin-text-main, #2C2520);
+  letter-spacing: -0.5px;
+}
+
+/* ==========================================================================
+   STRUTTURA TABELLA INTERFACCIA
+   ========================================================================== */
+
+.custom-admin-table thead {
+  background-color: #FDFDFD;
+  border-bottom: 2px solid var(--admin-border-color, #D4D6D6);
+}
+
+.custom-admin-table th {
+  font-family: var(--font-family-headlines, 'Gotham', sans-serif);
+  color: #6C757D;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.row-fenix-struttura {
+  border-bottom: 1px solid rgba(212, 214, 216, 0.5);
+  transition: background-color 0.2s ease-in-out;
+}
+
+.row-fenix-struttura:hover {
+  background-color: rgba(247, 249, 250, 0.8) !important;
+}
+
+/* Rendering Immagine Copertura Struttura */
+.struttura-image-wrapper {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.struttura-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 6px !important;
+  border: 1px solid var(--admin-border-color, #D4D6D6);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* Testi della Riga */
+.struttura-name {
+  color: var(--admin-text-main, #2C2520);
+}
+
+.id-badge {
+  font-size: 0.75rem;
+  font-family: monospace;
+  background-color: rgba(186, 178, 162, 0.15); /* Basato su colore Mirra */
+  color: #5A5245;
+  padding: 1px 5px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-top: 2px;
+}
+
+.location-block .city-text {
+  color: var(--brand-primary-hex, #65513D);
+}
+
+.location-block .province-text {
+  font-size: 0.75rem;
+}
+
+.table-empty-state {
+  font-style: italic;
+}
+
+/* ==========================================================================
+   ELEMENTI DI FEEDBACK E FOOTER TIMESTAMPS
+   ========================================================================== */
+
+.spinner-fenix {
+  color: var(--brand-primary-hex, #65513D);
+}
+
+.counter-footer .counter-highlight {
+  color: var(--brand-primary-hex, #65513D);
+}
+
+.counter-footer .update-timestamp {
+  font-variant-numeric: tabular-nums;
+  opacity: 0.8;
+}

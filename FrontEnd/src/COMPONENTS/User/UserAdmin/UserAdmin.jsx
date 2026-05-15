@@ -6,7 +6,6 @@ import EditProfile from "../../Button/EditProfile";
 import CreateUser from "../../Button/CreateUser";
 import "./UserAdmin.css";
 
-// Utilizzo della variabile d'ambiente corretta
 const API_URL = import.meta.env.VITE_BACK_END;
 
 function AllUser() {
@@ -14,7 +13,6 @@ function AllUser() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // useCallback evita render ciclici se passata a componenti figli (come CreateUser o EditProfile)
   const fetchUsers = useCallback(async () => {
     try {
       const token = localStorage.getItem("token");
@@ -26,7 +24,7 @@ function AllUser() {
 
       if (res.status === 401) {
         localStorage.removeItem("token");
-        window.location.href = "/"; // Reindirizzamento se il token è scaduto
+        window.location.href = "/";
         return;
       }
 
@@ -61,7 +59,6 @@ function AllUser() {
       });
 
       if (res.ok) {
-        // Aggiornamento ottimistico dello stato locale
         setUsers((prevUsers) =>
           prevUsers.map((u) => {
             const currentId = u._id || u.id;
@@ -78,101 +75,119 @@ function AllUser() {
 
   if (loading)
     return (
-      <div className="text-center py-5">
-        <Spinner animation="border" variant="primary" />
+      <div className="text-center py-5 v-fenix-loading">
+        <Spinner animation="border" className="spinner-fenix" />
+        <p className="mt-3 text-muted small text-uppercase tracking-wider">Sincronizzazione anagrafiche...</p>
       </div>
     );
 
   if (error)
     return (
-      <Alert variant="danger" className="m-3 text-center">
+      <Alert variant="danger" className="border-0 shadow-sm py-3 text-center v-fenix-alert">
         {error}
       </Alert>
     );
 
   return (
-    <div className="admin-section">
+    <div className="admin-section p-4 v-fenix-admin-wrapper">
+      
+      {/* Intestazione Sezione */}
       <div className="d-flex justify-content-between align-items-center mb-4">
         <div>
-          <h4 className="fw-bold mb-1">Gestione Utenti</h4>
-          <p className="text-muted small">
-            Amministra i permessi e le anagrafiche degli utenti registrati
+          <h4 className="fw-bold mb-1 v-fenix-title">Gestione Utenti</h4>
+          <p className="text-muted small mb-0">
+            Amministra i permessi e le anagrafiche degli utenti registrati nel circuito
           </p>
         </div>
         <CreateUser onCreated={fetchUsers} />
       </div>
 
-      <div className="table-responsive shadow-sm rounded-3">
+      {/* Tabella Utenti */}
+      <div className="table-responsive shadow-sm rounded-3 border-0 bg-white">
         <Table hover className="align-middle custom-admin-table mb-0">
-          <thead className="bg-light">
+          <thead>
             <tr>
-              <th className="border-0 text-muted small text-uppercase ps-4">Utente</th>
-              <th className="border-0 text-muted small text-uppercase">Email</th>
-              <th className="border-0 text-muted small text-uppercase">Ruolo</th>
-              <th className="border-0 text-muted small text-uppercase text-center">Azioni</th>
+              <th className="ps-4 py-3">Utente</th>
+              <th className="py-3">Email</th>
+              <th className="py-3">Ruolo</th>
+              <th className="text-center py-3 pe-4">Azioni</th>
             </tr>
           </thead>
           <tbody>
-            {users.map((u) => {
-              const userId = u._id || u.id;
-              return (
-                <tr key={userId} className="border-bottom">
-                  <td className="py-3 ps-4">
-                    <div className="d-flex align-items-center">
-                      <div className="user-avatar-sm me-3 d-flex align-items-center justify-content-center fw-bold bg-primary text-white rounded-circle" style={{ width: "40px", height: "40px" }}>
-                        {u.nome?.charAt(0)}{u.cognome?.charAt(0)}
-                      </div>
-                      <div>
-                        <div className="fw-bold text-dark">
-                          {u.nome} {u.cognome}
+            {users.length > 0 ? (
+              users.map((u) => {
+                const userId = u._id || u.id;
+                return (
+                  <tr key={userId} className="align-middle row-fenix-user">
+                    
+                    {/* Avatar Initials e Nome */}
+                    <td className="py-3 ps-4">
+                      <div className="d-flex align-items-center">
+                        <div className="user-avatar-sm me-3 d-flex align-items-center justify-content-center fw-bold shadow-sm">
+                          {u.nome?.charAt(0)}{u.cognome?.charAt(0)}
+                        </div>
+                        <div>
+                          <div className="fw-bold user-fullname-text">
+                            {u.nome} {u.cognome}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </td>
-                  <td>
-                    <span className="text-muted">{u.email}</span>
-                  </td>
-                  <td>
-                    <Badge
-                      pill
-                      bg={u.isAdmin ? "danger" : "info"}
-                      className="px-3 py-2 fw-medium"
-                      style={{ fontSize: "0.7rem" }}
-                    >
-                      {u.isAdmin ? "ADMIN" : "USER"}
-                    </Badge>
-                  </td>
-                  <td>
-                    <div className="d-flex justify-content-center gap-2 pe-3">
-                      <Button
-                        className={`rounded-3 border-0 d-flex align-items-center justify-content-center shadow-sm btn-orange-toggle ${u.isAdmin ? "active-admin" : ""}`}
-                        size="sm"
-                        style={{ width: "35px", height: "35px" }}
-                        onClick={() => toggleAdmin(u)}
-                        title={u.isAdmin ? "Rendi Utente Semplice" : "Rendi Admin"}
-                      >
-                        <ShieldCheck
-                          size={18}
-                          color={u.isAdmin ? "#f1901f" : "currentColor"}
+                    </td>
+                    
+                    {/* Indirizzo Email */}
+                    <td>
+                      <span className="user-email-text">{u.email}</span>
+                    </td>
+                    
+                    {/* Badge Ruolo Amministrativo */}
+                    <td>
+                      <Badge bg="none" className={`badge-fenix-role ${u.isAdmin ? "role-admin" : "role-user"}`}>
+                        {u.isAdmin ? "ADMIN" : "USER"}
+                      </Badge>
+                    </td>
+                    
+                    {/* Gruppo di Bottoni Azione */}
+                    <td className="pe-4">
+                      <div className="d-flex justify-content-center gap-2">
+                        <Button
+                          variant="none"
+                          className={`btn-fenix-toggle-admin d-flex align-items-center justify-content-center shadow-sm ${u.isAdmin ? "is-admin-active" : ""}`}
+                          size="sm"
+                          onClick={() => toggleAdmin(u)}
+                          title={u.isAdmin ? "Rendi Utente Semplice" : "Rendi Amministratore"}
+                        >
+                          <ShieldCheck size={16} />
+                        </Button>
+                        
+                        <EditProfile user={u} onUpdate={fetchUsers} />
+                        
+                        <DeleteProfile
+                          userId={userId}
+                          userName={`${u.nome} ${u.cognome}`}
+                          onDeleted={fetchUsers} 
                         />
-                      </Button>
-                      <EditProfile user={u} onUpdate={fetchUsers} />
-                      <DeleteProfile
-                        userId={userId}
-                        userName={`${u.nome} ${u.cognome}`}
-                        onDeleted={fetchUsers} 
-                      />
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
+                      </div>
+                    </td>
+
+                  </tr>
+                );
+              })
+            ) : (
+              <tr>
+                <td colSpan="4" className="text-center py-5 text-muted small">
+                  Nessun profilo utente censito nel database.
+                </td>
+              </tr>
+            )}
           </tbody>
         </Table>
       </div>
 
-      <div className="mt-3 text-muted small ps-2">
-        Utenti totali nel database: <strong>{users.length}</strong>
+      {/* Contatore Piè di Pagina */}
+      <div className="mt-3 d-flex justify-content-between align-items-center px-2 counter-footer">
+        <div className="text-muted small">
+          Utenti totali nel database aziendale: <strong className="counter-highlight">{users.length}</strong>
+        </div>
       </div>
     </div>
   );

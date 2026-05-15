@@ -1,44 +1,123 @@
-/* Rimuove l'arrotondamento dalla card principale */
-.profile-card {
-  border-radius: 0 !important; 
-  overflow: hidden;
+/* ==========================================================================
+   VILLA FENIX - DASHBOARD PROFILO UTENTE (USER CSS)
+   ========================================================================== */
+
+/* Card Profilo Principale */
+.vf-profile-card {
+  font-family: 'Ubuntu', sans-serif;
+  color: #65513D;
+  border: 1px solid rgba(101, 81, 61, 0.1) !important;
   background-color: #ffffff;
 }
 
-/* Rimuove l'arrotondamento dalla sidebar interna */
-.profile-sidebar {
-  background: linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%);
-  color: white;
-  border-radius: 0 !important;
+.vf-profile-name {
+  font-family: 'Gotham', sans-serif;
+  color: #65513D;
+  font-weight: 700;
 }
 
-/* MANTIENE il cerchio solo per l'avatar */
-.profile-avatar-circle {
-  width: 100px;
-  height: 100px;
-  background-color: rgba(255, 255, 255, 0.2);
-  border: 3px solid rgba(255, 255, 255, 0.5);
-  border-radius: 50%; /* Questo lo lasciamo per l'effetto cerchio */
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* Avatar Iniziali Alternativo */
+.vf-avatar-initials {
+  font-family: 'Gotham', sans-serif;
+  background: linear-gradient(135deg, #65513D 0%, #BAB2A2 100%) !important;
+  color: #ffffff !important;
+  letter-spacing: 1px;
 }
 
-/* Rimuove arrotondamento dai box delle icone */
-.icon-box {
-  width: 40px;
-  height: 40px;
-  background-color: #f8f9fa;
-  border-radius: 0 !important; /* Diventa quadrato */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #4ca1af;
-  font-size: 1.2rem;
+/* Badge Amministratore / Cliente */
+.vf-badge-admin {
+  font-family: 'Gotham', sans-serif;
+  background-color: #d9534f !important; /* Mantenuto rosso per alert critici di amministrazione */
+  color: #ffffff !important;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
 }
 
-/* Rimuove arrotondamento dai bottoni */
-.profile-card .btn, 
-.profile-card .badge {
-  border-radius: 0 !important;
+.vf-badge-client {
+  font-family: 'Gotham', sans-serif;
+  background-color: #65513D !important;
+  color: #ffffff !important;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+}
+
+/* Box Contenitore Dettagli Account */
+.vf-account-details-box {
+  background-color: #F7F9FA !important;
+  border-radius: 12px;
+  border: 1px solid rgba(101, 81, 61, 0.05);
+}
+
+.vf-details-section-title {
+  font-family: 'Gotham', sans-serif;
+  color: #BAB2A2;
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+}
+
+.vf-profile-icon {
+  color: #F28B2D !important; /* Arancione Secondario */
+}
+
+/* Card Statistiche (Soggiorni e Feedback) */
+.vf-stat-card-soggiorni {
+  border: none !important;
+  border-left: 4px solid #65513D !important;
+  background-color: #ffffff;
+}
+
+.vf-stat-card-feedback {
+  border: none !important;
+  border-left: 4px solid #F28B2D !important;
+  background-color: #ffffff;
+}
+
+.vf-stat-icon-wrapper {
+  background-color: #F7F9FA;
+  color: #65513D;
+}
+
+.vf-stat-icon-wrapper-orange {
+  background-color: rgba(242, 139, 45, 0.08);
+  color: #F28B2D;
+}
+
+.vf-stat-number {
+  font-family: 'Gotham', sans-serif;
+  color: #65513D;
+  font-weight: 700;
+}
+
+/* Lista Recensioni */
+.vf-reviews-card-header {
+  font-family: 'Gotham', sans-serif;
+  color: #65513D;
+  font-weight: 600;
+  border-bottom: 1px solid rgba(101, 81, 61, 0.08) !important;
+}
+
+.vf-review-item-title {
+  font-family: 'Gotham', sans-serif;
+  color: #65513D;
+  font-weight: 600;
+}
+
+.vf-star-active {
+  color: #F28B2D !important;
+}
+
+.vf-star-inactive {
+  color: #BAB2A2 !important;
+  opacity: 0.3;
+}
+
+.vf-quote-text {
+  font-family: 'Ubuntu', sans-serif;
+  color: #65513D;
+  opacity: 0.85;
+}
+
+/* Stati di Caricamento */
+.vf-spinner-brand {
+  color: #F28B2D !important;
 }

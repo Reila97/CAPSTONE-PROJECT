@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Container, Row, Col, Button, Offcanvas } from "react-bootstrap";
-import { CalendarCheck, List } from "react-bootstrap-icons";
+import { Container, Row, Col, Button, Offcanvas, Card } from "react-bootstrap";
+import { CalendarCheck, List, CupHot, Wifi, ShieldCheck, Award, Map } from "react-bootstrap-icons";
 
 import FormPrenotazione from "../../COMPONENTS/Prenotazioni/FormPrenotazione/FormPrenotazioni.jsx";
 import StruttureClient from "../../COMPONENTS/Strutture/Struttura Clienti/StruttureClient.jsx";
@@ -11,86 +11,131 @@ import "./Home.css";
 function Home() {
   const [showBooking, setShowBooking] = useState(false);
 
+  // Servizi istituzionali ottimizzati per l'esperienza Affittacamere Villa Fenix
+  const serviziBB = [
+    { nome: 'Colazione Gourmet', icon: <CupHot /> },
+    { nome: 'WiFi Alta Velocità', icon: <Wifi /> },
+    { nome: 'Accoglienza Fenix', icon: <Award /> },
+    { nome: 'Posizione Centrale', icon: <Map /> },
+    { nome: 'Comfort Garantito', icon: <ShieldCheck /> }
+  ];
+
   return (
-    <Container fluid className="p-0 bg-light-fenix">
-      {/* BOTTONE FLOATING PER MOBILE - Appare solo su schermi piccoli */}
-      <div className="d-lg-none fixed-bottom p-3 text-center">
-        <Button 
-          className="prenotaButton rounded-pill shadow-lg px-5 py-3 w-100"
-          onClick={() => setShowBooking(true)}
-        >
-          <CalendarCheck className="me-2" /> Prenota Ora
+    <Container fluid className="p-0 vf-home-wrapper">
+      
+      {/* HEADER MOBILE - Rispetta le restrizioni di scomposizione del brand logo */}
+      <div className="d-lg-none p-3 d-flex justify-content-between align-items-center bg-white shadow-sm sticky-top vf-mobile-header">
+        <div className="vf-responsive-logo-wrapper">
+          {/* Sotto i 30mm/risoluzioni mobile viene mostrato solo il Brand Symbol o una resa testuale controllata */}
+          <span className="brand-symbol-fallback">🦅</span>
+          <h3 className="vf-brand-name-mobile m-0 text-uppercase">
+            Villa Fenix <span className="vf-brand-sub-mobile">Affittacamere</span>
+          </h3>
+        </div>
+        <Button variant="link" className="p-0 vf-menu-toggle-btn">
+          <List size={28}/>
         </Button>
       </div>
 
-      <Row className="g-0">
-        {/* SIDEBAR DESKTOP: Resta Col 3/4 solo su grandi schermi */}
-        <Col lg={4} xl={3} className="d-none d-lg-block sticky-column bg-white shadow-sm">
-          <div className="sidebar-content p-4">
-            <FormPrenotazione /> 
-          </div>
-        </Col>
+      {/* SEZIONE HERO: Con payoff istituzionale usato CORRETTAMENTE nel testo e MAI associato al logo */}
+      <section className="vf-hero-section text-center text-white px-3 d-flex align-items-center justify-content-center">
+        <div className="py-5 vf-hero-content">
+          <h1 className="vf-hero-title display-2 text-uppercase mb-3">VILLA FENIX</h1>
+          <div className="vf-hero-divider mx-auto mb-3"></div>
+       
+          <p className="vf-hero-payoff fst-italic">
+            "La tua casa... lontano da casa"
+          </p>
+        </div>
+      </section>
 
-        {/* CONTENUTO PRINCIPALE */}
-        <Col lg={8} xl={9} className="main-content">
+      {/* BARRA DI PRENOTAZIONE ORIZZONTALE (DESKTOP) */}
+      <Container className="vf-booking-bar-container d-none d-lg-block">
+        <Row className="justify-content-center">
+          <Col lg={11} xl={10}>
+            <Card className="vf-booking-card-wrapper p-4 shadow-sm border-0">
+              <FormPrenotazione />
+            </Card>
+          </Col>
+        </Row>
+      </Container>
+
+      {/* CONTENUTO PRINCIPALE */}
+      <Container className="py-5 mt-3 mt-lg-5 px-4 px-md-5">
+        
+        {/* Sezione Strutture */}
+        <section className="home-section mb-5">
+          <div className="text-center text-lg-start mb-4">
+            <h2 className="vf-home-section-title h3 text-uppercase mb-1">Le Nostre Strutture</h2>
+            <p className="vf-home-section-subtitle mb-0">Scopri le esclusive location firmate Villa Fenix</p>
+          </div>
+          <div className="px-0">
+            <StruttureClient />
+          </div>
+        </section>
+
+        <hr className="vf-section-divider my-5" />
+
+        {/* Sezione Camere e Suite */}
+        <section className="home-section mb-5">
+          <div className="text-center text-lg-start mb-4">
+            <h2 className="vf-home-section-title h3 text-uppercase mb-1">Camere & Suite</h2>
+            <p className="vf-home-section-subtitle mb-0">Ambienti intimi e dettagli di pregio pensati per il tuo riposo</p>
+          </div>
+          <div className="px-0">
+            <CamereClient />
+          </div>
+        </section>
+
+        <hr className="vf-section-divider my-5" />
+
+        {/* Sezione Servizi Istituzionali */}
+        <section className="home-section mb-5 pb-5 pb-lg-0">
+          <div className="text-center mb-5">
+            <h2 className="vf-home-section-title h3 text-uppercase mb-1">I Servizi Esclusivi</h2>
+            <p className="vf-home-section-subtitle mb-0">Ogni dettaglio è pensato per rendere impeccabile la tua permanenza</p>
+          </div>
           
-          {/* Header Mobile: Logo e Menu */}
-          <div className="d-lg-none p-3 d-flex justify-content-between align-items-center bg-white shadow-sm mb-3">
-             <h3 className="headLine m-0">Villa Fenix</h3>
-             <Button variant="link" className="text-dark"><List size={30}/></Button>
-          </div>
+          <Row className="g-4 justify-content-center">
+            {serviziBB.map((item, i) => (
+              <Col xs={6} sm={4} md={3} lg={2} key={i}>
+                <Card className="vf-service-card text-center p-3 h-100 border-0 shadow-sm">
+                  <Card.Body className="d-flex flex-column align-items-center justify-content-center p-0">
+                    <div className="vf-service-icon-box mb-3">
+                      {item.icon}
+                    </div>
+                    <div className="vf-service-text text-uppercase">{item.nome}</div>
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+        </section>
+      </Container>
 
-          {/* Sezione Strutture */}
-          <section className="home-section py-4">
-            <div className="section-header px-4 mb-3">
-               <h2 className="headLine">Le Nostre Strutture</h2>
-               <p className="bodyCopy small">Scegli la cornice perfetta per il tuo relax</p>
-            </div>
-            <div className="horizontal-scroll-wrapper px-2">
-              <StruttureClient />
-            </div>
-          </section>
+      {/* BOTTONE FLOATING SMART MOBILE (Fix sintassi zIndex) */}
+      <div className="d-lg-none fixed-bottom p-3 text-center" style={{ zIndex: 1050 }}>
+        <Button 
+          className="vf-mobile-floating-btn rounded-pill shadow-lg px-4 py-3 w-100 border-0 text-white text-uppercase tracking-wider"
+          onClick={() => setShowBooking(true)}
+        >
+          <CalendarCheck className="me-2" size={18} /> Verifica Disponibilità
+        </Button>
+      </div>
 
-          <hr className="section-divider mx-4" />
-
-          {/* Sezione Camere */}
-          <section className="home-section py-4">
-            <div className="section-header px-4 mb-3">
-              <h2 className="headLine">Camere in Evidenza</h2>
-              <p className="bodyCopy small">Il massimo del comfort, pensato per te</p>
-            </div>
-            <div className="horizontal-scroll-wrapper px-2">
-              <CamereClient />
-            </div>
-          </section>
-
-          <hr className="section-divider mx-4" />
-
-          {/* Sezione Servizi: Grid Responsive */}
-          <section className="home-section py-4 mb-5 pb-5 pb-lg-0">
-            <div className="section-header px-4 mb-4">
-              <h2 className="headLine">I Nostri Servizi</h2>
-            </div>
-            <Row className="px-4 g-3">
-              {['Piscina', 'WiFi Alta Velocità', 'Centro Benessere', 'Colazione Gourmet', 'Parcheggio'].map((s, i) => (
-                <Col xs={6} md={4} lg={2} key={i}>
-                  <div className="service-card shadow-sm rounded-4 text-center p-3 h-100 bg-white">
-                    <div className="service-icon mb-2">⭐</div>
-                    <div className="service-name bodyCopy fw-bold" style={{fontSize: '0.8rem'}}>{s}</div>
-                  </div>
-                </Col>
-              ))}
-            </Row>
-          </section>
-        </Col>
-      </Row>
-
-      {/* OFFCANVAS PER PRENOTAZIONE MOBILE */}
-      <Offcanvas show={showBooking} onHide={() => setShowBooking(false)} placement="bottom" className="h-75 rounded-top-5">
-        <Offcanvas.Header closeButton className="border-bottom mx-2">
-          <Offcanvas.Title className="headLine">Prenota Soggiorno</Offcanvas.Title>
+      {/* PANNELLO DI PRENOTAZIONE IN OFFCANVAS (MOBILE) */}
+      <Offcanvas 
+        show={showBooking} 
+        onHide={() => setShowBooking(false)} 
+        placement="bottom" 
+        className="h-75 rounded-top-4 overflow-auto vf-offcanvas-custom"
+      >
+        <Offcanvas.Header closeButton className="vf-offcanvas-header px-4">
+          <Offcanvas.Title className="text-uppercase h5 vf-offcanvas-title">
+            Pianifica il Soggiorno
+          </Offcanvas.Title>
         </Offcanvas.Header>
-        <Offcanvas.Body>
+        <Offcanvas.Body className="p-4 bg-light">
           <FormPrenotazione onCreated={() => setShowBooking(false)} />
         </Offcanvas.Body>
       </Offcanvas>
