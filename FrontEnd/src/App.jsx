@@ -16,6 +16,7 @@ import CameraDettaglio from "./COMPONENTS/Camere/CameraDettaglio/CameraDettaglio
 import CamereClient from "./COMPONENTS/Camere/CamereClient/CamereClient.jsx";
 import Footer from "./COMPONENTS/Footer/Footer.jsx";
 import LoginSuccess from "./PAGES/Login/LoginSuccess.jsx";
+import WhatsappButton from "./COMPONENTS/Button/WhatsappButton.jsx";
 
 // --- PROTEZIONE ROTTE ADMIN ---
 const AdminRoute = ({ children }) => {
@@ -77,6 +78,9 @@ function App() {
           {/* Fallback per pagine inesistenti */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
+
+         {/* <WhatsappButton/> */}
+
 
         <Footer />
       </AuthProvider>

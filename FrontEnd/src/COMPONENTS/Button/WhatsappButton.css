@@ -1,0 +1,60 @@
+.whatsapp-float {
+    position: fixed;
+    width: 60px;
+    height: 60px;
+    bottom: 40px;
+    right: 40px;
+    background-color: #f1901f; /* Arancione Villa Fenix */
+    color: #fff !important;
+    border-radius: 50px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000; /* Superiore a quasi tutto */
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+/* Effetto Hover */
+.whatsapp-float:hover {
+    background-color: #cb781a;
+    transform: scale(1.1);
+    color: #fff;
+}
+
+/* Tooltip che appare al passaggio del mouse (solo desktop) */
+.tooltip-text {
+    visibility: hidden;
+    width: 100px;
+    background-color: #6d634f;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    right: 120%; /* Posizionato a sinistra del bottone */
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 0.8rem;
+}
+
+.whatsapp-float:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Mobile First: adeguiamo la posizione su schermi piccoli */
+@media (max-width: 768px) {
+    .whatsapp-float {
+        width: 50px;
+        height: 50px;
+        bottom: 90px; /* Alzato per non coprire il tasto "Prenota Ora" della Home mobile */
+        right: 20px;
+    }
+    
+    .tooltip-text {
+        display: none; /* Nascondiamo il tooltip su mobile */
+    }
+}

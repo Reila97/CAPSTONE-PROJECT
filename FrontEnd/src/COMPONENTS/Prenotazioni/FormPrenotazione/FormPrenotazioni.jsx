@@ -12,7 +12,7 @@ function FormPrenotazioni({ onCreated }) {
 
   // Dati per i menu a tendina
   const [strutture, setStrutture] = useState([]);
-  const [camere, setCamere] = useState([]);
+  const [camere, setCamere] = useState([]); // Inizializzato correttamente come array
   
   const [formData, setFormData] = useState({
     struttura: "",
@@ -32,10 +32,20 @@ function FormPrenotazioni({ onCreated }) {
   // Caricamento camere dinamico
   useEffect(() => {
     if (formData.struttura) {
-      fetch(`${API_URL}/strutture/camere${formData.struttura}`)
+      // 🛠️ CORRETTO: Aggiunto lo slash "/" prima dell'ID della struttura
+      fetch(`${API_URL}/strutture/camere/${formData.struttura}`)
         .then(res => res.json())
-        .then(data => setCamere(data))
-        .catch(() => setError("Errore nel caricamento delle camere"));
+        .then(data => {
+          // 🛡️ PROTEZIONE: Verifica che il backend restituisca un array, altrimenti imposta un array vuoto
+          // Se il tuo backend risponde con un oggetto tipo { camere: [...] }, usa: data.camere
+          setCamere(Array.isArray(data) ? data : []);
+        })
+        .catch(() => {
+          setError("Errore nel caricamento delle camere");
+          setCamere([]); // Svuota le camere in caso di errore
+        });
+    } else {
+      setCamere([]); // Svuota le camere se non c'è una struttura selezionata
     }
   }, [formData.struttura]);
 
@@ -75,7 +85,6 @@ function FormPrenotazioni({ onCreated }) {
         {/* LATO A: LOGO & BRANDING */}
         <div className="booking-logo-side d-flex flex-column align-items-center justify-content-center text-center p-4">
           <div className="logo-placeholder mb-3">
-             {/* Sostituisci src con il tuo logo reale */}
              <img src="/Villa Fenix_Logo_Colore.png" alt="Villa Fenix Logo" className="img-fluid" style={{maxWidth: '180px'}} />
           </div>
           <h2 className="headLine mt-3">Villa Fenix</h2>
@@ -117,7 +126,10 @@ function FormPrenotazioni({ onCreated }) {
                     required
                   >
                     <option value="">Scegli la tua camera</option>
-                    {camere.map(c => <option key={c._id} value={c._id}>{c.nome} - €{c.prezzo}</option>)}
+                    {/* 🛡️ ULTERIORE BLINDATURA: optional chaining o controllo di sicurezza */}
+                    {Array.isArray(camere) && camere.map(c => (
+                      <option key={c._id} value={c._id}>{c.nome} - €{c.prezzo}</option>
+                    ))}
                   </Form.Select>
                 </Form.Group>
               </Col>
