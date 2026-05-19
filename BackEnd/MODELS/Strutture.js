@@ -39,7 +39,6 @@ const strutturaSchema = new mongoose.Schema(
       manager: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User", 
-        required: true
       }
     },
 
