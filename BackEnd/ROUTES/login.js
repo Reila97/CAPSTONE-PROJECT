@@ -34,9 +34,9 @@ loginRouter.get('/google/callback',
         const payload = { id: req.user._id };
         const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '24h' });
 
-        // Reindirizziamo l'utente al frontend passando il token
-        // (In produzione è meglio usare un cookie, ma per il Capstone il query param è più semplice)
-        res.redirect(`http://localhost:5173/login-success?token=${token}`);
+        // Reindirizziamo l'utente al frontend passando il token 
+        const frontendUrl = process.env.FRONT_END
+        res.redirect(`${frontendUrl}/login-success?token=${token}`);
     }
 );
 
